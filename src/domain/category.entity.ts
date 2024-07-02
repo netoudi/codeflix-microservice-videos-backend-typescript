@@ -1,5 +1,5 @@
 export type CategoryConstructor = {
-  id: string;
+  id?: string;
   name: string;
   description?: string | null;
   isActive?: boolean;
