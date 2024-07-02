@@ -7,7 +7,7 @@ export type CategoryConstructor = {
 };
 
 export type CategoryCreateCommand = {
-  id: string;
+  id?: string;
   name: string;
   description?: string | null;
   isActive?: boolean;
@@ -15,7 +15,7 @@ export type CategoryCreateCommand = {
 };
 
 export class Category {
-  id: string;
+  id?: string;
   name: string;
   description: string | null;
   isActive: boolean;
