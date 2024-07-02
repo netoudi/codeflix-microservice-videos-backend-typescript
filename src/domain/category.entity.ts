@@ -32,4 +32,30 @@ export class Category {
   static create(props: CategoryCreateCommand): Category {
     return new Category(props);
   }
+
+  changeName(name: string): void {
+    this.name = name;
+  }
+
+  changeDescription(description: string): void {
+    this.description = description;
+  }
+
+  activate(): void {
+    this.isActive = true;
+  }
+
+  deactivate(): void {
+    this.isActive = false;
+  }
+
+  toJSON() {
+    return {
+      id: this.id,
+      name: this.name,
+      description: this.description,
+      is_active: this.isActive,
+      created_at: this.createdAt,
+    };
+  }
 }
