@@ -13,7 +13,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "lodash": "^4.17.21"
+    "lodash": "^4.17.21",
+    "uuid": "^10.0.0"
   },
   "devDependencies": {
     "@swc/cli": "^0.4.0",
@@ -21,6 +22,7 @@
     "@swc/jest": "^0.2.36",
     "@types/jest": "^29.5.12",
     "@types/lodash": "^4.17.6",
+    "@types/uuid": "^10.0.0",
     "@typescript-eslint/eslint-plugin": "^7.15.0",
     "@typescript-eslint/parser": "^7.15.0",
     "eslint": "^8.57.0",
