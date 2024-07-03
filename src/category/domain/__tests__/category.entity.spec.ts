@@ -1,4 +1,5 @@
 import { Category } from '@/category/domain/category.entity';
+import { Uuid } from '@/shared/domain/value-objects/uuid.vo';
 
 describe('Category Unit Tests', () => {
   describe('constructor', () => {
@@ -6,7 +7,7 @@ describe('Category Unit Tests', () => {
       const category = new Category({
         name: 'Movie',
       });
-      expect(category.id).toBeUndefined();
+      expect(category.id).toBeInstanceOf(Uuid);
       expect(category.name).toBe('Movie');
       expect(category.description).toBeNull();
       expect(category.isActive).toBeTruthy();
@@ -20,7 +21,7 @@ describe('Category Unit Tests', () => {
         description: 'Movie description',
         createdAt,
       });
-      expect(category.id).toBeUndefined();
+      expect(category.id).toBeInstanceOf(Uuid);
       expect(category.name).toBe('Movie');
       expect(category.description).toBe('Movie description');
       expect(category.isActive).toBeTruthy();
@@ -32,11 +33,25 @@ describe('Category Unit Tests', () => {
         name: 'Movie',
         description: 'Movie description',
       });
-      expect(category.id).toBeUndefined();
+      expect(category.id).toBeInstanceOf(Uuid);
       expect(category.name).toBe('Movie');
       expect(category.description).toBe('Movie description');
       expect(category.isActive).toBeTruthy();
       expect(category.createdAt).toBeInstanceOf(Date);
+    });
+  });
+
+  describe('id field', () => {
+    const arrange = [{ id: null }, { id: undefined }, { id: new Uuid() }];
+    test.each(arrange)('when id is %j', ({ id }) => {
+      const category = new Category({
+        id: id as any,
+        name: 'Movie',
+      });
+      expect(category.id).toBeInstanceOf(Uuid);
+      if (id instanceof Uuid) {
+        expect(category.id).toBe(id);
+      }
     });
   });
 
@@ -45,7 +60,7 @@ describe('Category Unit Tests', () => {
       const category = Category.create({
         name: 'Movie',
       });
-      expect(category.id).toBeUndefined();
+      expect(category.id).toBeInstanceOf(Uuid);
       expect(category.name).toBe('Movie');
       expect(category.description).toBeNull();
       expect(category.isActive).toBeTruthy();
@@ -59,7 +74,7 @@ describe('Category Unit Tests', () => {
         description: 'Movie description',
         createdAt,
       });
-      expect(category.id).toBeUndefined();
+      expect(category.id).toBeInstanceOf(Uuid);
       expect(category.name).toBe('Movie');
       expect(category.description).toBe('Movie description');
       expect(category.isActive).toBeTruthy();
@@ -71,7 +86,7 @@ describe('Category Unit Tests', () => {
         name: 'Movie',
         description: 'Movie description',
       });
-      expect(category.id).toBeUndefined();
+      expect(category.id).toBeInstanceOf(Uuid);
       expect(category.name).toBe('Movie');
       expect(category.description).toBe('Movie description');
       expect(category.isActive).toBeTruthy();
@@ -83,7 +98,7 @@ describe('Category Unit Tests', () => {
         name: 'Movie',
         isActive: false,
       });
-      expect(category.id).toBeUndefined();
+      expect(category.id).toBeInstanceOf(Uuid);
       expect(category.name).toBe('Movie');
       expect(category.description).toBeNull();
       expect(category.isActive).toBeFalsy();
