@@ -1,4 +1,5 @@
 import { Category } from '@/category/domain/category.entity';
+import { EntityValidationError } from '@/shared/domain/validators/entity-validation.error';
 import { Uuid } from '@/shared/domain/value-objects/uuid.vo';
 
 describe('Category Unit Tests', () => {
@@ -153,5 +154,19 @@ describe('Category Unit Tests', () => {
       category.deactivate();
       expect(category.isActive).toBe(false);
     });
+  });
+});
+
+describe('Category Validator', () => {
+  test('field name', () => {
+    expect(() => {
+      Category.create({
+        name: null,
+      });
+    }).toThrow(
+      new EntityValidationError({
+        name: ['name is'],
+      }),
+    );
   });
 });
