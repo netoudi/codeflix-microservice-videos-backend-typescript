@@ -21,22 +21,23 @@ export abstract class InMemoryRepository<E extends Entity, EntityId extends Valu
     this.items[indexFound] = entity;
   }
 
-  async delete(entity: E): Promise<void> {
-    const indexFound = this.findIndexOrFail(entity);
+  async delete(entityId: EntityId): Promise<void> {
+    const indexFound = this.findIndexOrFail(entityId);
     this.items.splice(indexFound, 1);
   }
 
-  async findById(id: EntityId): Promise<E | null> {
-    return this.items.find((item) => item.entityId.equals(id)) ?? null;
+  async findById(entityId: EntityId): Promise<E | null> {
+    return this.items.find((item) => item.entityId.equals(entityId)) ?? null;
   }
 
   async findAll(): Promise<E[]> {
     return this.items;
   }
 
-  private findIndexOrFail(entity: E): number {
-    const indexFound = this.items.findIndex((item) => item.entityId.equals(entity.entityId));
-    if (indexFound < 0) throw new NotFoundError(entity.entityId, this.getEntity());
+  private findIndexOrFail(value: E | EntityId): number {
+    const entityId = value instanceof Entity ? value.entityId : value;
+    const indexFound = this.items.findIndex((item) => item.entityId.equals(entityId));
+    if (indexFound < 0) throw new NotFoundError(entityId, this.getEntity());
     return indexFound;
   }
 
