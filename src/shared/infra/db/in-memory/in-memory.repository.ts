@@ -1,4 +1,5 @@
 import { Entity } from '@/shared/domain/entity';
+import { NotFoundError } from '@/shared/domain/errors/not-found';
 import { IRepository } from '@/shared/domain/repository/repository-interface';
 import { ValueObject } from '@/shared/domain/value-object';
 
@@ -35,7 +36,7 @@ export abstract class InMemoryRepository<E extends Entity, EntityId extends Valu
 
   private findIndexOrFail(entity: E): number {
     const indexFound = this.items.findIndex((item) => item.entityId.equals(entity.entityId));
-    if (indexFound < 0) throw new Error('Entity not found');
+    if (indexFound < 0) throw new NotFoundError(entity.entityId, this.getEntity());
     return indexFound;
   }
 
