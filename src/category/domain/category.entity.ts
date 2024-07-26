@@ -1,3 +1,4 @@
+import { CategoryFakeBuilder } from '@/category/domain/category-fake.builder';
 import { CategoryValidatorFactory } from '@/category/domain/category.validator';
 import { Entity } from '@/shared/domain/entity';
 import { EntityValidationError } from '@/shared/domain/validators/entity-validation.error';
@@ -69,6 +70,10 @@ export class Category extends Entity {
     if (!isValid) {
       throw new EntityValidationError(validator.errors);
     }
+  }
+
+  static fake() {
+    return CategoryFakeBuilder;
   }
 
   toJSON() {

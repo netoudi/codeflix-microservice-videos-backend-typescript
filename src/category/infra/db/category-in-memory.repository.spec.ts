@@ -9,7 +9,7 @@ describe('CategoryInMemoryRepository Unit Tests', () => {
   });
 
   it('should no filter items when filter object is null', async () => {
-    const items = [new Category({ name: 'test' })];
+    const items = [Category.fake().aCategory().build()];
     const filterSpy = jest.spyOn(items, 'filter');
     const itemsFiltered = await repository['applyFilter'](items, null);
     expect(filterSpy).not.toHaveBeenCalled();
@@ -17,7 +17,11 @@ describe('CategoryInMemoryRepository Unit Tests', () => {
   });
 
   it('should filter items using filter parameter', async () => {
-    const items = [new Category({ name: 'test' }), new Category({ name: 'TEST' }), new Category({ name: 'fake' })];
+    const items = [
+      Category.fake().aCategory().withName('test').build(),
+      Category.fake().aCategory().withName('TEST').build(),
+      Category.fake().aCategory().withName('fake').build(),
+    ];
 
     const spyFilter = jest.spyOn(items, 'filter');
 
@@ -29,16 +33,28 @@ describe('CategoryInMemoryRepository Unit Tests', () => {
   it('should sort by createdAt when sort param is null', async () => {
     const createdAt = new Date();
     const items = [
-      new Category({ name: 'test', createdAt }),
-      new Category({ name: 'TEST', createdAt: new Date(createdAt.getTime() + 100) }),
-      new Category({ name: 'fake', createdAt: new Date(createdAt.getTime() + 200) }),
+      Category.fake().aCategory().withName('test').withCreatedAt(createdAt).build(),
+      Category.fake()
+        .aCategory()
+        .withName('TEST')
+        .withCreatedAt(new Date(createdAt.getTime() + 100))
+        .build(),
+      Category.fake()
+        .aCategory()
+        .withName('fake')
+        .withCreatedAt(new Date(createdAt.getTime() + 200))
+        .build(),
     ];
     const itemsFiltered = await repository['applySort'](items, null, null);
     expect(itemsFiltered).toStrictEqual([items[2], items[1], items[0]]);
   });
 
   it('should sort by name', async () => {
-    const items = [new Category({ name: 'c' }), new Category({ name: 'b' }), new Category({ name: 'a' })];
+    const items = [
+      Category.fake().aCategory().withName('c').build(),
+      Category.fake().aCategory().withName('b').build(),
+      Category.fake().aCategory().withName('a').build(),
+    ];
     let itemsFiltered = await repository['applySort'](items, 'name', 'asc');
     expect(itemsFiltered).toStrictEqual([items[2], items[1], items[0]]);
     itemsFiltered = await repository['applySort'](items, 'name', 'desc');
