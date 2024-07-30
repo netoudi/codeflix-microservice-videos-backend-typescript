@@ -16,6 +16,8 @@
     "chance": "1.1.12",
     "class-validator": "^0.14.1",
     "lodash": "^4.17.21",
+    "sequelize": "6.37.3",
+    "sequelize-typescript": "2.1.6",
     "uuid": "^10.0.0"
   },
   "devDependencies": {
@@ -25,6 +27,7 @@
     "@types/chance": "1.1.6",
     "@types/jest": "^29.5.12",
     "@types/lodash": "^4.17.6",
+    "@types/sequelize": "4.28.20",
     "@types/uuid": "^10.0.0",
     "@typescript-eslint/eslint-plugin": "^7.15.0",
     "@typescript-eslint/parser": "^7.15.0",
