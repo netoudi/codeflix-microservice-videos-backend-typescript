@@ -1,5 +1,5 @@
 import { Category } from '@/category/domain/category.entity';
-import { ICategoryRepository } from '@/category/domain/category.repository';
+import { CategoryFilter, ICategoryRepository } from '@/category/domain/category.repository';
 import { SortDirection } from '@/shared/domain/repository/search-params';
 import { Uuid } from '@/shared/domain/value-objects/uuid.vo';
 import { InMemorySearchableRepository } from '@/shared/infra/db/in-memory/in-memory.repository';
@@ -10,7 +10,7 @@ export class CategoryInMemoryRepository
 {
   sortableFields: string[] = ['name', 'createdAt'];
 
-  protected async applyFilter(items: Category[], filter: string): Promise<Category[]> {
+  protected async applyFilter(items: Category[], filter: CategoryFilter | null): Promise<Category[]> {
     if (!filter) return items;
     return items.filter((i) => {
       return i.name.toLowerCase().includes(filter.toLowerCase());

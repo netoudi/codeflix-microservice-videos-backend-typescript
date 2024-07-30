@@ -52,7 +52,7 @@ export abstract class InMemorySearchableRepository<E extends Entity, EntityId ex
 {
   sortableFields: string[];
 
-  async search(props: SearchParams<Filter>): Promise<SearchResult<Entity>> {
+  async search(props: SearchParams<Filter>): Promise<SearchResult<E>> {
     const itemsFiltered = await this.applyFilter(this.items, props.filter);
     const itemsSorted = this.applySort(itemsFiltered, props.sort, props.sortDir);
     const itemsPaginated = this.applyPaginate(itemsSorted, props.page, props.perPage);
