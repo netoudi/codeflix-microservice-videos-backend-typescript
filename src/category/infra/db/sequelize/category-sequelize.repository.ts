@@ -18,7 +18,7 @@ export class CategorySequelizeRepository implements ICategoryRepository {
 
   async bulkInsert(entities: Category[]): Promise<void> {
     const models = CategoryModelMapper.toModels(entities);
-    await this.categoryModel.bulkCreate(models);
+    await this.categoryModel.bulkCreate(models.map((model) => model.toJSON()));
   }
 
   async update(entity: Category): Promise<void> {
