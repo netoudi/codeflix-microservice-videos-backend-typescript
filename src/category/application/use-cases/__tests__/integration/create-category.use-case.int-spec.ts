@@ -1,4 +1,4 @@
-import { CreateCategoryUseCase } from '@/category/application/create-category.use-case';
+import { CreateCategoryUseCase } from '@/category/application/use-cases/create-category.use-case';
 import { CategorySequelizeRepository } from '@/category/infra/db/sequelize/category-sequelize.repository';
 import { CategoryModel } from '@/category/infra/db/sequelize/category.model';
 import { Uuid } from '@/shared/domain/value-objects/uuid.vo';

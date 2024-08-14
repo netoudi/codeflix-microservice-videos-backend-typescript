@@ -1,3 +1,4 @@
+import { CategoryOutput, CategoryOutputMapper } from '@/category/application/use-cases/common/category-output.mapper';
 import { Category } from '@/category/domain/category.entity';
 import { ICategoryRepository } from '@/category/domain/category.repository';
 import { IUseCase } from '@/shared/application/use-case.interface';
@@ -18,13 +19,7 @@ export class UpdateCategoryUseCase implements IUseCase<UpdateCategoryInput, Upda
 
     await this.categoryRepository.update(category);
 
-    return {
-      id: category.id.value,
-      name: category.name,
-      description: category.description,
-      isActive: category.isActive,
-      createdAt: category.createdAt,
-    };
+    return CategoryOutputMapper.toOutput(category);
   }
 }
 
@@ -35,10 +30,4 @@ export type UpdateCategoryInput = {
   isActive?: boolean;
 };
 
-export type UpdateCategoryOutput = {
-  id: string;
-  name: string;
-  description?: string | null;
-  isActive: boolean;
-  createdAt: Date;
-};
+export type UpdateCategoryOutput = CategoryOutput;

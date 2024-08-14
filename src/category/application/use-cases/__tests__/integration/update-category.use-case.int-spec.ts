@@ -1,15 +1,19 @@
-import { UpdateCategoryUseCase } from '@/category/application/update-category.use-case';
+import { UpdateCategoryUseCase } from '@/category/application/use-cases/update-category.use-case';
 import { Category } from '@/category/domain/category.entity';
-import { CategoryInMemoryRepository } from '@/category/infra/db/in-memory/category-in-memory.repository';
+import { CategorySequelizeRepository } from '@/category/infra/db/sequelize/category-sequelize.repository';
+import { CategoryModel } from '@/category/infra/db/sequelize/category.model';
 import { NotFoundError } from '@/shared/domain/errors/not-found';
 import { InvalidUuidError, Uuid } from '@/shared/domain/value-objects/uuid.vo';
+import { setupSequelize } from '@/shared/infra/testing/helpers';
 
-describe('UpdateCategoryUseCase Unit Tests', () => {
+describe('UpdateCategoryUseCase Integration Tests', () => {
   let useCase: UpdateCategoryUseCase;
-  let repository: CategoryInMemoryRepository;
+  let repository: CategorySequelizeRepository;
+
+  setupSequelize({ models: [CategoryModel] });
 
   beforeEach(() => {
-    repository = new CategoryInMemoryRepository();
+    repository = new CategorySequelizeRepository(CategoryModel);
     useCase = new UpdateCategoryUseCase(repository);
   });
 
@@ -22,11 +26,9 @@ describe('UpdateCategoryUseCase Unit Tests', () => {
   });
 
   it('should update a category', async () => {
-    const spyInsert = jest.spyOn(repository, 'update');
-    const category = new Category({ name: 'Movie' });
-    repository.items = [category];
+    const category = Category.fake().aCategory().withDescription(null).build();
+    await repository.insert(category);
     const output = await useCase.execute({ id: category.id.value, name: 'test' });
-    expect(spyInsert).toHaveBeenCalledTimes(1);
     expect(output).toStrictEqual({
       id: category.id.value,
       name: 'test',
@@ -155,6 +157,14 @@ describe('UpdateCategoryUseCase Unit Tests', () => {
         ...('isActive' in i.input && { isActive: i.input.isActive }),
       });
       expect(output).toStrictEqual(i.output);
+      // check if really saved in the database
+      const categoryUpdated = await repository.findById(category.id);
+      expect(categoryUpdated).not.toBeNull();
+      expect(categoryUpdated?.id.value).toBe(i.output.id);
+      expect(categoryUpdated?.name).toBe(i.output.name);
+      expect(categoryUpdated?.description).toBe(i.output.description);
+      expect(categoryUpdated?.isActive).toBe(i.output.isActive);
+      expect(categoryUpdated?.createdAt).toBeDefined();
     }
   });
 });
