@@ -1,9 +1,6 @@
-import {
-  PaginationOutput,
-  PaginationOutputMapper,
-} from '@/category/application/use-cases/common/pagination-output.mapper';
 import { Category } from '@/category/domain/category.entity';
 import { CategorySearchResult } from '@/category/domain/category.repository';
+import { PaginationOutput, PaginationOutputMapper } from '@/shared/application/pagination-output.mapper';
 
 export type CategoryOutput = {
   id: string;
@@ -25,9 +22,6 @@ export class CategoryOutputMapper {
   }
 
   static toPagination(result: CategorySearchResult): PaginationOutput<CategoryOutput> {
-    return PaginationOutputMapper.toOutput(
-      result.items.map((category) => CategoryOutputMapper.toOutput(category)),
-      result,
-    );
+    return PaginationOutputMapper.toOutput(result.items.map(CategoryOutputMapper.toOutput), result);
   }
 }

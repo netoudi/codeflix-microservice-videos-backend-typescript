@@ -1,6 +1,6 @@
 import { CategoryOutput, CategoryOutputMapper } from '@/category/application/use-cases/common/category-output.mapper';
-import { PaginationOutput } from '@/category/application/use-cases/common/pagination-output.mapper';
 import { CategoryFilter, CategorySearchParams, ICategoryRepository } from '@/category/domain/category.repository';
+import { PaginationOutput } from '@/shared/application/pagination-output.mapper';
 import { IUseCase } from '@/shared/application/use-case.interface';
 import { SortDirection } from '@/shared/domain/repository/search-params';
 
