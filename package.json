@@ -5,8 +5,9 @@
   "main": "index.js",
   "scripts": {
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
-    "typecheck": "tsc --project tsconfig.json --noEmit",
+    "tsc:check": "tsc --project tsconfig.json --noEmit",
     "test": "jest --maxWorkers=50%",
+    "test:cov": "jest --maxWorkers=50% --coverage",
     "test:watch": "jest --watch --maxWorkers=50%"
   },
   "keywords": [],
