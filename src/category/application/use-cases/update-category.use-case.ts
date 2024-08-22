@@ -3,6 +3,7 @@ import { Category } from '@/category/domain/category.entity';
 import { ICategoryRepository } from '@/category/domain/category.repository';
 import { IUseCase } from '@/shared/application/use-case.interface';
 import { NotFoundError } from '@/shared/domain/errors/not-found';
+import { EntityValidationError } from '@/shared/domain/validators/entity-validation.error';
 import { Uuid } from '@/shared/domain/value-objects/uuid.vo';
 
 export class UpdateCategoryUseCase implements IUseCase<UpdateCategoryInput, UpdateCategoryOutput> {
@@ -16,6 +17,10 @@ export class UpdateCategoryUseCase implements IUseCase<UpdateCategoryInput, Upda
     'name' in input && category.changeName(input.name);
     'description' in input && category.changeDescription(input.description);
     'isActive' in input && category[input.isActive ? 'activate' : 'deactivate']();
+
+    if (category.notification.hasErrors()) {
+      throw new EntityValidationError(category.notification.toJSON());
+    }
 
     await this.categoryRepository.update(category);
 
