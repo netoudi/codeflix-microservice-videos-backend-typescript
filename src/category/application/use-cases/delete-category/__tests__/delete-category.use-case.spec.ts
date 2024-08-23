@@ -1,4 +1,4 @@
-import { DeleteCategoryUseCase } from '@/category/application/use-cases/delete-category.use-case';
+import { DeleteCategoryUseCase } from '@/category/application/use-cases/delete-category/delete-category.use-case';
 import { Category } from '@/category/domain/category.entity';
 import { CategoryInMemoryRepository } from '@/category/infra/db/in-memory/category-in-memory.repository';
 import { NotFoundError } from '@/shared/domain/errors/not-found';

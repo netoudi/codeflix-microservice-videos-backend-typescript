@@ -1,4 +1,5 @@
 import { CategoryOutput, CategoryOutputMapper } from '@/category/application/use-cases/common/category-output.mapper';
+import { CreateCategoryInput } from '@/category/application/use-cases/create-category/create-category.input';
 import { Category } from '@/category/domain/category.entity';
 import { ICategoryRepository } from '@/category/domain/category.repository';
 import { IUseCase } from '@/shared/application/use-case.interface';
@@ -19,11 +20,5 @@ export class CreateCategoryUseCase implements IUseCase<CreateCategoryInput, Crea
     return CategoryOutputMapper.toOutput(category);
   }
 }
-
-export type CreateCategoryInput = {
-  name: string;
-  description?: string | null;
-  isActive?: boolean;
-};
 
 export type CreateCategoryOutput = CategoryOutput;

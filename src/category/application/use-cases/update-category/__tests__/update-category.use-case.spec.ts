@@ -1,20 +1,23 @@
-import { UpdateCategoryUseCase } from '@/category/application/use-cases/update-category.use-case';
+import { UpdateCategoryUseCase } from '@/category/application/use-cases/update-category/update-category.use-case';
 import { Category } from '@/category/domain/category.entity';
-import { CategorySequelizeRepository } from '@/category/infra/db/sequelize/category-sequelize.repository';
-import { CategoryModel } from '@/category/infra/db/sequelize/category.model';
+import { CategoryInMemoryRepository } from '@/category/infra/db/in-memory/category-in-memory.repository';
 import { NotFoundError } from '@/shared/domain/errors/not-found';
 import { InvalidUuidError, Uuid } from '@/shared/domain/value-objects/uuid.vo';
-import { setupSequelize } from '@/shared/infra/testing/helpers';
 
-describe('UpdateCategoryUseCase Integration Tests', () => {
+describe('UpdateCategoryUseCase Unit Tests', () => {
   let useCase: UpdateCategoryUseCase;
-  let repository: CategorySequelizeRepository;
-
-  setupSequelize({ models: [CategoryModel] });
+  let repository: CategoryInMemoryRepository;
 
   beforeEach(() => {
-    repository = new CategorySequelizeRepository(CategoryModel);
+    repository = new CategoryInMemoryRepository();
     useCase = new UpdateCategoryUseCase(repository);
+  });
+
+  it('should throw error when category is not valid', async () => {
+    const category = new Category({ name: 'Movie' });
+    repository.items = [category];
+    const input = { id: category.id.value, name: 'x'.repeat(256) };
+    await expect(useCase.execute(input)).rejects.toThrow('Entity Validation Error');
   });
 
   it('should throw error when entity not found', async () => {
@@ -26,9 +29,11 @@ describe('UpdateCategoryUseCase Integration Tests', () => {
   });
 
   it('should update a category', async () => {
-    const category = Category.fake().aCategory().withDescription(null).build();
-    await repository.insert(category);
+    const spyInsert = jest.spyOn(repository, 'update');
+    const category = new Category({ name: 'Movie' });
+    repository.items = [category];
     const output = await useCase.execute({ id: category.id.value, name: 'test' });
+    expect(spyInsert).toHaveBeenCalledTimes(1);
     expect(output).toStrictEqual({
       id: category.id.value,
       name: 'test',
@@ -157,14 +162,6 @@ describe('UpdateCategoryUseCase Integration Tests', () => {
         ...('isActive' in i.input && { isActive: i.input.isActive }),
       });
       expect(output).toStrictEqual(i.output);
-      // check if really saved in the database
-      const categoryUpdated = await repository.findById(category.id);
-      expect(categoryUpdated).not.toBeNull();
-      expect(categoryUpdated?.id.value).toBe(i.output.id);
-      expect(categoryUpdated?.name).toBe(i.output.name);
-      expect(categoryUpdated?.description).toBe(i.output.description);
-      expect(categoryUpdated?.isActive).toBe(i.output.isActive);
-      expect(categoryUpdated?.createdAt).toBeDefined();
     }
   });
 });

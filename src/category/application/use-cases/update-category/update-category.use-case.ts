@@ -1,4 +1,5 @@
 import { CategoryOutput, CategoryOutputMapper } from '@/category/application/use-cases/common/category-output.mapper';
+import { UpdateCategoryInput } from '@/category/application/use-cases/update-category/update-category.input';
 import { Category } from '@/category/domain/category.entity';
 import { ICategoryRepository } from '@/category/domain/category.repository';
 import { IUseCase } from '@/shared/application/use-case.interface';
@@ -27,12 +28,5 @@ export class UpdateCategoryUseCase implements IUseCase<UpdateCategoryInput, Upda
     return CategoryOutputMapper.toOutput(category);
   }
 }
-
-export type UpdateCategoryInput = {
-  id: string;
-  name?: string;
-  description?: string | null;
-  isActive?: boolean;
-};
 
 export type UpdateCategoryOutput = CategoryOutput;

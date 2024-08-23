@@ -1,4 +1,4 @@
-import { GetCategoryUseCase } from '@/category/application/use-cases/get-category.use-case';
+import { GetCategoryUseCase } from '@/category/application/use-cases/get-category/get-category.use-case';
 import { Category } from '@/category/domain/category.entity';
 import { CategorySequelizeRepository } from '@/category/infra/db/sequelize/category-sequelize.repository';
 import { CategoryModel } from '@/category/infra/db/sequelize/category.model';
