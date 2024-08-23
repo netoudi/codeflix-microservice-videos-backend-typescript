@@ -12,19 +12,18 @@ describe('CategoryModelMapper Integration Tests', () => {
     expect.assertions(2);
     const model = CategoryModel.build({
       id: 'c30c0a92-1c8c-4b9e-9b0c-9b0c9b0c9b0c',
+      name: 'x'.repeat(256),
     });
     try {
       CategoryModelMapper.toEntity(model);
       fail('The category is valid, but it needs to throws a EntityValidationError');
     } catch (error) {
       expect(error).toBeInstanceOf(EntityValidationError);
-      expect((error as EntityValidationError).errors).toMatchObject({
-        name: [
-          'name should not be empty',
-          'name must be a string',
-          'name must be shorter than or equal to 255 characters',
-        ],
-      });
+      expect((error as EntityValidationError).errors).toMatchObject([
+        {
+          name: ['name must be shorter than or equal to 255 characters'],
+        },
+      ]);
     }
   });
 

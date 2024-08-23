@@ -1,4 +1,4 @@
-import { GetCategoryUseCase } from '@/category/application/use-cases/get-category.use-case';
+import { GetCategoryUseCase } from '@/category/application/use-cases/get-category/get-category.use-case';
 import { Category } from '@/category/domain/category.entity';
 import { CategoryInMemoryRepository } from '@/category/infra/db/in-memory/category-in-memory.repository';
 import { NotFoundError } from '@/shared/domain/errors/not-found';

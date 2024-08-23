@@ -1,5 +1,6 @@
 import { Category } from '@/category/domain/category.entity';
 import { CategoryModel } from '@/category/infra/db/sequelize/category.model';
+import { EntityValidationError } from '@/shared/domain/validators/entity-validation.error';
 import { Uuid } from '@/shared/domain/value-objects/uuid.vo';
 
 export class CategoryModelMapper {
@@ -21,7 +22,10 @@ export class CategoryModelMapper {
       isActive: model.is_active,
       createdAt: model.created_at,
     });
-    Category.validate(category);
+    category.validate();
+    if (category.notification.hasErrors()) {
+      throw new EntityValidationError(category.notification.toJSON());
+    }
     return category;
   }
 

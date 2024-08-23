@@ -1,4 +1,4 @@
-import { DeleteCategoryUseCase } from '@/category/application/use-cases/delete-category.use-case';
+import { DeleteCategoryUseCase } from '@/category/application/use-cases/delete-category/delete-category.use-case';
 import { Category } from '@/category/domain/category.entity';
 import { CategorySequelizeRepository } from '@/category/infra/db/sequelize/category-sequelize.repository';
 import { CategoryModel } from '@/category/infra/db/sequelize/category.model';

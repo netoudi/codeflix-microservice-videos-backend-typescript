@@ -1,5 +1,5 @@
 import { CategoryOutputMapper } from '@/category/application/use-cases/common/category-output.mapper';
-import { ListCategoriesUseCase } from '@/category/application/use-cases/list-categories.use-case';
+import { ListCategoriesUseCase } from '@/category/application/use-cases/list-category/list-categories.use-case';
 import { Category } from '@/category/domain/category.entity';
 import { CategoryInMemoryRepository } from '@/category/infra/db/in-memory/category-in-memory.repository';
 
