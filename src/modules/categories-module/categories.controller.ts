@@ -1,9 +1,14 @@
 import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
+import { CategorySequelizeRepository } from '@/core/category/infra/db/sequelize/category-sequelize.repository';
 import { CreateCategoryDto } from '@/modules/categories-module/dto/create-category.dto';
 import { UpdateCategoryDto } from '@/modules/categories-module/dto/update-category.dto';
 
 @Controller('categories')
 export class CategoriesController {
+  constructor(private categoryRepository: CategorySequelizeRepository) {
+    console.log(this.categoryRepository);
+  }
+
   @Post()
   create(@Body() createCategoryDto: CreateCategoryDto) {
     throw new Error('Method not implemented');
