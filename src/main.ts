@@ -3,6 +3,9 @@ import { AppModule } from './app.module';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  await app.listen(3000);
+  await app.listen(3333);
 }
-bootstrap();
+
+bootstrap().then(() => {
+  console.log(`🚀 HTTP server listening on http://host.docker.internal:3333`);
+});

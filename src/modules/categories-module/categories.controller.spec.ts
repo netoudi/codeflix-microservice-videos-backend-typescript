@@ -3,7 +3,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { CategoriesController } from '@/modules/categories-module/categories.controller';
 import { CategoriesModule } from '@/modules/categories-module/categories.module';
 import { ConfigModule } from '@/modules/config-module/config.module';
-import { DatabaseModule } from '@/modules/database/database.module';
+import { DatabaseModule } from '@/modules/database-module/database.module';
 
 describe('CategoriesController', () => {
   let controller: CategoriesController;
