@@ -15,11 +15,16 @@ services:
   db:
     image: mysql:8.0.39-debian
     container_name: codeflix-videos-db
+    restart: always
+    tty: true
+    ports:
+      - "3366:3306"
     environment:
       - MYSQL_ROOT_PASSWORD=root
     volumes:
+      - ./.docker/dbdata:/var/lib/mysql:delegated
       - ./.docker/mysql:/docker-entrypoint-initdb.d
-    tmpfs:
-      - /var/lib/mysql
     security_opt:
       - seccomp:unconfined
+    extra_hosts:
+      - "host.docker.internal:host-gateway"

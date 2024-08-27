@@ -6,7 +6,7 @@ import { ConfigModule } from '@/modules/config-module/config.module';
 import { DatabaseModule } from '@/modules/database/database.module';
 
 @Module({
-  imports: [DatabaseModule, CategoriesModule, ConfigModule],
+  imports: [ConfigModule.forRoot(), DatabaseModule, CategoriesModule],
   controllers: [AppController],
   providers: [AppService],
 })
