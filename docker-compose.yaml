@@ -11,3 +11,15 @@ services:
       - .:/home/node/app
     extra_hosts:
       - "host.docker.internal:host-gateway"
+
+  db:
+    image: mysql:8.0.39-debian
+    container_name: codeflix-videos-db
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+    volumes:
+      - ./.docker/mysql:/docker-entrypoint-initdb.d
+    tmpfs:
+      - /var/lib/mysql
+    security_opt:
+      - seccomp:unconfined

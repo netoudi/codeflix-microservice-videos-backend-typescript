@@ -1,6 +1,8 @@
-FROM node:20.15.1-slim
+FROM node:20.17.0-slim
 
 RUN apt-get update -y && apt-get upgrade -y
+
+RUN npm install -g @nestjs/cli@10.4.4
 
 WORKDIR /home/node/app
 
