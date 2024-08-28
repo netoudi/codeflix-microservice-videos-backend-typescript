@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Inject, Param, ParseUUIDPipe, Patch, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpCode, Inject, Param, ParseUUIDPipe, Patch, Post } from '@nestjs/common';
 import { CategoryOutput } from '@/core/category/application/use-cases/common/category-output.mapper';
 import { CreateCategoryUseCase } from '@/core/category/application/use-cases/create-category/create-category.use-case';
 import { DeleteCategoryUseCase } from '@/core/category/application/use-cases/delete-category/delete-category.use-case';
@@ -51,9 +51,10 @@ export class CategoriesController {
     return CategoriesController.serialize(output);
   }
 
+  @HttpCode(204)
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    throw new Error('Method not implemented');
+  remove(@Param('id', new ParseUUIDPipe({ errorHttpStatusCode: 422 })) id: string) {
+    return this.deleteUseCase.execute({ id });
   }
 
   static serialize(output: CategoryOutput) {
