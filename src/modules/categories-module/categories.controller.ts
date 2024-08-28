@@ -26,7 +26,7 @@ export class CategoriesController {
 
   @Post()
   create(@Body() createCategoryDto: CreateCategoryDto) {
-    throw new Error('Method not implemented');
+    return this.createUseCase.execute(createCategoryDto);
   }
 
   @Get()
