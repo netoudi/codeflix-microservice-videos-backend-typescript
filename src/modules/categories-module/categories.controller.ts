@@ -1,12 +1,25 @@
-import { Body, Controller, Delete, Get, HttpCode, Inject, Param, ParseUUIDPipe, Patch, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  HttpCode,
+  Inject,
+  Param,
+  ParseUUIDPipe,
+  Patch,
+  Post,
+  Query,
+} from '@nestjs/common';
 import { CategoryOutput } from '@/core/category/application/use-cases/common/category-output.mapper';
 import { CreateCategoryUseCase } from '@/core/category/application/use-cases/create-category/create-category.use-case';
 import { DeleteCategoryUseCase } from '@/core/category/application/use-cases/delete-category/delete-category.use-case';
 import { GetCategoryUseCase } from '@/core/category/application/use-cases/get-category/get-category.use-case';
 import { ListCategoriesUseCase } from '@/core/category/application/use-cases/list-category/list-categories.use-case';
 import { UpdateCategoryUseCase } from '@/core/category/application/use-cases/update-category/update-category.use-case';
-import { CategoriesPresenter } from '@/modules/categories-module/categories.presenter';
+import { CategoryPresenter, CategoryCollectionPresenter } from '@/modules/categories-module/categories.presenter';
 import { CreateCategoryDto } from '@/modules/categories-module/dto/create-category.dto';
+import { SearchCategoriesDto } from '@/modules/categories-module/dto/search-categories.dto';
 import { UpdateCategoryDto } from '@/modules/categories-module/dto/update-category.dto';
 
 @Controller('categories')
@@ -21,7 +34,7 @@ export class CategoriesController {
   private getUseCase: GetCategoryUseCase;
 
   @Inject(ListCategoriesUseCase)
-  private: ListCategoriesUseCase;
+  private listUseCase: ListCategoriesUseCase;
 
   @Inject(UpdateCategoryUseCase)
   private updateUseCase: UpdateCategoryUseCase;
@@ -33,8 +46,9 @@ export class CategoriesController {
   }
 
   @Get()
-  findAll() {
-    throw new Error('Method not implemented');
+  async search(@Query() searchParamsDto: SearchCategoriesDto) {
+    const output = await this.listUseCase.execute(searchParamsDto);
+    return new CategoryCollectionPresenter(output);
   }
 
   @Get(':id')
@@ -59,6 +73,6 @@ export class CategoriesController {
   }
 
   static serialize(output: CategoryOutput) {
-    return new CategoriesPresenter(output);
+    return new CategoryPresenter(output);
   }
 }
