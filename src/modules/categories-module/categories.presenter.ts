@@ -7,6 +7,7 @@ export class CategoryPresenter {
   id: string;
   name: string;
   description: string | null;
+  is_active: boolean;
 
   @Transform(({ value }: { value: Date }) => value.toISOString())
   created_at: Date;
@@ -15,6 +16,7 @@ export class CategoryPresenter {
     this.id = output.id;
     this.name = output.name;
     this.description = output.description;
+    this.is_active = output.isActive;
     this.created_at = output.createdAt;
   }
 }

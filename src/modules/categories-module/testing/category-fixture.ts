@@ -275,7 +275,7 @@ export class ListCategoriesFixture {
       {
         send_data: {
           page: 1,
-          per_page: 2,
+          perPage: 2,
         },
         expected: {
           entities: [entitiesMap.fourth, entitiesMap.third],
@@ -290,7 +290,7 @@ export class ListCategoriesFixture {
       {
         send_data: {
           page: 2,
-          per_page: 2,
+          perPage: 2,
         },
         expected: {
           entities: [entitiesMap.second, entitiesMap.first],
@@ -322,7 +322,7 @@ export class ListCategoriesFixture {
       {
         send_data: {
           page: 1,
-          per_page: 2,
+          perPage: 2,
           sort: 'name',
           filter: 'a',
         },
@@ -339,7 +339,7 @@ export class ListCategoriesFixture {
       {
         send_data: {
           page: 2,
-          per_page: 2,
+          perPage: 2,
           sort: 'name',
           filter: 'a',
         },
