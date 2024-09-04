@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsOptional, IsString, validateSync, ValidationError } from 'class-validator';
+import { IsBoolean, IsNotEmpty, IsOptional, IsString, ValidationError, validateSync } from 'class-validator';
 
 export type UpdateCategoryInputConstructor = {
   id: string;
@@ -20,7 +20,7 @@ export class UpdateCategoryInput {
   @IsOptional()
   description?: string | null;
 
-  @IsString()
+  @IsBoolean()
   @IsOptional()
   isActive?: boolean;
 

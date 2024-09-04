@@ -120,7 +120,7 @@ export class CreateCategoryFixture {
           ...defaultExpected,
         },
       },
-      isActive_NOT_A_BOOLEAN: {
+      IS_ACTIVE_NOT_A_BOOLEAN: {
         send_data: {
           isActive: 'a',
         },
@@ -211,7 +211,7 @@ export class UpdateCategoryFixture {
           ...defaultExpected,
         },
       },
-      isActive_NOT_A_BOOLEAN: {
+      IS_ACTIVE_NOT_A_BOOLEAN: {
         send_data: {
           isActive: 'a',
         },
