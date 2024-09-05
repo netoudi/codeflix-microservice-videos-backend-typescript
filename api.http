@@ -1,0 +1,30 @@
+@baseUrl = http://host.docker.internal:3333
+
+### create a category
+POST {{baseUrl}}/categories
+Content-Type: application/json
+
+{
+  "name": "Movie"
+}
+
+### list all categories
+
+# @name categories
+@categoryId = {{categories.response.body.data.0.id}}
+
+GET {{baseUrl}}/categories
+
+### list a category
+GET {{baseUrl}}/categories/{{categoryId}}
+
+### udpate a category
+PATCH {{baseUrl}}/categories/{{categoryId}}
+Content-Type: application/json
+
+{
+  "description": "some description"
+}
+
+### delete a category
+DELETE {{baseUrl}}/categories/{{categoryId}}

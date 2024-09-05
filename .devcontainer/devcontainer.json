@@ -45,6 +45,7 @@
 	"customizations": {
 		"vscode": {
 			"extensions": [
+				"humao.rest-client",
 				"ms-azuretools.vscode-docker",
 				"EditorConfig.EditorConfig",
 				"dbaeumer.vscode-eslint",

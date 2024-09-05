@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsOptional, IsString, validateSync, ValidationError } from 'class-validator';
+import { IsBoolean, IsNotEmpty, IsOptional, IsString, validateSync, ValidationError } from 'class-validator';
 
 export type CreateCategoryInputConstructor = {
   name: string;
@@ -15,7 +15,7 @@ export class CreateCategoryInput {
   @IsOptional()
   description?: string | null;
 
-  @IsString()
+  @IsBoolean()
   @IsOptional()
   isActive?: boolean;
 
