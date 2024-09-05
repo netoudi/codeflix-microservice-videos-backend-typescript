@@ -31,9 +31,11 @@ const config: Config = {
   coveragePathIgnorePatterns: [
     '/node_modules/',
     'shared/infra/testing',
+    'shared-module/testing',
     '.interface.ts',
     '-interface.ts',
     '-fixture.ts',
+    '.input.ts',
     '.d.ts',
   ],
 
