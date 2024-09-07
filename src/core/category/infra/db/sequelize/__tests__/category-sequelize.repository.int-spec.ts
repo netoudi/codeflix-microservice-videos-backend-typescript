@@ -69,12 +69,12 @@ describe('CategorySequelizeRepository Integration Tests', () => {
 
   describe('search method tests', () => {
     it('should only apply paginate when other params are null', async () => {
-      const createdAt = new Date();
+      const created_at = new Date();
       const categories = Category.fake()
         .theCategories(16)
         .withName('Movie')
         .withDescription(null)
-        .withCreatedAt(createdAt)
+        .withCreatedAt(created_at)
         .build();
       await repository.bulkInsert(categories);
       const spyToEntity = jest.spyOn(CategoryModelMapper, 'toEntity');
@@ -97,18 +97,18 @@ describe('CategorySequelizeRepository Integration Tests', () => {
           name: 'Movie',
           description: null,
           is_active: true,
-          created_at: createdAt,
+          created_at: created_at,
         }),
       );
     });
 
     it('should order by created_at DESC when search params are null', async () => {
-      const createdAt = new Date();
+      const created_at = new Date();
       const categories = Category.fake()
         .theCategories(16)
         .withName((index) => `Movie ${index}`)
         .withDescription(null)
-        .withCreatedAt((index) => new Date(createdAt.getTime() + index))
+        .withCreatedAt((index) => new Date(created_at.getTime() + index))
         .build();
       await repository.bulkInsert(categories);
       const result = await repository.search(new CategorySearchParams());
@@ -175,7 +175,7 @@ describe('CategorySequelizeRepository Integration Tests', () => {
     });
 
     it('should apply paginate and sort', async () => {
-      expect(repository.sortableFields).toStrictEqual(['name', 'createdAt']);
+      expect(repository.sortableFields).toStrictEqual(['name', 'created_at']);
       const categories = [
         Category.fake().aCategory().withName('b').build(),
         Category.fake().aCategory().withName('a').build(),

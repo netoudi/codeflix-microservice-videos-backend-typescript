@@ -3,7 +3,7 @@ import { IsBoolean, IsNotEmpty, IsOptional, IsString, validateSync, ValidationEr
 export type CreateCategoryInputConstructor = {
   name: string;
   description?: string | null;
-  isActive?: boolean;
+  is_active?: boolean;
 };
 
 export class CreateCategoryInput {
@@ -17,13 +17,13 @@ export class CreateCategoryInput {
 
   @IsBoolean()
   @IsOptional()
-  isActive?: boolean;
+  is_active?: boolean;
 
   constructor(props: CreateCategoryInputConstructor) {
     if (!props) return;
     this.name = props.name;
     this.description = props.description;
-    this.isActive = props.isActive;
+    this.is_active = props.is_active;
   }
 }
 

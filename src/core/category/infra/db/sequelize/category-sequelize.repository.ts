@@ -12,7 +12,7 @@ import { SortDirection } from '@/core/shared/domain/repository/search-params';
 import { Uuid } from '@/core/shared/domain/value-objects/uuid.vo';
 
 export class CategorySequelizeRepository implements ICategoryRepository {
-  sortableFields: string[] = ['name', 'createdAt'];
+  sortableFields: string[] = ['name', 'created_at'];
   orderBy = { mysql: { name: (sortDir: SortDirection) => literal(`binary name ${sortDir}`) } };
 
   constructor(private categoryModel: typeof CategoryModel) {}

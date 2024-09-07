@@ -38,22 +38,22 @@ describe('UpdateCategoryUseCase Unit Tests', () => {
       id: category.id.value,
       name: 'test',
       description: null,
-      isActive: true,
-      createdAt: category.createdAt,
+      is_active: true,
+      created_at: category.created_at,
     });
     type Arrange = {
       input: {
         id: string;
         name?: string;
         description?: string | null;
-        isActive?: boolean;
+        is_active?: boolean;
       };
       output: {
         id: string;
         name: string;
         description: string | null;
-        isActive: boolean;
-        createdAt: Date;
+        is_active: boolean;
+        created_at: Date;
       };
     };
     const arrange: Arrange[] = [
@@ -67,8 +67,8 @@ describe('UpdateCategoryUseCase Unit Tests', () => {
           id: category.id.value,
           name: 'test',
           description: 'some description',
-          isActive: true,
-          createdAt: category.createdAt,
+          is_active: true,
+          created_at: category.created_at,
         },
       },
       {
@@ -80,22 +80,22 @@ describe('UpdateCategoryUseCase Unit Tests', () => {
           id: category.id.value,
           name: 'test',
           description: 'some description',
-          isActive: true,
-          createdAt: category.createdAt,
+          is_active: true,
+          created_at: category.created_at,
         },
       },
       {
         input: {
           id: category.id.value,
           name: 'test',
-          isActive: false,
+          is_active: false,
         },
         output: {
           id: category.id.value,
           name: 'test',
           description: 'some description',
-          isActive: false,
-          createdAt: category.createdAt,
+          is_active: false,
+          created_at: category.created_at,
         },
       },
       {
@@ -107,22 +107,22 @@ describe('UpdateCategoryUseCase Unit Tests', () => {
           id: category.id.value,
           name: 'test',
           description: 'some description',
-          isActive: false,
-          createdAt: category.createdAt,
+          is_active: false,
+          created_at: category.created_at,
         },
       },
       {
         input: {
           id: category.id.value,
           name: 'test',
-          isActive: true,
+          is_active: true,
         },
         output: {
           id: category.id.value,
           name: 'test',
           description: 'some description',
-          isActive: true,
-          createdAt: category.createdAt,
+          is_active: true,
+          created_at: category.created_at,
         },
       },
       {
@@ -130,14 +130,14 @@ describe('UpdateCategoryUseCase Unit Tests', () => {
           id: category.id.value,
           name: 'test',
           description: 'some description',
-          isActive: false,
+          is_active: false,
         },
         output: {
           id: category.id.value,
           name: 'test',
           description: 'some description',
-          isActive: false,
-          createdAt: category.createdAt,
+          is_active: false,
+          created_at: category.created_at,
         },
       },
       {
@@ -149,8 +149,8 @@ describe('UpdateCategoryUseCase Unit Tests', () => {
           id: category.id.value,
           name: 'test',
           description: null,
-          isActive: false,
-          createdAt: category.createdAt,
+          is_active: false,
+          created_at: category.created_at,
         },
       },
     ];
@@ -159,7 +159,7 @@ describe('UpdateCategoryUseCase Unit Tests', () => {
         id: i.input.id,
         ...('name' in i.input && { name: i.input.name }),
         ...('description' in i.input && { description: i.input.description }),
-        ...('isActive' in i.input && { isActive: i.input.isActive }),
+        ...('is_active' in i.input && { is_active: i.input.is_active }),
       });
       expect(output).toStrictEqual(i.output);
     }

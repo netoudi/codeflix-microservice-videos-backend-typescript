@@ -14,22 +14,22 @@ describe('Category Unit Tests', () => {
       expect(category.id).toBeInstanceOf(Uuid);
       expect(category.name).toBe('Movie');
       expect(category.description).toBeNull();
-      expect(category.isActive).toBeTruthy();
-      expect(category.createdAt).toBeInstanceOf(Date);
+      expect(category.is_active).toBeTruthy();
+      expect(category.created_at).toBeInstanceOf(Date);
     });
 
     test('should create a category with all values', () => {
-      const createdAt = new Date();
+      const created_at = new Date();
       const category = new Category({
         name: 'Movie',
         description: 'Movie description',
-        createdAt,
+        created_at,
       });
       expect(category.id).toBeInstanceOf(Uuid);
       expect(category.name).toBe('Movie');
       expect(category.description).toBe('Movie description');
-      expect(category.isActive).toBeTruthy();
-      expect(category.createdAt).toBe(createdAt);
+      expect(category.is_active).toBeTruthy();
+      expect(category.created_at).toBe(created_at);
     });
 
     test('should create a category with name and description', () => {
@@ -40,8 +40,8 @@ describe('Category Unit Tests', () => {
       expect(category.id).toBeInstanceOf(Uuid);
       expect(category.name).toBe('Movie');
       expect(category.description).toBe('Movie description');
-      expect(category.isActive).toBeTruthy();
-      expect(category.createdAt).toBeInstanceOf(Date);
+      expect(category.is_active).toBeTruthy();
+      expect(category.created_at).toBeInstanceOf(Date);
     });
   });
 
@@ -67,24 +67,24 @@ describe('Category Unit Tests', () => {
       expect(category.id).toBeInstanceOf(Uuid);
       expect(category.name).toBe('Movie');
       expect(category.description).toBeNull();
-      expect(category.isActive).toBeTruthy();
-      expect(category.createdAt).toBeInstanceOf(Date);
+      expect(category.is_active).toBeTruthy();
+      expect(category.created_at).toBeInstanceOf(Date);
       expect(Category.prototype.validate).toHaveBeenCalledTimes(1);
       expect(category.notification.hasErrors()).toBeFalsy();
     });
 
     test('should create a category with all values', () => {
-      const createdAt = new Date();
+      const created_at = new Date();
       const category = Category.create({
         name: 'Movie',
         description: 'Movie description',
-        createdAt,
+        created_at,
       });
       expect(category.id).toBeInstanceOf(Uuid);
       expect(category.name).toBe('Movie');
       expect(category.description).toBe('Movie description');
-      expect(category.isActive).toBeTruthy();
-      expect(category.createdAt).toBe(createdAt);
+      expect(category.is_active).toBeTruthy();
+      expect(category.created_at).toBe(created_at);
       expect(Category.prototype.validate).toHaveBeenCalledTimes(1);
       expect(category.notification.hasErrors()).toBeFalsy();
     });
@@ -97,22 +97,22 @@ describe('Category Unit Tests', () => {
       expect(category.id).toBeInstanceOf(Uuid);
       expect(category.name).toBe('Movie');
       expect(category.description).toBe('Movie description');
-      expect(category.isActive).toBeTruthy();
-      expect(category.createdAt).toBeInstanceOf(Date);
+      expect(category.is_active).toBeTruthy();
+      expect(category.created_at).toBeInstanceOf(Date);
       expect(Category.prototype.validate).toHaveBeenCalledTimes(1);
       expect(category.notification.hasErrors()).toBeFalsy();
     });
 
-    test('should create a category with name and isActive', () => {
+    test('should create a category with name and is_active', () => {
       const category = Category.create({
         name: 'Movie',
-        isActive: false,
+        is_active: false,
       });
       expect(category.id).toBeInstanceOf(Uuid);
       expect(category.name).toBe('Movie');
       expect(category.description).toBeNull();
-      expect(category.isActive).toBeFalsy();
-      expect(category.createdAt).toBeInstanceOf(Date);
+      expect(category.is_active).toBeFalsy();
+      expect(category.created_at).toBeInstanceOf(Date);
       expect(Category.prototype.validate).toHaveBeenCalledTimes(1);
       expect(category.notification.hasErrors()).toBeFalsy();
     });
@@ -143,19 +143,19 @@ describe('Category Unit Tests', () => {
     test('should active a category', () => {
       const category = Category.create({
         name: 'Movie',
-        isActive: false,
+        is_active: false,
       });
       category.activate();
-      expect(category.isActive).toBe(true);
+      expect(category.is_active).toBe(true);
     });
 
     test('should disable a category', () => {
       const category = Category.create({
         name: 'Movie',
-        isActive: true,
+        is_active: true,
       });
       category.deactivate();
-      expect(category.isActive).toBe(false);
+      expect(category.is_active).toBe(false);
     });
   });
 });

@@ -20,8 +20,8 @@ describe('CategoriesController Unit Tests', () => {
       id: 'c3c3c3c3-c3c3-c3c3-c3c3-c3c3c3c3c3c3',
       name: 'Movie',
       description: 'some description',
-      isActive: true,
-      createdAt: new Date(),
+      is_active: true,
+      created_at: new Date(),
     };
     const mockCreateUseCase = {
       execute: jest.fn().mockReturnValue(Promise.resolve(output)),
@@ -31,7 +31,7 @@ describe('CategoriesController Unit Tests', () => {
     const input: CreateCategoryInput = {
       name: 'Movie',
       description: 'some description',
-      isActive: true,
+      is_active: true,
     };
     const presenter = await controller.create(input);
     expect(mockCreateUseCase.execute).toHaveBeenCalledWith(input);
@@ -45,8 +45,8 @@ describe('CategoriesController Unit Tests', () => {
       id,
       name: 'Movie',
       description: 'some description',
-      isActive: true,
-      createdAt: new Date(),
+      is_active: true,
+      created_at: new Date(),
     };
     const mockUpdateUseCase = {
       execute: jest.fn().mockReturnValue(Promise.resolve(output)),
@@ -56,7 +56,7 @@ describe('CategoriesController Unit Tests', () => {
     const input: Omit<UpdateCategoryInput, 'id'> = {
       name: 'Movie',
       description: 'some description',
-      isActive: true,
+      is_active: true,
     };
     const presenter = await controller.update(id, input);
     expect(mockUpdateUseCase.execute).toHaveBeenCalledWith({ id, ...input });
@@ -70,8 +70,8 @@ describe('CategoriesController Unit Tests', () => {
       id,
       name: 'Movie',
       description: 'some description',
-      isActive: true,
-      createdAt: new Date(),
+      is_active: true,
+      created_at: new Date(),
     };
     const mockGetUseCase = {
       execute: jest.fn().mockReturnValue(Promise.resolve(output)),
@@ -91,8 +91,8 @@ describe('CategoriesController Unit Tests', () => {
           id: 'c3c3c3c3-c3c3-c3c3-c3c3-c3c3c3c3c3c3',
           name: 'Movie',
           description: 'some description',
-          isActive: true,
-          createdAt: new Date(),
+          is_active: true,
+          created_at: new Date(),
         },
       ],
       currentPage: 1,

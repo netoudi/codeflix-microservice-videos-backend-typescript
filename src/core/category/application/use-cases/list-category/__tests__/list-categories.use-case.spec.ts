@@ -12,10 +12,10 @@ describe('ListCategoriesUseCase Unit Tests', () => {
     useCase = new ListCategoriesUseCase(repository);
   });
 
-  it('should return output sorted by createdAt when input param is empty', async () => {
+  it('should return output sorted by created_at when input param is empty', async () => {
     const items = [
       new Category({ name: 'test 1' }),
-      new Category({ name: 'test 2', createdAt: new Date(new Date().getTime() + 1000) }),
+      new Category({ name: 'test 2', created_at: new Date(new Date().getTime() + 1000) }),
     ];
     repository.items = items;
     const output = await useCase.execute({});

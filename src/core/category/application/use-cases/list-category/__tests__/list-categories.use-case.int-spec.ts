@@ -16,7 +16,7 @@ describe('ListCategoriesUseCase Integration Tests', () => {
     useCase = new ListCategoriesUseCase(repository);
   });
 
-  it('should return output sorted by createdAt when input param is empty', async () => {
+  it('should return output sorted by created_at when input param is empty', async () => {
     const categories = Category.fake()
       .theCategories(2)
       .withCreatedAt((i) => new Date(new Date().getTime() + 1000 + i))
