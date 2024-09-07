@@ -19,30 +19,30 @@ describe('CategoryOutputMapper Unit Tests', () => {
     let result = new CategorySearchResult({
       items: [],
       total: 0,
-      currentPage: 1,
-      perPage: 1,
+      current_page: 1,
+      per_page: 1,
     });
     let output = CategoryOutputMapper.toPagination(result);
     expect(output).toStrictEqual({
       items: [],
       total: result.total,
-      currentPage: result.currentPage,
-      perPage: result.perPage,
-      lastPage: result.lastPage,
+      current_page: result.current_page,
+      per_page: result.per_page,
+      last_page: result.last_page,
     });
     result = new CategorySearchResult({
       items: Category.fake().theCategories(3).build(),
       total: 3,
-      currentPage: 1,
-      perPage: 15,
+      current_page: 1,
+      per_page: 15,
     });
     output = CategoryOutputMapper.toPagination(result);
     expect(output).toStrictEqual({
       items: result.items.map(CategoryOutputMapper.toOutput),
       total: result.total,
-      currentPage: result.currentPage,
-      perPage: result.perPage,
-      lastPage: result.lastPage,
+      current_page: result.current_page,
+      per_page: result.per_page,
+      last_page: result.last_page,
     });
   });
 });

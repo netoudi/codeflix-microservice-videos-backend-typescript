@@ -1,9 +1,9 @@
 import { Transform } from 'class-transformer';
 
 export type PaginationPresenterProps = {
-  currentPage: number;
-  lastPage: number;
-  perPage: number;
+  current_page: number;
+  last_page: number;
+  per_page: number;
   total: number;
 };
 
@@ -21,9 +21,9 @@ export class PaginationPresenter {
   total: number;
 
   constructor(props: PaginationPresenterProps) {
-    this.current_page = props.currentPage;
-    this.last_page = props.lastPage;
-    this.per_page = props.perPage;
+    this.current_page = props.current_page;
+    this.last_page = props.last_page;
+    this.per_page = props.per_page;
     this.total = props.total;
   }
 }

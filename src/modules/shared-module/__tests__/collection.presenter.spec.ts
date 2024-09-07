@@ -10,9 +10,9 @@ describe('CollectionPresenter Unit Tests', () => {
   describe('constructor', () => {
     it('should set values', () => {
       const presenter = new StubCollectionPresenter({
-        currentPage: 1,
-        lastPage: 3,
-        perPage: 2,
+        current_page: 1,
+        last_page: 3,
+        per_page: 2,
         total: 4,
       });
       expect(presenter['paginationPresenter']).toBeInstanceOf(PaginationPresenter);
@@ -26,9 +26,9 @@ describe('CollectionPresenter Unit Tests', () => {
 
   it('should presenter data', () => {
     let presenter = new StubCollectionPresenter({
-      currentPage: 1,
-      lastPage: 3,
-      perPage: 2,
+      current_page: 1,
+      last_page: 3,
+      per_page: 2,
       total: 4,
     });
     expect(instanceToPlain(presenter)).toStrictEqual({
@@ -41,9 +41,9 @@ describe('CollectionPresenter Unit Tests', () => {
       },
     });
     presenter = new StubCollectionPresenter({
-      currentPage: '1' as any,
-      lastPage: '3' as any,
-      perPage: '2' as any,
+      current_page: '1' as any,
+      last_page: '3' as any,
+      per_page: '2' as any,
       total: '4' as any,
     });
     expect(instanceToPlain(presenter)).toStrictEqual({

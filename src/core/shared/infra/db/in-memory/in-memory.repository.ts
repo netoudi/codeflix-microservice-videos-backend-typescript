@@ -55,13 +55,13 @@ export abstract class InMemorySearchableRepository<E extends Entity, EntityId ex
   async search(props: SearchParams<Filter>): Promise<SearchResult<E>> {
     const itemsFiltered = await this.applyFilter(this.items, props.filter);
     const itemsSorted = this.applySort(itemsFiltered, props.sort, props.sortDir);
-    const itemsPaginated = this.applyPaginate(itemsSorted, props.page, props.perPage);
+    const itemsPaginated = this.applyPaginate(itemsSorted, props.page, props.per_page);
     return Promise.resolve(
       new SearchResult({
         items: itemsPaginated,
         total: itemsFiltered.length,
-        currentPage: props.page,
-        perPage: props.perPage,
+        current_page: props.page,
+        per_page: props.per_page,
       }),
     );
   }
@@ -90,9 +90,9 @@ export abstract class InMemorySearchableRepository<E extends Entity, EntityId ex
 
   protected abstract applyFilter(items: E[], filter: Filter | null): Promise<E[]>;
 
-  protected applyPaginate(items: E[], page: SearchParams['page'], perPage: SearchParams['perPage']): E[] {
-    const start = (page - 1) * perPage;
-    const limit = start + perPage;
+  protected applyPaginate(items: E[], page: SearchParams['page'], per_page: SearchParams['per_page']): E[] {
+    const start = (page - 1) * per_page;
+    const limit = start + per_page;
     return items.slice(start, limit);
   }
 }

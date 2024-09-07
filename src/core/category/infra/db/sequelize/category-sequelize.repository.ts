@@ -55,8 +55,8 @@ export class CategorySequelizeRepository implements ICategoryRepository {
   }
 
   async search(props: CategorySearchParams): Promise<CategorySearchResult> {
-    const offset = (props.page - 1) * props.perPage;
-    const limit = props.perPage;
+    const offset = (props.page - 1) * props.per_page;
+    const limit = props.per_page;
     const { rows: models, count } = await this.categoryModel.findAndCountAll({
       ...(props.filter && { where: { name: { [Op.like]: `%${props.filter}%` } } }),
       ...(props.sort && this.sortableFields.includes(props.sort)
@@ -67,8 +67,8 @@ export class CategorySequelizeRepository implements ICategoryRepository {
     });
     return new CategorySearchResult({
       items: CategoryModelMapper.toEntities(models),
-      currentPage: props.page,
-      perPage: props.perPage,
+      current_page: props.page,
+      per_page: props.per_page,
       total: count,
     });
   }

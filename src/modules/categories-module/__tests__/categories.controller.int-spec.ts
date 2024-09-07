@@ -115,9 +115,9 @@ describe('CategoriesController Integration Tests', () => {
         expect(presenter).toEqual(
           new CategoryCollectionPresenter({
             items: entities.map(CategoryOutputMapper.toOutput),
-            currentPage: paginationProps.meta.current_page,
-            lastPage: paginationProps.meta.last_page,
-            perPage: paginationProps.meta.per_page,
+            current_page: paginationProps.meta.current_page,
+            last_page: paginationProps.meta.last_page,
+            per_page: paginationProps.meta.per_page,
             total: paginationProps.meta.total,
           }),
         );
@@ -137,9 +137,9 @@ describe('CategoriesController Integration Tests', () => {
         expect(presenter).toEqual(
           new CategoryCollectionPresenter({
             items: entities.map(CategoryOutputMapper.toOutput),
-            currentPage: paginationProps.meta.current_page,
-            lastPage: paginationProps.meta.last_page,
-            perPage: paginationProps.meta.per_page,
+            current_page: paginationProps.meta.current_page,
+            last_page: paginationProps.meta.last_page,
+            per_page: paginationProps.meta.per_page,
             total: paginationProps.meta.total,
           }),
         );

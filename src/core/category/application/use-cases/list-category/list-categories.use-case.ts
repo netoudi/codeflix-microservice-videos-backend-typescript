@@ -19,7 +19,7 @@ export class ListCategoriesUseCase implements IUseCase<ListCategoriesInput, List
 
 export type ListCategoriesInput = {
   page?: number;
-  perPage?: number;
+  per_page?: number;
   sort?: string;
   sortDir?: SortDirection | null;
   filter?: CategoryFilter | null;

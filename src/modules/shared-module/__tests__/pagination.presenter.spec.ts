@@ -5,9 +5,9 @@ describe('PaginationPresenter Unit Tests', () => {
   describe('constructor', () => {
     it('should set values', () => {
       const presenter = new PaginationPresenter({
-        currentPage: 1,
-        lastPage: 3,
-        perPage: 2,
+        current_page: 1,
+        last_page: 3,
+        per_page: 2,
         total: 4,
       });
       expect(presenter.current_page).toBe(1);
@@ -18,9 +18,9 @@ describe('PaginationPresenter Unit Tests', () => {
 
     it('should set string number values', () => {
       const presenter = new PaginationPresenter({
-        currentPage: '1' as any,
-        lastPage: '3' as any,
-        perPage: '2' as any,
+        current_page: '1' as any,
+        last_page: '3' as any,
+        per_page: '2' as any,
         total: '4' as any,
       });
       expect(presenter.current_page).toBe('1');
@@ -32,9 +32,9 @@ describe('PaginationPresenter Unit Tests', () => {
 
   it('should presenter data', () => {
     let presenter = new PaginationPresenter({
-      currentPage: 1,
-      lastPage: 3,
-      perPage: 2,
+      current_page: 1,
+      last_page: 3,
+      per_page: 2,
       total: 4,
     });
     expect(instanceToPlain(presenter)).toStrictEqual({
@@ -44,9 +44,9 @@ describe('PaginationPresenter Unit Tests', () => {
       total: 4,
     });
     presenter = new PaginationPresenter({
-      currentPage: '1' as any,
-      lastPage: '3' as any,
-      perPage: '2' as any,
+      current_page: '1' as any,
+      last_page: '3' as any,
+      per_page: '2' as any,
       total: '4' as any,
     });
     expect(instanceToPlain(presenter)).toStrictEqual({

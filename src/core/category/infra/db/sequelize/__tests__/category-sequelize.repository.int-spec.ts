@@ -83,9 +83,9 @@ describe('CategorySequelizeRepository Integration Tests', () => {
       expect(spyToEntity).toHaveBeenCalledTimes(15);
       expect(result.toJSON()).toMatchObject({
         total: 16,
-        currentPage: 1,
-        perPage: 15,
-        lastPage: 2,
+        current_page: 1,
+        per_page: 15,
+        last_page: 2,
       });
       result.items.forEach((category) => {
         expect(category).toBeInstanceOf(Category);
@@ -145,7 +145,7 @@ describe('CategorySequelizeRepository Integration Tests', () => {
       let result = await repository.search(
         new CategorySearchParams({
           page: 1,
-          perPage: 2,
+          per_page: 2,
           filter: 'TEST',
         }),
       );
@@ -153,14 +153,14 @@ describe('CategorySequelizeRepository Integration Tests', () => {
         new CategorySearchResult({
           items: [categories[0], categories[2]],
           total: 3,
-          currentPage: 1,
-          perPage: 2,
+          current_page: 1,
+          per_page: 2,
         }).toJSON(true),
       );
       result = await repository.search(
         new CategorySearchParams({
           page: 2,
-          perPage: 2,
+          per_page: 2,
           filter: 'TEST',
         }),
       );
@@ -168,8 +168,8 @@ describe('CategorySequelizeRepository Integration Tests', () => {
         new CategorySearchResult({
           items: [categories[3]],
           total: 3,
-          currentPage: 2,
-          perPage: 2,
+          current_page: 2,
+          per_page: 2,
         }).toJSON(true),
       );
     });
@@ -188,54 +188,54 @@ describe('CategorySequelizeRepository Integration Tests', () => {
         {
           params: new CategorySearchParams({
             page: 1,
-            perPage: 2,
+            per_page: 2,
             sort: 'name',
           }),
           result: new CategorySearchResult({
             items: [categories[1], categories[0]],
             total: 5,
-            currentPage: 1,
-            perPage: 2,
+            current_page: 1,
+            per_page: 2,
           }),
         },
         {
           params: new CategorySearchParams({
             page: 2,
-            perPage: 2,
+            per_page: 2,
             sort: 'name',
           }),
           result: new CategorySearchResult({
             items: [categories[4], categories[2]],
             total: 5,
-            currentPage: 2,
-            perPage: 2,
+            current_page: 2,
+            per_page: 2,
           }),
         },
         {
           params: new CategorySearchParams({
             page: 3,
-            perPage: 2,
+            per_page: 2,
             sort: 'name',
           }),
           result: new CategorySearchResult({
             items: [categories[3]],
             total: 5,
-            currentPage: 3,
-            perPage: 2,
+            current_page: 3,
+            per_page: 2,
           }),
         },
         {
           params: new CategorySearchParams({
             page: 1,
-            perPage: 2,
+            per_page: 2,
             sort: 'name',
             sortDir: 'desc',
           }),
           result: new CategorySearchResult({
             items: [categories[3], categories[2]],
             total: 5,
-            currentPage: 1,
-            perPage: 2,
+            current_page: 1,
+            per_page: 2,
           }),
         },
       ];
@@ -258,29 +258,29 @@ describe('CategorySequelizeRepository Integration Tests', () => {
         {
           params: new CategorySearchParams({
             page: 1,
-            perPage: 2,
+            per_page: 2,
             sort: 'name',
             filter: 'TEST',
           }),
           result: new CategorySearchResult({
             items: [categories[2], categories[4]],
             total: 3,
-            currentPage: 1,
-            perPage: 2,
+            current_page: 1,
+            per_page: 2,
           }),
         },
         {
           params: new CategorySearchParams({
             page: 2,
-            perPage: 2,
+            per_page: 2,
             sort: 'name',
             filter: 'TEST',
           }),
           result: new CategorySearchResult({
             items: [categories[0]],
             total: 3,
-            currentPage: 2,
-            perPage: 2,
+            current_page: 2,
+            per_page: 2,
           }),
         },
       ];

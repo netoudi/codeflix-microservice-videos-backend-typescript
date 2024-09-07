@@ -95,9 +95,9 @@ describe('CategoriesController Unit Tests', () => {
           created_at: new Date(),
         },
       ],
-      currentPage: 1,
-      lastPage: 1,
-      perPage: 1,
+      current_page: 1,
+      last_page: 1,
+      per_page: 1,
       total: 1,
     };
     const mockListUseCase = {
@@ -107,7 +107,7 @@ describe('CategoriesController Unit Tests', () => {
     controller['listUseCase'] = mockListUseCase;
     const searchParams: SearchCategoriesDto = {
       page: 1,
-      perPage: 1,
+      per_page: 1,
       sort: 'name',
       sortDir: 'asc',
       filter: 'test',
