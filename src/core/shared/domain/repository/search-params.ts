@@ -6,7 +6,7 @@ export type SearchParamsConstructor<Filter = string> = {
   page?: number;
   per_page?: number;
   sort?: string;
-  sortDir?: SortDirection | null;
+  sort_dir?: SortDirection | null;
   filter?: Filter | null;
 };
 
@@ -14,7 +14,7 @@ export class SearchParams<Filter = string> extends ValueObject {
   protected _page: number = 1;
   protected _per_page: number = 15;
   protected _sort: string | null;
-  protected _sortDir: SortDirection | null;
+  protected _sort_dir: SortDirection | null;
   protected _filter: Filter | null;
 
   constructor(props: SearchParamsConstructor<Filter> = {}) {
@@ -22,7 +22,7 @@ export class SearchParams<Filter = string> extends ValueObject {
     this.page = props.page;
     this.per_page = props.per_page;
     this.sort = props.sort;
-    this.sortDir = props.sortDir;
+    this.sort_dir = props.sort_dir;
     this.filter = props.filter;
   }
 
@@ -58,17 +58,17 @@ export class SearchParams<Filter = string> extends ValueObject {
     this._sort = value === null || value === undefined || value === '' ? null : `${value}`;
   }
 
-  get sortDir(): SortDirection | null {
-    return this._sortDir;
+  get sort_dir(): SortDirection | null {
+    return this._sort_dir;
   }
 
-  private set sortDir(value: SortDirection | null) {
+  private set sort_dir(value: SortDirection | null) {
     if (!this.sort) {
-      this._sortDir = null;
+      this._sort_dir = null;
       return;
     }
     const dir = `${value}`.toLowerCase();
-    this._sortDir = dir !== 'asc' && dir !== 'desc' ? 'asc' : dir;
+    this._sort_dir = dir !== 'asc' && dir !== 'desc' ? 'asc' : dir;
   }
 
   get filter(): Filter | null {

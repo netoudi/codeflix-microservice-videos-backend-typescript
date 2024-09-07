@@ -66,28 +66,28 @@ describe('SearchParams Unit Tests', () => {
     });
   });
 
-  test('sortDir prop', () => {
+  test('sort_dir prop', () => {
     let params = new SearchParams();
-    expect(params.sortDir).toBeNull();
+    expect(params.sort_dir).toBeNull();
     params = new SearchParams({ sort: null });
-    expect(params.sortDir).toBeNull();
+    expect(params.sort_dir).toBeNull();
     params = new SearchParams({ sort: undefined });
-    expect(params.sortDir).toBeNull();
+    expect(params.sort_dir).toBeNull();
     params = new SearchParams({ sort: '' });
-    expect(params.sortDir).toBeNull();
+    expect(params.sort_dir).toBeNull();
     const arrange = [
-      { sortDir: null, expected: 'asc' },
-      { sortDir: undefined, expected: 'asc' },
-      { sortDir: '', expected: 'asc' },
-      { sortDir: 0, expected: 'asc' },
-      { sortDir: 'fake', expected: 'asc' },
-      { sortDir: 'asc', expected: 'asc' },
-      { sortDir: 'ASC', expected: 'asc' },
-      { sortDir: 'desc', expected: 'desc' },
-      { sortDir: 'DESC', expected: 'desc' },
+      { sort_dir: null, expected: 'asc' },
+      { sort_dir: undefined, expected: 'asc' },
+      { sort_dir: '', expected: 'asc' },
+      { sort_dir: 0, expected: 'asc' },
+      { sort_dir: 'fake', expected: 'asc' },
+      { sort_dir: 'asc', expected: 'asc' },
+      { sort_dir: 'ASC', expected: 'asc' },
+      { sort_dir: 'desc', expected: 'desc' },
+      { sort_dir: 'DESC', expected: 'desc' },
     ];
     arrange.forEach((i) => {
-      expect(new SearchParams({ sort: 'field', sortDir: i.sortDir as any }).sortDir).toBe(i.expected);
+      expect(new SearchParams({ sort: 'field', sort_dir: i.sort_dir as any }).sort_dir).toBe(i.expected);
     });
   });
 

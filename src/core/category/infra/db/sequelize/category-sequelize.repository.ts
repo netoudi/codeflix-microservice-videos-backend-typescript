@@ -13,7 +13,7 @@ import { Uuid } from '@/core/shared/domain/value-objects/uuid.vo';
 
 export class CategorySequelizeRepository implements ICategoryRepository {
   sortableFields: string[] = ['name', 'created_at'];
-  orderBy = { mysql: { name: (sortDir: SortDirection) => literal(`binary name ${sortDir}`) } };
+  orderBy = { mysql: { name: (sort_dir: SortDirection) => literal(`binary name ${sort_dir}`) } };
 
   constructor(private categoryModel: typeof CategoryModel) {}
 
@@ -60,7 +60,7 @@ export class CategorySequelizeRepository implements ICategoryRepository {
     const { rows: models, count } = await this.categoryModel.findAndCountAll({
       ...(props.filter && { where: { name: { [Op.like]: `%${props.filter}%` } } }),
       ...(props.sort && this.sortableFields.includes(props.sort)
-        ? { order: this.formatSort(props.sort, props.sortDir) }
+        ? { order: this.formatSort(props.sort, props.sort_dir) }
         : { order: [['created_at', 'desc']] }),
       offset,
       limit,
@@ -73,13 +73,13 @@ export class CategorySequelizeRepository implements ICategoryRepository {
     });
   }
 
-  private formatSort(sort: string, sortDir: SortDirection) {
+  private formatSort(sort: string, sort_dir: SortDirection) {
     const dialect = this.categoryModel.sequelize.getDialect() as 'msyql';
     if (this.orderBy[dialect] && this.orderBy[dialect][sort]) {
       // mysql searching by ascii
-      return this.orderBy[dialect][sort](sortDir);
+      return this.orderBy[dialect][sort](sort_dir);
     }
-    return [[sort, sortDir]];
+    return [[sort, sort_dir]];
   }
 
   getEntity(): new (...args: any[]) => Category {

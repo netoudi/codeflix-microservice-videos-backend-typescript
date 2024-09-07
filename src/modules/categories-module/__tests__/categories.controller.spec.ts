@@ -109,7 +109,7 @@ describe('CategoriesController Unit Tests', () => {
       page: 1,
       per_page: 1,
       sort: 'name',
-      sortDir: 'asc',
+      sort_dir: 'asc',
       filter: 'test',
     };
     const presenter = await controller.search(searchParams);

@@ -54,7 +54,7 @@ export abstract class InMemorySearchableRepository<E extends Entity, EntityId ex
 
   async search(props: SearchParams<Filter>): Promise<SearchResult<E>> {
     const itemsFiltered = await this.applyFilter(this.items, props.filter);
-    const itemsSorted = this.applySort(itemsFiltered, props.sort, props.sortDir);
+    const itemsSorted = this.applySort(itemsFiltered, props.sort, props.sort_dir);
     const itemsPaginated = this.applyPaginate(itemsSorted, props.page, props.per_page);
     return Promise.resolve(
       new SearchResult({
@@ -69,7 +69,7 @@ export abstract class InMemorySearchableRepository<E extends Entity, EntityId ex
   protected applySort(
     items: E[],
     sort: string | null,
-    sortDir: SortDirection | null,
+    sort_dir: SortDirection | null,
     customGetter?: (sort: string, item: E) => any,
   ): E[] {
     if (!sort || !this.sortableFields.includes(sort)) {
@@ -82,8 +82,8 @@ export abstract class InMemorySearchableRepository<E extends Entity, EntityId ex
       //eslint-disable-next-line @typescript-eslint/ban-ts-comment
       //@ts-ignore
       const bValue = customGetter ? customGetter(sort, b) : b[sort];
-      if (aValue < bValue) return sortDir === 'asc' ? -1 : 1;
-      if (aValue > bValue) return sortDir === 'asc' ? 1 : -1;
+      if (aValue < bValue) return sort_dir === 'asc' ? -1 : 1;
+      if (aValue > bValue) return sort_dir === 'asc' ? 1 : -1;
       return 0;
     });
   }

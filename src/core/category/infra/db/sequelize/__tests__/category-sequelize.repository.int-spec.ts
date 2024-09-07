@@ -229,7 +229,7 @@ describe('CategorySequelizeRepository Integration Tests', () => {
             page: 1,
             per_page: 2,
             sort: 'name',
-            sortDir: 'desc',
+            sort_dir: 'desc',
           }),
           result: new CategorySearchResult({
             items: [categories[3], categories[2]],

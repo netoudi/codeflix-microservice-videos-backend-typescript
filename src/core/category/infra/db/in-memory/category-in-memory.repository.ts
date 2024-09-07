@@ -17,8 +17,8 @@ export class CategoryInMemoryRepository
     });
   }
 
-  protected applySort(items: Category[], sort: string | null, sortDir: SortDirection | null): Category[] {
-    return sort ? super.applySort(items, sort, sortDir) : super.applySort(items, 'created_at', 'desc');
+  protected applySort(items: Category[], sort: string | null, sort_dir: SortDirection | null): Category[] {
+    return sort ? super.applySort(items, sort, sort_dir) : super.applySort(items, 'created_at', 'desc');
   }
 
   getEntity(): new (...args: any[]) => Category {

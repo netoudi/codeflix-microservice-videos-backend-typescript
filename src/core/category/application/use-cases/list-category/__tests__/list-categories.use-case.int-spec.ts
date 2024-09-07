@@ -71,7 +71,7 @@ describe('ListCategoriesUseCase Integration Tests', () => {
       page: 1,
       per_page: 2,
       sort: 'name',
-      sortDir: 'desc',
+      sort_dir: 'desc',
       filter: 'a',
     });
     expect(output).toStrictEqual({

@@ -226,7 +226,7 @@ describe('InMemorySearchableRepository Unit Tests', () => {
             page: 1,
             per_page: 2,
             sort: 'name',
-            sortDir: 'desc',
+            sort_dir: 'desc',
           }),
           searchResult: new SearchResult({
             items: [items[3], items[2]],
@@ -240,7 +240,7 @@ describe('InMemorySearchableRepository Unit Tests', () => {
             page: 2,
             per_page: 2,
             sort: 'name',
-            sortDir: 'desc',
+            sort_dir: 'desc',
           }),
           searchResult: new SearchResult({
             items: [items[4], items[0]],
