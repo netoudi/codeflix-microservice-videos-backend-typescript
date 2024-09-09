@@ -7,7 +7,7 @@ describe('Category Unit Tests', () => {
   });
 
   describe('constructor', () => {
-    test('should create a categroy with default values', () => {
+    test('should create a category with default values', () => {
       const category = new Category({
         name: 'Movie',
       });
@@ -60,7 +60,7 @@ describe('Category Unit Tests', () => {
   });
 
   describe('create command', () => {
-    test('should create a categroy with default values', () => {
+    test('should create a category with default values', () => {
       const category = Category.create({
         name: 'Movie',
       });
