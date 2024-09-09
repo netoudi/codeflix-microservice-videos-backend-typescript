@@ -1,1 +1,4 @@
+.docker/dbdata
 node_modules
+coverage
+dist
