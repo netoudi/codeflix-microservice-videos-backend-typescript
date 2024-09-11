@@ -30,6 +30,7 @@ const config: Config = {
   // An array of regexp pattern strings used to skip coverage collection
   coveragePathIgnorePatterns: [
     '/node_modules/',
+    'sequelize/migrations',
     'shared/infra/testing',
     'shared-module/testing',
     '.interface.ts',
