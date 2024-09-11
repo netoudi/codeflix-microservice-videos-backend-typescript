@@ -4,7 +4,7 @@ export type UpdateCategoryInputConstructor = {
   id: string;
   name?: string;
   description?: string | null;
-  isActive?: boolean;
+  is_active?: boolean;
 };
 
 export class UpdateCategoryInput {
@@ -22,14 +22,14 @@ export class UpdateCategoryInput {
 
   @IsBoolean()
   @IsOptional()
-  isActive?: boolean;
+  is_active?: boolean;
 
   constructor(props: UpdateCategoryInputConstructor) {
     if (!props) return;
     this.id = props.id;
     props.name && (this.name = props.name);
     props.description && (this.description = props.description);
-    props.isActive !== undefined && props.isActive !== null && (this.isActive = props.isActive);
+    props.is_active !== undefined && props.is_active !== null && (this.is_active = props.is_active);
   }
 }
 

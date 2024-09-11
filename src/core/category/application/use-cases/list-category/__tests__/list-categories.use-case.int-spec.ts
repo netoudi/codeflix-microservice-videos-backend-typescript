@@ -16,7 +16,7 @@ describe('ListCategoriesUseCase Integration Tests', () => {
     useCase = new ListCategoriesUseCase(repository);
   });
 
-  it('should return output sorted by createdAt when input param is empty', async () => {
+  it('should return output sorted by created_at when input param is empty', async () => {
     const categories = Category.fake()
       .theCategories(2)
       .withCreatedAt((i) => new Date(new Date().getTime() + 1000 + i))
@@ -26,9 +26,9 @@ describe('ListCategoriesUseCase Integration Tests', () => {
     expect(output).toStrictEqual({
       items: [...categories].reverse().map(CategoryOutputMapper.toOutput),
       total: 2,
-      currentPage: 1,
-      perPage: 15,
-      lastPage: 1,
+      current_page: 1,
+      per_page: 15,
+      last_page: 1,
     });
   });
 
@@ -43,43 +43,43 @@ describe('ListCategoriesUseCase Integration Tests', () => {
     await repository.bulkInsert(categories);
     let output = await useCase.execute({
       page: 1,
-      perPage: 2,
+      per_page: 2,
       sort: 'name',
       filter: 'a',
     });
     expect(output).toStrictEqual({
       items: [categories[1], categories[2]].map(CategoryOutputMapper.toOutput),
       total: 3,
-      currentPage: 1,
-      perPage: 2,
-      lastPage: 2,
+      current_page: 1,
+      per_page: 2,
+      last_page: 2,
     });
     output = await useCase.execute({
       page: 2,
-      perPage: 2,
+      per_page: 2,
       sort: 'name',
       filter: 'a',
     });
     expect(output).toStrictEqual({
       items: [categories[0]].map(CategoryOutputMapper.toOutput),
       total: 3,
-      currentPage: 2,
-      perPage: 2,
-      lastPage: 2,
+      current_page: 2,
+      per_page: 2,
+      last_page: 2,
     });
     output = await useCase.execute({
       page: 1,
-      perPage: 2,
+      per_page: 2,
       sort: 'name',
-      sortDir: 'desc',
+      sort_dir: 'desc',
       filter: 'a',
     });
     expect(output).toStrictEqual({
       items: [categories[0], categories[2]].map(CategoryOutputMapper.toOutput),
       total: 3,
-      currentPage: 1,
-      perPage: 2,
-      lastPage: 2,
+      current_page: 1,
+      per_page: 2,
+      last_page: 2,
     });
   });
 });

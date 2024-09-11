@@ -22,17 +22,17 @@ describe('CreateCategoryUseCase Integration Tests', () => {
       id: category.id.value,
       name: 'test',
       description: null,
-      isActive: true,
-      createdAt: category.createdAt,
+      is_active: true,
+      created_at: category.created_at,
     });
-    output = await useCase.execute({ name: 'test', description: 'some description', isActive: false });
+    output = await useCase.execute({ name: 'test', description: 'some description', is_active: false });
     category = await repository.findById(new Uuid(output.id));
     expect(output).toStrictEqual({
       id: category.id.value,
       name: 'test',
       description: 'some description',
-      isActive: false,
-      createdAt: category.createdAt,
+      is_active: false,
+      created_at: category.created_at,
     });
   });
 });

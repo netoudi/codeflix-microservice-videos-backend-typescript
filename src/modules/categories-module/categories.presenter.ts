@@ -16,8 +16,8 @@ export class CategoryPresenter {
     this.id = output.id;
     this.name = output.name;
     this.description = output.description;
-    this.is_active = output.isActive;
-    this.created_at = output.createdAt;
+    this.is_active = output.is_active;
+    this.created_at = output.created_at;
   }
 }
 

@@ -33,22 +33,22 @@ describe('UpdateCategoryUseCase Integration Tests', () => {
       id: category.id.value,
       name: 'test',
       description: null,
-      isActive: true,
-      createdAt: category.createdAt,
+      is_active: true,
+      created_at: category.created_at,
     });
     type Arrange = {
       input: {
         id: string;
         name?: string;
         description?: string | null;
-        isActive?: boolean;
+        is_active?: boolean;
       };
       output: {
         id: string;
         name: string;
         description: string | null;
-        isActive: boolean;
-        createdAt: Date;
+        is_active: boolean;
+        created_at: Date;
       };
     };
     const arrange: Arrange[] = [
@@ -62,8 +62,8 @@ describe('UpdateCategoryUseCase Integration Tests', () => {
           id: category.id.value,
           name: 'test',
           description: 'some description',
-          isActive: true,
-          createdAt: category.createdAt,
+          is_active: true,
+          created_at: category.created_at,
         },
       },
       {
@@ -75,22 +75,22 @@ describe('UpdateCategoryUseCase Integration Tests', () => {
           id: category.id.value,
           name: 'test',
           description: 'some description',
-          isActive: true,
-          createdAt: category.createdAt,
+          is_active: true,
+          created_at: category.created_at,
         },
       },
       {
         input: {
           id: category.id.value,
           name: 'test',
-          isActive: false,
+          is_active: false,
         },
         output: {
           id: category.id.value,
           name: 'test',
           description: 'some description',
-          isActive: false,
-          createdAt: category.createdAt,
+          is_active: false,
+          created_at: category.created_at,
         },
       },
       {
@@ -102,22 +102,22 @@ describe('UpdateCategoryUseCase Integration Tests', () => {
           id: category.id.value,
           name: 'test',
           description: 'some description',
-          isActive: false,
-          createdAt: category.createdAt,
+          is_active: false,
+          created_at: category.created_at,
         },
       },
       {
         input: {
           id: category.id.value,
           name: 'test',
-          isActive: true,
+          is_active: true,
         },
         output: {
           id: category.id.value,
           name: 'test',
           description: 'some description',
-          isActive: true,
-          createdAt: category.createdAt,
+          is_active: true,
+          created_at: category.created_at,
         },
       },
       {
@@ -125,14 +125,14 @@ describe('UpdateCategoryUseCase Integration Tests', () => {
           id: category.id.value,
           name: 'test',
           description: 'some description',
-          isActive: false,
+          is_active: false,
         },
         output: {
           id: category.id.value,
           name: 'test',
           description: 'some description',
-          isActive: false,
-          createdAt: category.createdAt,
+          is_active: false,
+          created_at: category.created_at,
         },
       },
       {
@@ -144,8 +144,8 @@ describe('UpdateCategoryUseCase Integration Tests', () => {
           id: category.id.value,
           name: 'test',
           description: null,
-          isActive: false,
-          createdAt: category.createdAt,
+          is_active: false,
+          created_at: category.created_at,
         },
       },
     ];
@@ -154,7 +154,7 @@ describe('UpdateCategoryUseCase Integration Tests', () => {
         id: i.input.id,
         ...('name' in i.input && { name: i.input.name }),
         ...('description' in i.input && { description: i.input.description }),
-        ...('isActive' in i.input && { isActive: i.input.isActive }),
+        ...('is_active' in i.input && { is_active: i.input.is_active }),
       });
       expect(output).toStrictEqual(i.output);
       // check if really saved in the database
@@ -163,8 +163,8 @@ describe('UpdateCategoryUseCase Integration Tests', () => {
       expect(categoryUpdated?.id.value).toBe(i.output.id);
       expect(categoryUpdated?.name).toBe(i.output.name);
       expect(categoryUpdated?.description).toBe(i.output.description);
-      expect(categoryUpdated?.isActive).toBe(i.output.isActive);
-      expect(categoryUpdated?.createdAt).toBeDefined();
+      expect(categoryUpdated?.is_active).toBe(i.output.is_active);
+      expect(categoryUpdated?.created_at).toBeDefined();
     }
   });
 });

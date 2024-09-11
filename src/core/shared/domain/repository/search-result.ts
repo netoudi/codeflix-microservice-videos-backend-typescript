@@ -4,33 +4,33 @@ import { ValueObject } from '@/core/shared/domain/value-object';
 export type SearchResultConstructor<E extends Entity> = {
   items: E[];
   total: number;
-  currentPage: number;
-  perPage: number;
+  current_page: number;
+  per_page: number;
 };
 
 export class SearchResult<E extends Entity = Entity> extends ValueObject {
   readonly items: E[];
   readonly total: number;
-  readonly currentPage: number;
-  readonly perPage: number;
-  readonly lastPage: number;
+  readonly current_page: number;
+  readonly per_page: number;
+  readonly last_page: number;
 
   constructor(props: SearchResultConstructor<E>) {
     super();
     this.items = props.items;
     this.total = props.total;
-    this.currentPage = props.currentPage;
-    this.perPage = props.perPage;
-    this.lastPage = Math.ceil(this.total / this.perPage);
+    this.current_page = props.current_page;
+    this.per_page = props.per_page;
+    this.last_page = Math.ceil(this.total / this.per_page);
   }
 
   toJSON(forceEntity = false) {
     return {
       items: forceEntity ? this.items.map((item) => item.toJSON()) : this.items,
       total: this.total,
-      currentPage: this.currentPage,
-      perPage: this.perPage,
-      lastPage: this.lastPage,
+      current_page: this.current_page,
+      per_page: this.per_page,
+      last_page: this.last_page,
     };
   }
 }

@@ -74,9 +74,9 @@ export class CategoryFakeBuilder<TBuild = any> {
         id: !this._category_id ? undefined : this.callFactory(this._category_id, index),
         name: this.callFactory(this._name, index),
         description: this.callFactory(this._description, index),
-        isActive: this.callFactory(this._is_active, index),
+        is_active: this.callFactory(this._is_active, index),
         ...(this._created_at && {
-          createdAt: this.callFactory(this._created_at, index),
+          created_at: this.callFactory(this._created_at, index),
         }),
       });
       category.validate();

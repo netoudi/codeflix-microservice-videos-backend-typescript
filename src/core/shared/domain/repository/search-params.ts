@@ -4,25 +4,25 @@ export type SortDirection = 'asc' | 'desc';
 
 export type SearchParamsConstructor<Filter = string> = {
   page?: number;
-  perPage?: number;
+  per_page?: number;
   sort?: string;
-  sortDir?: SortDirection | null;
+  sort_dir?: SortDirection | null;
   filter?: Filter | null;
 };
 
 export class SearchParams<Filter = string> extends ValueObject {
   protected _page: number = 1;
-  protected _perPage: number = 15;
+  protected _per_page: number = 15;
   protected _sort: string | null;
-  protected _sortDir: SortDirection | null;
+  protected _sort_dir: SortDirection | null;
   protected _filter: Filter | null;
 
   constructor(props: SearchParamsConstructor<Filter> = {}) {
     super();
     this.page = props.page;
-    this.perPage = props.perPage;
+    this.per_page = props.per_page;
     this.sort = props.sort;
-    this.sortDir = props.sortDir;
+    this.sort_dir = props.sort_dir;
     this.filter = props.filter;
   }
 
@@ -38,16 +38,16 @@ export class SearchParams<Filter = string> extends ValueObject {
     this._page = _page;
   }
 
-  get perPage(): number {
-    return this._perPage;
+  get per_page(): number {
+    return this._per_page;
   }
 
-  private set perPage(value: number) {
-    let _perPage = value === (true as any) ? this._perPage : +value;
-    if (Number.isNaN(_perPage) || _perPage <= 0 || parseInt(_perPage as any) !== _perPage) {
-      _perPage = this._perPage;
+  private set per_page(value: number) {
+    let _per_page = value === (true as any) ? this._per_page : +value;
+    if (Number.isNaN(_per_page) || _per_page <= 0 || parseInt(_per_page as any) !== _per_page) {
+      _per_page = this._per_page;
     }
-    this._perPage = _perPage;
+    this._per_page = _per_page;
   }
 
   get sort(): string | null {
@@ -58,17 +58,17 @@ export class SearchParams<Filter = string> extends ValueObject {
     this._sort = value === null || value === undefined || value === '' ? null : `${value}`;
   }
 
-  get sortDir(): SortDirection | null {
-    return this._sortDir;
+  get sort_dir(): SortDirection | null {
+    return this._sort_dir;
   }
 
-  private set sortDir(value: SortDirection | null) {
+  private set sort_dir(value: SortDirection | null) {
     if (!this.sort) {
-      this._sortDir = null;
+      this._sort_dir = null;
       return;
     }
     const dir = `${value}`.toLowerCase();
-    this._sortDir = dir !== 'asc' && dir !== 'desc' ? 'asc' : dir;
+    this._sort_dir = dir !== 'asc' && dir !== 'desc' ? 'asc' : dir;
   }
 
   get filter(): Filter | null {

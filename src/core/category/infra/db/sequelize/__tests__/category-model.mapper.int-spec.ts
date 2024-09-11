@@ -28,13 +28,13 @@ describe('CategoryModelMapper Integration Tests', () => {
   });
 
   it('should convert a category model to a category entity', async () => {
-    const createdAt = new Date();
+    const created_at = new Date();
     const model = CategoryModel.build({
       id: 'c30c0a92-1c8c-4b9e-9b0c-9b0c9b0c9b0c',
       name: 'Movie',
       description: 'Movie description',
       is_active: true,
-      created_at: createdAt,
+      created_at: created_at,
     });
     const entity = CategoryModelMapper.toEntity(model);
     expect(entity.toJSON()).toStrictEqual(
@@ -42,20 +42,20 @@ describe('CategoryModelMapper Integration Tests', () => {
         id: new Uuid('c30c0a92-1c8c-4b9e-9b0c-9b0c9b0c9b0c'),
         name: 'Movie',
         description: 'Movie description',
-        isActive: true,
-        createdAt: createdAt,
+        is_active: true,
+        created_at: created_at,
       }).toJSON(),
     );
   });
 
   it('should convert a category entity to a category model', async () => {
-    const createdAt = new Date();
+    const created_at = new Date();
     const entity = new Category({
       id: new Uuid('c30c0a92-1c8c-4b9e-9b0c-9b0c9b0c9b0c'),
       name: 'Movie',
       description: 'Movie description',
-      isActive: true,
-      createdAt: createdAt,
+      is_active: true,
+      created_at: created_at,
     });
     const model = CategoryModelMapper.toModel(entity);
     expect(model.toJSON()).toStrictEqual(
@@ -64,7 +64,7 @@ describe('CategoryModelMapper Integration Tests', () => {
         name: 'Movie',
         description: 'Movie description',
         is_active: true,
-        created_at: createdAt,
+        created_at: created_at,
       }).toJSON(),
     );
   });

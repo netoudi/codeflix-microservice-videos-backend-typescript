@@ -20,7 +20,7 @@ export class UpdateCategoryUseCase implements IUseCase<UpdateCategoryInput, Upda
 
     'name' in input && category.changeName(input.name);
     'description' in input && category.changeDescription(input.description);
-    'isActive' in input && category[input.isActive ? 'activate' : 'deactivate']();
+    'is_active' in input && category[input.is_active ? 'activate' : 'deactivate']();
 
     if (category.notification.hasErrors()) {
       throw new EntityValidationError(category.notification.toJSON());

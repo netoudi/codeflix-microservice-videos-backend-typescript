@@ -5,48 +5,48 @@ describe('SearchResult Unit Tests', () => {
     let result = new SearchResult({
       items: ['entity1', 'entity2'] as any,
       total: 4,
-      currentPage: 1,
-      perPage: 2,
+      current_page: 1,
+      per_page: 2,
     });
     expect(result.toJSON()).toStrictEqual({
       items: ['entity1', 'entity2'] as any,
       total: 4,
-      currentPage: 1,
-      perPage: 2,
-      lastPage: 2,
+      current_page: 1,
+      per_page: 2,
+      last_page: 2,
     });
     result = new SearchResult({
       items: ['entity1', 'entity2'] as any,
       total: 4,
-      currentPage: 1,
-      perPage: 2,
+      current_page: 1,
+      per_page: 2,
     });
     expect(result.toJSON()).toStrictEqual({
       items: ['entity1', 'entity2'] as any,
       total: 4,
-      currentPage: 1,
-      perPage: 2,
-      lastPage: 2,
+      current_page: 1,
+      per_page: 2,
+      last_page: 2,
     });
   });
 
-  test('should set lastPage = 1 when perPage field is greater than total field', () => {
+  test('should set last_page = 1 when per_page field is greater than total field', () => {
     const result = new SearchResult({
       items: [] as any,
       total: 4,
-      currentPage: 1,
-      perPage: 15,
+      current_page: 1,
+      per_page: 15,
     });
-    expect(result.lastPage).toBe(1);
+    expect(result.last_page).toBe(1);
   });
 
-  test('lastPage prop when total is not a multiple of perPage', () => {
+  test('last_page prop when total is not a multiple of per_page', () => {
     const result = new SearchResult({
       items: [] as any,
       total: 101,
-      currentPage: 1,
-      perPage: 20,
+      current_page: 1,
+      per_page: 20,
     });
-    expect(result.lastPage).toBe(6);
+    expect(result.last_page).toBe(6);
   });
 });

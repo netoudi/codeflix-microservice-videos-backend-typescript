@@ -50,7 +50,7 @@ describe('CategoriesController Integration Tests', () => {
         id: presenter.id,
         name: expected.name,
         description: expected.description,
-        is_active: expected.isActive,
+        is_active: expected.is_active,
         created_at: presenter.created_at,
       });
       const output = CategoryOutputMapper.toOutput(entity);
@@ -73,7 +73,8 @@ describe('CategoriesController Integration Tests', () => {
         id: presenter.id,
         name: expected.name ?? category.name,
         description: 'description' in expected ? expected.description : category.description,
-        is_active: expected.isActive === true || expected.isActive === false ? expected.isActive : category.isActive,
+        is_active:
+          expected.is_active === true || expected.is_active === false ? expected.is_active : category.is_active,
         created_at: presenter.created_at,
       });
       const output = CategoryOutputMapper.toOutput(entity);
@@ -96,8 +97,8 @@ describe('CategoriesController Integration Tests', () => {
     expect(presenter.id).toBe(category.id.value);
     expect(presenter.name).toBe(category.name);
     expect(presenter.description).toBe(category.description);
-    expect(presenter.is_active).toBe(category.isActive);
-    expect(presenter.created_at).toStrictEqual(category.createdAt);
+    expect(presenter.is_active).toBe(category.is_active);
+    expect(presenter.created_at).toStrictEqual(category.created_at);
   });
 
   describe('search method', () => {
@@ -114,9 +115,9 @@ describe('CategoriesController Integration Tests', () => {
         expect(presenter).toEqual(
           new CategoryCollectionPresenter({
             items: entities.map(CategoryOutputMapper.toOutput),
-            currentPage: paginationProps.meta.current_page,
-            lastPage: paginationProps.meta.last_page,
-            perPage: paginationProps.meta.per_page,
+            current_page: paginationProps.meta.current_page,
+            last_page: paginationProps.meta.last_page,
+            per_page: paginationProps.meta.per_page,
             total: paginationProps.meta.total,
           }),
         );
@@ -136,9 +137,9 @@ describe('CategoriesController Integration Tests', () => {
         expect(presenter).toEqual(
           new CategoryCollectionPresenter({
             items: entities.map(CategoryOutputMapper.toOutput),
-            currentPage: paginationProps.meta.current_page,
-            lastPage: paginationProps.meta.last_page,
-            perPage: paginationProps.meta.per_page,
+            current_page: paginationProps.meta.current_page,
+            last_page: paginationProps.meta.last_page,
+            per_page: paginationProps.meta.per_page,
             total: paginationProps.meta.total,
           }),
         );

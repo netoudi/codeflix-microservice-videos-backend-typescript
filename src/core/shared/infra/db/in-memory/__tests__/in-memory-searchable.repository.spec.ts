@@ -150,8 +150,8 @@ describe('InMemorySearchableRepository Unit Tests', () => {
         new SearchResult({
           items: Array(15).fill(entity),
           total: 16,
-          currentPage: 1,
-          perPage: 15,
+          current_page: 1,
+          per_page: 15,
         }),
       );
     });
@@ -165,23 +165,23 @@ describe('InMemorySearchableRepository Unit Tests', () => {
       ];
       repository.items = items;
 
-      let result = await repository.search(new SearchParams({ page: 1, perPage: 2, filter: 'TEST' }));
+      let result = await repository.search(new SearchParams({ page: 1, per_page: 2, filter: 'TEST' }));
       expect(result).toStrictEqual(
         new SearchResult({
           items: [items[0], items[2]],
           total: 3,
-          currentPage: 1,
-          perPage: 2,
+          current_page: 1,
+          per_page: 2,
         }),
       );
 
-      result = await repository.search(new SearchParams({ page: 2, perPage: 2, filter: 'TEST' }));
+      result = await repository.search(new SearchParams({ page: 2, per_page: 2, filter: 'TEST' }));
       expect(result).toStrictEqual(
         new SearchResult({
           items: [items[3]],
           total: 3,
-          currentPage: 2,
-          perPage: 2,
+          current_page: 2,
+          per_page: 2,
         }),
       );
     });
@@ -198,55 +198,55 @@ describe('InMemorySearchableRepository Unit Tests', () => {
         {
           searchParams: new SearchParams({
             page: 1,
-            perPage: 2,
+            per_page: 2,
             sort: 'name',
           }),
           searchResult: new SearchResult({
             items: [items[1], items[0]],
             total: 5,
-            currentPage: 1,
-            perPage: 2,
+            current_page: 1,
+            per_page: 2,
           }),
         },
         {
           searchParams: new SearchParams({
             page: 2,
-            perPage: 2,
+            per_page: 2,
             sort: 'name',
           }),
           searchResult: new SearchResult({
             items: [items[4], items[2]],
             total: 5,
-            currentPage: 2,
-            perPage: 2,
+            current_page: 2,
+            per_page: 2,
           }),
         },
         {
           searchParams: new SearchParams({
             page: 1,
-            perPage: 2,
+            per_page: 2,
             sort: 'name',
-            sortDir: 'desc',
+            sort_dir: 'desc',
           }),
           searchResult: new SearchResult({
             items: [items[3], items[2]],
             total: 5,
-            currentPage: 1,
-            perPage: 2,
+            current_page: 1,
+            per_page: 2,
           }),
         },
         {
           searchParams: new SearchParams({
             page: 2,
-            perPage: 2,
+            per_page: 2,
             sort: 'name',
-            sortDir: 'desc',
+            sort_dir: 'desc',
           }),
           searchResult: new SearchResult({
             items: [items[4], items[0]],
             total: 5,
-            currentPage: 2,
-            perPage: 2,
+            current_page: 2,
+            per_page: 2,
           }),
         },
       ];
@@ -276,29 +276,29 @@ describe('InMemorySearchableRepository Unit Tests', () => {
         {
           searchParams: new SearchParams({
             page: 1,
-            perPage: 2,
+            per_page: 2,
             sort: 'name',
             filter: 'TEST',
           }),
           searchResult: new SearchResult({
             items: [items[2], items[4]],
             total: 3,
-            currentPage: 1,
-            perPage: 2,
+            current_page: 1,
+            per_page: 2,
           }),
         },
         {
           searchParams: new SearchParams({
             page: 2,
-            perPage: 2,
+            per_page: 2,
             sort: 'name',
             filter: 'TEST',
           }),
           searchResult: new SearchResult({
             items: [items[0]],
             total: 3,
-            currentPage: 2,
-            perPage: 2,
+            current_page: 2,
+            per_page: 2,
           }),
         },
       ];

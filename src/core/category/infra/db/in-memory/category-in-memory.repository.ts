@@ -8,7 +8,7 @@ export class CategoryInMemoryRepository
   extends InMemorySearchableRepository<Category, Uuid>
   implements ICategoryRepository
 {
-  sortableFields: string[] = ['name', 'createdAt'];
+  sortableFields: string[] = ['name', 'created_at'];
 
   protected async applyFilter(items: Category[], filter: CategoryFilter | null): Promise<Category[]> {
     if (!filter) return items;
@@ -17,8 +17,8 @@ export class CategoryInMemoryRepository
     });
   }
 
-  protected applySort(items: Category[], sort: string | null, sortDir: SortDirection | null): Category[] {
-    return sort ? super.applySort(items, sort, sortDir) : super.applySort(items, 'createdAt', 'desc');
+  protected applySort(items: Category[], sort: string | null, sort_dir: SortDirection | null): Category[] {
+    return sort ? super.applySort(items, sort, sort_dir) : super.applySort(items, 'created_at', 'desc');
   }
 
   getEntity(): new (...args: any[]) => Category {

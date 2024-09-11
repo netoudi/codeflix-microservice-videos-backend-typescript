@@ -1,6 +1,6 @@
 import { Category } from '@/core/category/domain/category.entity';
 
-const _keysInResponse = ['id', 'name', 'description', 'isActive', 'createdAt'];
+const _keysInResponse = ['id', 'name', 'description', 'is_active', 'created_at'];
 
 export class GetCategoryFixture {
   static keysInResponse = _keysInResponse;
@@ -19,7 +19,7 @@ export class CreateCategoryFixture {
         expected: {
           name: faker.name,
           description: null,
-          isActive: true,
+          is_active: true,
         },
       },
       {
@@ -30,41 +30,41 @@ export class CreateCategoryFixture {
         expected: {
           name: faker.name,
           description: faker.description,
-          isActive: true,
+          is_active: true,
         },
       },
       {
         send_data: {
           name: faker.name,
-          isActive: true,
-        },
-        expected: {
-          name: faker.name,
-          description: null,
-          isActive: true,
-        },
-      },
-      {
-        send_data: {
-          name: faker.name,
-          isActive: false,
+          is_active: true,
         },
         expected: {
           name: faker.name,
           description: null,
-          isActive: false,
+          is_active: true,
+        },
+      },
+      {
+        send_data: {
+          name: faker.name,
+          is_active: false,
+        },
+        expected: {
+          name: faker.name,
+          description: null,
+          is_active: false,
         },
       },
       {
         send_data: {
           name: faker.name,
           description: faker.description,
-          isActive: true,
+          is_active: true,
         },
         expected: {
           name: faker.name,
           description: faker.description,
-          isActive: true,
+          is_active: true,
         },
       },
     ];
@@ -122,10 +122,10 @@ export class CreateCategoryFixture {
       },
       IS_ACTIVE_NOT_A_BOOLEAN: {
         send_data: {
-          isActive: 'a',
+          is_active: 'a',
         },
         expected: {
-          message: ['name should not be empty', 'name must be a string', 'isActive must be a boolean value'],
+          message: ['name should not be empty', 'name must be a string', 'is_active must be a boolean value'],
           ...defaultExpected,
         },
       },
@@ -163,12 +163,12 @@ export class UpdateCategoryFixture {
         send_data: {
           name: faker.name,
           description: null,
-          isActive: true,
+          is_active: true,
         },
         expected: {
           name: faker.name,
           description: null,
-          isActive: true,
+          is_active: true,
         },
       },
       {
@@ -179,17 +179,17 @@ export class UpdateCategoryFixture {
         expected: {
           name: faker.name,
           description: faker.description,
-          isActive: true,
+          is_active: true,
         },
       },
       {
         send_data: {
           name: faker.name,
-          isActive: false,
+          is_active: false,
         },
         expected: {
           name: faker.name,
-          isActive: false,
+          is_active: false,
         },
       },
     ];
@@ -213,10 +213,10 @@ export class UpdateCategoryFixture {
       },
       IS_ACTIVE_NOT_A_BOOLEAN: {
         send_data: {
-          isActive: 'a',
+          is_active: 'a',
         },
         expected: {
-          message: ['isActive must be a boolean value'],
+          message: ['is_active must be a boolean value'],
           ...defaultExpected,
         },
       },
@@ -275,7 +275,7 @@ export class ListCategoriesFixture {
       {
         send_data: {
           page: 1,
-          perPage: 2,
+          per_page: 2,
         },
         expected: {
           entities: [entitiesMap.fourth, entitiesMap.third],
@@ -290,7 +290,7 @@ export class ListCategoriesFixture {
       {
         send_data: {
           page: 2,
-          perPage: 2,
+          per_page: 2,
         },
         expected: {
           entities: [entitiesMap.second, entitiesMap.first],
@@ -322,7 +322,7 @@ export class ListCategoriesFixture {
       {
         send_data: {
           page: 1,
-          perPage: 2,
+          per_page: 2,
           sort: 'name',
           filter: 'a',
         },
@@ -339,7 +339,7 @@ export class ListCategoriesFixture {
       {
         send_data: {
           page: 2,
-          perPage: 2,
+          per_page: 2,
           sort: 'name',
           filter: 'a',
         },

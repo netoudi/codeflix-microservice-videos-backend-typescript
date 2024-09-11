@@ -8,31 +8,31 @@ export type CategoryConstructor = {
   id?: Uuid;
   name: string;
   description?: string | null;
-  isActive?: boolean;
-  createdAt?: Date;
+  is_active?: boolean;
+  created_at?: Date;
 };
 
 export type CategoryCreateCommand = {
   name: string;
   description?: string | null;
-  isActive?: boolean;
-  createdAt?: Date;
+  is_active?: boolean;
+  created_at?: Date;
 };
 
 export class Category extends Entity {
   id: Uuid;
   name: string;
   description: string | null;
-  isActive: boolean;
-  createdAt: Date;
+  is_active: boolean;
+  created_at: Date;
 
   constructor(props: CategoryConstructor) {
     super();
     this.id = props.id ?? new Uuid();
     this.name = props.name;
     this.description = props.description ?? null;
-    this.isActive = props.isActive ?? true;
-    this.createdAt = props.createdAt ?? new Date();
+    this.is_active = props.is_active ?? true;
+    this.created_at = props.created_at ?? new Date();
   }
 
   get entityId(): ValueObject {
@@ -55,11 +55,11 @@ export class Category extends Entity {
   }
 
   activate(): void {
-    this.isActive = true;
+    this.is_active = true;
   }
 
   deactivate(): void {
-    this.isActive = false;
+    this.is_active = false;
   }
 
   validate(fields?: string[]): boolean {
@@ -76,8 +76,8 @@ export class Category extends Entity {
       id: this.id.value,
       name: this.name,
       description: this.description,
-      is_active: this.isActive,
-      created_at: this.createdAt,
+      is_active: this.is_active,
+      created_at: this.created_at,
     };
   }
 }

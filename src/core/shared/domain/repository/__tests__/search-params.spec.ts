@@ -23,26 +23,26 @@ describe('SearchParams Unit Tests', () => {
     });
   });
 
-  test('perPage prop', () => {
+  test('per_page prop', () => {
     const params = new SearchParams();
-    expect(params.perPage).toBe(15);
+    expect(params.per_page).toBe(15);
     const arrange = [
-      { perPage: null, expected: 15 },
-      { perPage: undefined, expected: 15 },
-      { perPage: '', expected: 15 },
-      { perPage: 'fake', expected: 15 },
-      { perPage: 0, expected: 15 },
-      { perPage: -1, expected: 15 },
-      { perPage: 5.5, expected: 15 },
-      { perPage: true, expected: 15 },
-      { perPage: false, expected: 15 },
-      { perPage: {}, expected: 15 },
-      { perPage: 1, expected: 1 },
-      { perPage: 2, expected: 2 },
-      { perPage: 10, expected: 10 },
+      { per_page: null, expected: 15 },
+      { per_page: undefined, expected: 15 },
+      { per_page: '', expected: 15 },
+      { per_page: 'fake', expected: 15 },
+      { per_page: 0, expected: 15 },
+      { per_page: -1, expected: 15 },
+      { per_page: 5.5, expected: 15 },
+      { per_page: true, expected: 15 },
+      { per_page: false, expected: 15 },
+      { per_page: {}, expected: 15 },
+      { per_page: 1, expected: 1 },
+      { per_page: 2, expected: 2 },
+      { per_page: 10, expected: 10 },
     ];
     arrange.forEach((i) => {
-      expect(new SearchParams({ perPage: i.perPage as any }).perPage).toBe(i.expected);
+      expect(new SearchParams({ per_page: i.per_page as any }).per_page).toBe(i.expected);
     });
   });
 
@@ -66,28 +66,28 @@ describe('SearchParams Unit Tests', () => {
     });
   });
 
-  test('sortDir prop', () => {
+  test('sort_dir prop', () => {
     let params = new SearchParams();
-    expect(params.sortDir).toBeNull();
+    expect(params.sort_dir).toBeNull();
     params = new SearchParams({ sort: null });
-    expect(params.sortDir).toBeNull();
+    expect(params.sort_dir).toBeNull();
     params = new SearchParams({ sort: undefined });
-    expect(params.sortDir).toBeNull();
+    expect(params.sort_dir).toBeNull();
     params = new SearchParams({ sort: '' });
-    expect(params.sortDir).toBeNull();
+    expect(params.sort_dir).toBeNull();
     const arrange = [
-      { sortDir: null, expected: 'asc' },
-      { sortDir: undefined, expected: 'asc' },
-      { sortDir: '', expected: 'asc' },
-      { sortDir: 0, expected: 'asc' },
-      { sortDir: 'fake', expected: 'asc' },
-      { sortDir: 'asc', expected: 'asc' },
-      { sortDir: 'ASC', expected: 'asc' },
-      { sortDir: 'desc', expected: 'desc' },
-      { sortDir: 'DESC', expected: 'desc' },
+      { sort_dir: null, expected: 'asc' },
+      { sort_dir: undefined, expected: 'asc' },
+      { sort_dir: '', expected: 'asc' },
+      { sort_dir: 0, expected: 'asc' },
+      { sort_dir: 'fake', expected: 'asc' },
+      { sort_dir: 'asc', expected: 'asc' },
+      { sort_dir: 'ASC', expected: 'asc' },
+      { sort_dir: 'desc', expected: 'desc' },
+      { sort_dir: 'DESC', expected: 'desc' },
     ];
     arrange.forEach((i) => {
-      expect(new SearchParams({ sort: 'field', sortDir: i.sortDir as any }).sortDir).toBe(i.expected);
+      expect(new SearchParams({ sort: 'field', sort_dir: i.sort_dir as any }).sort_dir).toBe(i.expected);
     });
   });
 

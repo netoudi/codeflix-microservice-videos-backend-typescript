@@ -12,19 +12,19 @@ describe('ListCategoriesUseCase Unit Tests', () => {
     useCase = new ListCategoriesUseCase(repository);
   });
 
-  it('should return output sorted by createdAt when input param is empty', async () => {
+  it('should return output sorted by created_at when input param is empty', async () => {
     const items = [
       new Category({ name: 'test 1' }),
-      new Category({ name: 'test 2', createdAt: new Date(new Date().getTime() + 1000) }),
+      new Category({ name: 'test 2', created_at: new Date(new Date().getTime() + 1000) }),
     ];
     repository.items = items;
     const output = await useCase.execute({});
     expect(output).toStrictEqual({
       items: [...items].reverse().map(CategoryOutputMapper.toOutput),
       total: 2,
-      currentPage: 1,
-      perPage: 15,
-      lastPage: 1,
+      current_page: 1,
+      per_page: 15,
+      last_page: 1,
     });
   });
 
@@ -39,43 +39,43 @@ describe('ListCategoriesUseCase Unit Tests', () => {
     repository.items = items;
     let output = await useCase.execute({
       page: 1,
-      perPage: 2,
+      per_page: 2,
       sort: 'name',
       filter: 'a',
     });
     expect(output).toStrictEqual({
       items: [items[1], items[2]].map(CategoryOutputMapper.toOutput),
       total: 3,
-      currentPage: 1,
-      perPage: 2,
-      lastPage: 2,
+      current_page: 1,
+      per_page: 2,
+      last_page: 2,
     });
     output = await useCase.execute({
       page: 2,
-      perPage: 2,
+      per_page: 2,
       sort: 'name',
       filter: 'a',
     });
     expect(output).toStrictEqual({
       items: [items[0]].map(CategoryOutputMapper.toOutput),
       total: 3,
-      currentPage: 2,
-      perPage: 2,
-      lastPage: 2,
+      current_page: 2,
+      per_page: 2,
+      last_page: 2,
     });
     output = await useCase.execute({
       page: 1,
-      perPage: 2,
+      per_page: 2,
       sort: 'name',
-      sortDir: 'desc',
+      sort_dir: 'desc',
       filter: 'a',
     });
     expect(output).toStrictEqual({
       items: [items[0], items[2]].map(CategoryOutputMapper.toOutput),
       total: 3,
-      currentPage: 1,
-      perPage: 2,
-      lastPage: 2,
+      current_page: 1,
+      per_page: 2,
+      last_page: 2,
     });
   });
 });

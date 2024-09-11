@@ -30,19 +30,19 @@ describe('CategoryInMemoryRepository Unit Tests', () => {
     expect(itemsFiltered).toStrictEqual([items[0], items[1]]);
   });
 
-  it('should sort by createdAt when sort param is null', async () => {
-    const createdAt = new Date();
+  it('should sort by created_at when sort param is null', async () => {
+    const created_at = new Date();
     const items = [
-      Category.fake().aCategory().withName('test').withCreatedAt(createdAt).build(),
+      Category.fake().aCategory().withName('test').withCreatedAt(created_at).build(),
       Category.fake()
         .aCategory()
         .withName('TEST')
-        .withCreatedAt(new Date(createdAt.getTime() + 100))
+        .withCreatedAt(new Date(created_at.getTime() + 100))
         .build(),
       Category.fake()
         .aCategory()
         .withName('fake')
-        .withCreatedAt(new Date(createdAt.getTime() + 200))
+        .withCreatedAt(new Date(created_at.getTime() + 200))
         .build(),
     ];
     const itemsFiltered = await repository['applySort'](items, null, null);

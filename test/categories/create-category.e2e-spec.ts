@@ -59,7 +59,7 @@ describe('CategoriesController (e2e)', () => {
           id: serialized.id,
           name: expected.name,
           description: expected.description,
-          is_active: expected.isActive,
+          is_active: expected.is_active,
           created_at: serialized.created_at,
         });
       });

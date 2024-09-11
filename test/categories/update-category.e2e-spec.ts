@@ -100,7 +100,7 @@ describe('CategoriesController (e2e)', () => {
           id: serialized.id,
           name: expected.name ?? categoryUpdated.name,
           description: 'description' in expected ? expected.description : categoryUpdated.description,
-          is_active: expected.isActive ?? categoryUpdated.isActive,
+          is_active: expected.is_active ?? categoryUpdated.is_active,
           created_at: serialized.created_at,
         });
       });

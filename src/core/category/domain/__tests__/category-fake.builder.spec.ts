@@ -189,14 +189,14 @@ describe('CategoryFakerBuilder Unit Tests', () => {
       const date = new Date();
       faker.withCreatedAt((index) => new Date(date.getTime() + index + 2));
       const category = faker.build();
-      expect(category.createdAt.getTime()).toBe(date.getTime() + 2);
+      expect(category.created_at.getTime()).toBe(date.getTime() + 2);
 
       const fakerMany = CategoryFakeBuilder.theCategories(2);
       fakerMany.withCreatedAt((index) => new Date(date.getTime() + index + 2));
       const categories = fakerMany.build();
 
-      expect(categories[0].createdAt.getTime()).toBe(date.getTime() + 2);
-      expect(categories[1].createdAt.getTime()).toBe(date.getTime() + 3);
+      expect(categories[0].created_at.getTime()).toBe(date.getTime() + 2);
+      expect(categories[1].created_at.getTime()).toBe(date.getTime() + 3);
     });
   });
 
@@ -207,8 +207,8 @@ describe('CategoryFakerBuilder Unit Tests', () => {
     expect(category.id).toBeInstanceOf(Uuid);
     expect(typeof category.name === 'string').toBeTruthy();
     expect(typeof category.description === 'string').toBeTruthy();
-    expect(category.isActive).toBe(true);
-    expect(category.createdAt).toBeInstanceOf(Date);
+    expect(category.is_active).toBe(true);
+    expect(category.created_at).toBeInstanceOf(Date);
 
     const created_at = new Date();
     const category_id = new Uuid();
@@ -223,8 +223,8 @@ describe('CategoryFakerBuilder Unit Tests', () => {
     expect(category.id.value).toBe(category_id.value);
     expect(category.name).toBe('name test');
     expect(category.description).toBe('description test');
-    expect(category.isActive).toBe(false);
-    expect(category.createdAt).toBe(created_at);
+    expect(category.is_active).toBe(false);
+    expect(category.created_at).toBe(created_at);
   });
 
   test('should create many categories', () => {
@@ -235,8 +235,8 @@ describe('CategoryFakerBuilder Unit Tests', () => {
       expect(category.id).toBeInstanceOf(Uuid);
       expect(typeof category.name === 'string').toBeTruthy();
       expect(typeof category.description === 'string').toBeTruthy();
-      expect(category.isActive).toBe(true);
-      expect(category.createdAt).toBeInstanceOf(Date);
+      expect(category.is_active).toBe(true);
+      expect(category.created_at).toBeInstanceOf(Date);
     });
 
     const created_at = new Date();
@@ -253,8 +253,8 @@ describe('CategoryFakerBuilder Unit Tests', () => {
       expect(category.id.value).toBe(category_id.value);
       expect(category.name).toBe('name test');
       expect(category.description).toBe('description test');
-      expect(category.isActive).toBe(false);
-      expect(category.createdAt).toBe(created_at);
+      expect(category.is_active).toBe(false);
+      expect(category.created_at).toBe(created_at);
     });
   });
 });

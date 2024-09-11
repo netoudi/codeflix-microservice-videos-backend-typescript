@@ -6,8 +6,8 @@ export type CategoryOutput = {
   id: string;
   name: string;
   description: string | null;
-  isActive: boolean;
-  createdAt: Date;
+  is_active: boolean;
+  created_at: Date;
 };
 
 export class CategoryOutputMapper {
@@ -16,8 +16,8 @@ export class CategoryOutputMapper {
       id: category.id.value,
       name: category.name,
       description: category.description,
-      isActive: category.isActive,
-      createdAt: category.createdAt,
+      is_active: category.is_active,
+      created_at: category.created_at,
     };
   }
 

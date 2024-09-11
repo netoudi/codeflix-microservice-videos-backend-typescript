@@ -9,8 +9,8 @@ export class CategoryModelMapper {
       id: entity.id.value,
       name: entity.name,
       description: entity.description,
-      is_active: entity.isActive,
-      created_at: entity.createdAt,
+      is_active: entity.is_active,
+      created_at: entity.created_at,
     });
   }
 
@@ -19,8 +19,8 @@ export class CategoryModelMapper {
       id: new Uuid(model.id),
       name: model.name,
       description: model.description,
-      isActive: model.is_active,
-      createdAt: model.created_at,
+      is_active: model.is_active,
+      created_at: model.created_at,
     });
     category.validate();
     if (category.notification.hasErrors()) {

@@ -29,8 +29,8 @@ describe('GetCategoryUseCase Unit Tests', () => {
       id: items[0].id.value,
       name: items[0].name,
       description: items[0].description,
-      isActive: items[0].isActive,
-      createdAt: items[0].createdAt,
+      is_active: items[0].is_active,
+      created_at: items[0].created_at,
     });
   });
 });
