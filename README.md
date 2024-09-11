@@ -18,6 +18,7 @@ docker-compose exec app bash
 
 # configurar as variáveis de ambiente
 cp envs/.env.test.example envs/.env.test
+cp envs/.env.e2e.example envs/.env.e2e
 
 # instalar as dependências
 npm install
@@ -41,6 +42,9 @@ npm run lint
 
 # executar typecheck, lint e testes
 npm run tsc:check && npm run lint && npm run test:cov
+
+# executar os testes e2e
+npm run test:e2e
 ```
 
 
@@ -52,3 +56,4 @@ npm run tsc:check && npm run lint && npm run test:cov
 - [Node.js](https://nodejs.org/)
 - [Sequelize](https://sequelize.org/)
 - [Jest](https://jestjs.io/)
+- [Nest.js](https://nestjs.com/)
