@@ -1,10 +1,11 @@
 import { Global, Module } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { SequelizeModule } from '@nestjs/sequelize';
+import { CastMemberModel } from '@/core/cast-member/infra/db/sequelize/cast-member.model';
 import { CategoryModel } from '@/core/category/infra/db/sequelize/category.model';
 import { DB_SCHEMA_TYPE } from '@/modules/config-module/config.module';
 
-const MODELS = [CategoryModel];
+const MODELS = [CategoryModel, CastMemberModel];
 
 @Global()
 @Module({

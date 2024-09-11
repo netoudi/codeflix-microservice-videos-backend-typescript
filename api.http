@@ -1,5 +1,9 @@
 @baseUrl = http://host.docker.internal:3333
 
+///
+/// CATEGORIES
+///
+
 ### create a category
 POST {{baseUrl}}/categories
 Content-Type: application/json
@@ -28,3 +32,38 @@ Content-Type: application/json
 
 ### delete a category
 DELETE {{baseUrl}}/categories/{{categoryId}}
+
+
+///
+/// CAST MEMBERS
+///
+
+### create a cast member
+POST {{baseUrl}}/cast-members
+Content-Type: application/json
+
+{
+  "name": "John Doe",
+  "type": 1
+}
+
+### list all cast members
+
+# @name cast_members
+@castMemberId = {{cast_members.response.body.data.0.id}}
+
+GET {{baseUrl}}/cast-members
+
+### list a cast member
+GET {{baseUrl}}/cast-members/{{castMemberId}}
+
+### udpate a cast member
+PATCH {{baseUrl}}/cast-members/{{castMemberId}}
+Content-Type: application/json
+
+{
+  "type": 2
+}
+
+### delete a cast member
+DELETE {{baseUrl}}/cast-members/{{castMemberId}}
