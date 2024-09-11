@@ -13,6 +13,7 @@ describe('CastMemberModelMapper Integration Tests', () => {
     const model = CastMemberModel.build({
       id: 'c30c0a92-1c8c-4b9e-9b0c-9b0c9b0c9b0c',
       name: 'x'.repeat(256),
+      type: 3,
     });
     try {
       CastMemberModelMapper.toEntity(model);
@@ -22,6 +23,9 @@ describe('CastMemberModelMapper Integration Tests', () => {
       expect((error as EntityValidationError).errors).toMatchObject([
         {
           name: ['name must be shorter than or equal to 255 characters'],
+        },
+        {
+          type: ['type must be one of the following values: 1, 2'],
         },
       ]);
     }

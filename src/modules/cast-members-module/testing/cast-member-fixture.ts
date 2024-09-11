@@ -156,6 +156,16 @@ export class CreateCastMemberFixture {
           ...defaultExpected,
         },
       },
+      TYPE_IS_NOT_VALID: {
+        send_data: {
+          name: 'test',
+          type: 3,
+        },
+        expected: {
+          message: ['type must be one of the following values: 1, 2'],
+          ...defaultExpected,
+        },
+      },
     };
   }
 }

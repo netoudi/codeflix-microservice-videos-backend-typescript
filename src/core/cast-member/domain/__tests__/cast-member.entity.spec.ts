@@ -144,7 +144,7 @@ describe('CastMember Unit Tests', () => {
       });
       castMember.changeType(CastMemberType.DIRECTOR);
       expect(castMember.type).toBe(CastMemberType.DIRECTOR);
-      expect(CastMember.prototype.validate).toHaveBeenCalledTimes(1);
+      expect(CastMember.prototype.validate).toHaveBeenCalledTimes(2);
       expect(castMember.notification.hasErrors()).toBeFalsy();
     });
   });
@@ -161,6 +161,27 @@ describe('CastMember Validator', () => {
         },
       ]);
     });
+
+    test('should an invalid cast member with type property', () => {
+      const castMember = CastMember.create({ name: 'John Doe', type: 3 as any });
+      expect(castMember.notification.hasErrors()).toBeTruthy();
+      expect(castMember.notification).notificationContainsErrorMessages([
+        {
+          type: ['type must be one of the following values: 1, 2'],
+        },
+      ]);
+    });
+
+    test('should an invalid cast member with name and type property', () => {
+      const castMember = CastMember.create({ name: 'x'.repeat(256), type: 3 as any });
+      expect(castMember.notification.hasErrors()).toBeTruthy();
+      expect(castMember.notification).notificationContainsErrorMessages([
+        {
+          name: ['name must be shorter than or equal to 255 characters'],
+          type: ['type must be one of the following values: 1, 2'],
+        },
+      ]);
+    });
   });
 
   describe('changeName method', () => {
@@ -171,6 +192,19 @@ describe('CastMember Validator', () => {
       expect(castMember.notification).notificationContainsErrorMessages([
         {
           name: ['name must be shorter than or equal to 255 characters'],
+        },
+      ]);
+    });
+  });
+
+  describe('changeType method', () => {
+    test('should an invalid cast member with type property', () => {
+      const castMember = CastMember.create({ name: 'John Doe', type: CastMemberType.ACTOR });
+      castMember.changeType(3 as any);
+      expect(castMember.notification.hasErrors()).toBeTruthy();
+      expect(castMember.notification).notificationContainsErrorMessages([
+        {
+          type: ['type must be one of the following values: 1, 2'],
         },
       ]);
     });

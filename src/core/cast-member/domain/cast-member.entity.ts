@@ -42,7 +42,7 @@ export class CastMember extends Entity {
 
   static create(props: CastMemberCreateCommand): CastMember {
     const castMember = new CastMember(props);
-    castMember.validate(['name']);
+    castMember.validate(['name', 'type']);
     return castMember;
   }
 
@@ -53,6 +53,7 @@ export class CastMember extends Entity {
 
   changeType(type: CastMemberType): void {
     this.type = type;
+    this.validate(['type']);
   }
 
   validate(fields?: string[]): boolean {
