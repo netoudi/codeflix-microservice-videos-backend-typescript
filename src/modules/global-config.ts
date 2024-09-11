@@ -1,8 +1,8 @@
 import { ClassSerializerInterceptor, INestApplication, ValidationPipe } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
-import { WrapperDataInterceptor } from '@/modules/interceptors/wrapper-data/wrapper-data.interceptor';
 import { EntityValidationErrorFilter } from '@/modules/shared-module/filters/entity-validation-error.filter';
 import { NotFoundErrorFilter } from '@/modules/shared-module/filters/not-found-error.filter';
+import { WrapperDataInterceptor } from '@/modules/shared-module/interceptors/wrapper-data/wrapper-data.interceptor';
 
 export function applyGlobalConfig(app: INestApplication) {
   app.useGlobalPipes(

@@ -1,5 +1,5 @@
 import { lastValueFrom, of } from 'rxjs';
-import { WrapperDataInterceptor } from '@/modules/interceptors/wrapper-data/wrapper-data.interceptor';
+import { WrapperDataInterceptor } from '@/modules/shared-module/interceptors/wrapper-data/wrapper-data.interceptor';
 
 describe('WrapperDataInterceptor', () => {
   let interceptor: WrapperDataInterceptor;
