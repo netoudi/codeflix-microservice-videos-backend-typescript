@@ -1,8 +1,8 @@
 import { DeleteCastMemberUseCase } from '@/core/cast-member/application/use-cases/delete-cast-member/delete-cast-member.use-case';
-import { CastMember } from '@/core/cast-member/domain/cast-member.entity';
+import { CastMember, CastMemberId } from '@/core/cast-member/domain/cast-member.entity';
 import { CastMemberInMemoryRepository } from '@/core/cast-member/infra/db/in-memory/cast-member-in-memory.repository';
 import { NotFoundError } from '@/core/shared/domain/errors/not-found';
-import { InvalidUuidError, Uuid } from '@/core/shared/domain/value-objects/uuid.vo';
+import { InvalidUuidError } from '@/core/shared/domain/value-objects/uuid.vo';
 
 describe('DeleteCastMemberUseCase Unit Tests', () => {
   let useCase: DeleteCastMemberUseCase;
@@ -15,8 +15,10 @@ describe('DeleteCastMemberUseCase Unit Tests', () => {
 
   it('should throw error when entity not found', async () => {
     await expect(useCase.execute({ id: 'fake-id' })).rejects.toThrow(new InvalidUuidError());
-    const uuid = new Uuid();
-    await expect(useCase.execute({ id: uuid.value })).rejects.toThrow(new NotFoundError(uuid.value, CastMember));
+    const castMemberId = new CastMemberId();
+    await expect(useCase.execute({ id: castMemberId.value })).rejects.toThrow(
+      new NotFoundError(castMemberId.value, CastMember),
+    );
   });
 
   it('should delete a cast member', async () => {

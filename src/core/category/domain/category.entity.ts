@@ -5,7 +5,7 @@ import { ValueObject } from '@/core/shared/domain/value-object';
 import { Uuid } from '@/core/shared/domain/value-objects/uuid.vo';
 
 export type CategoryConstructor = {
-  id?: Uuid;
+  id?: CategoryId;
   name: string;
   description?: string | null;
   is_active?: boolean;
@@ -19,8 +19,10 @@ export type CategoryCreateCommand = {
   created_at?: Date;
 };
 
+export class CategoryId extends Uuid {}
+
 export class Category extends AggregateRoot {
-  id: Uuid;
+  id: CategoryId;
   name: string;
   description: string | null;
   is_active: boolean;
@@ -28,7 +30,7 @@ export class Category extends AggregateRoot {
 
   constructor(props: CategoryConstructor) {
     super();
-    this.id = props.id ?? new Uuid();
+    this.id = props.id ?? new CategoryId();
     this.name = props.name;
     this.description = props.description ?? null;
     this.is_active = props.is_active ?? true;

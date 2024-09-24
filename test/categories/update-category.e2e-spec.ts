@@ -1,9 +1,8 @@
 import { instanceToPlain } from 'class-transformer';
 import request from 'supertest';
 import { CategoryOutputMapper } from '@/core/category/application/use-cases/common/category-output.mapper';
-import { Category } from '@/core/category/domain/category.entity';
+import { Category, CategoryId } from '@/core/category/domain/category.entity';
 import { ICategoryRepository } from '@/core/category/domain/category.repository';
-import { Uuid } from '@/core/shared/domain/value-objects/uuid.vo';
 import { CategoriesController } from '@/modules/categories-module/categories.controller';
 import { CATEGORY_PROVIDERS } from '@/modules/categories-module/categories.providers';
 import { UpdateCategoryFixture } from '@/modules/categories-module/testing/category-fixture';
@@ -92,7 +91,7 @@ describe('CategoriesController (e2e)', () => {
         expect(Object.keys(response.body)).toStrictEqual(['data']);
         expect(Object.keys(response.body.data)).toStrictEqual(keysInResponse);
         const id = response.body.data.id;
-        const categoryUpdated = await repository.findById(new Uuid(id));
+        const categoryUpdated = await repository.findById(new CategoryId(id));
         const presenter = CategoriesController.serialize(CategoryOutputMapper.toOutput(categoryUpdated));
         const serialized = instanceToPlain(presenter);
         expect(response.body.data).toStrictEqual(serialized);

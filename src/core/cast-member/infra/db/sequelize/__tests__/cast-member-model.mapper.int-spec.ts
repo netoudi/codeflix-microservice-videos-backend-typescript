@@ -1,8 +1,7 @@
-import { CastMember } from '@/core/cast-member/domain/cast-member.entity';
+import { CastMember, CastMemberId } from '@/core/cast-member/domain/cast-member.entity';
 import { CastMemberModelMapper } from '@/core/cast-member/infra/db/sequelize/cast-member-model.mapper';
 import { CastMemberModel } from '@/core/cast-member/infra/db/sequelize/cast-member.model';
 import { EntityValidationError } from '@/core/shared/domain/validators/entity-validation.error';
-import { Uuid } from '@/core/shared/domain/value-objects/uuid.vo';
 import { setupSequelize } from '@/core/shared/infra/testing/helpers';
 
 describe('CastMemberModelMapper Integration Tests', () => {
@@ -42,7 +41,7 @@ describe('CastMemberModelMapper Integration Tests', () => {
     const entity = CastMemberModelMapper.toEntity(model);
     expect(entity.toJSON()).toStrictEqual(
       new CastMember({
-        id: new Uuid('c30c0a92-1c8c-4b9e-9b0c-9b0c9b0c9b0c'),
+        id: new CastMemberId('c30c0a92-1c8c-4b9e-9b0c-9b0c9b0c9b0c'),
         name: 'John Doe',
         type: 1,
         created_at: created_at,
@@ -53,7 +52,7 @@ describe('CastMemberModelMapper Integration Tests', () => {
   it('should convert a cast member entity to a cast member model', async () => {
     const created_at = new Date();
     const entity = new CastMember({
-      id: new Uuid('c30c0a92-1c8c-4b9e-9b0c-9b0c9b0c9b0c'),
+      id: new CastMemberId('c30c0a92-1c8c-4b9e-9b0c-9b0c9b0c9b0c'),
       name: 'John Doe',
       type: 1,
       created_at: created_at,

@@ -1,7 +1,6 @@
-import { Category } from '@/core/category/domain/category.entity';
+import { Category, CategoryId } from '@/core/category/domain/category.entity';
 import { CategoryModel } from '@/core/category/infra/db/sequelize/category.model';
 import { EntityValidationError } from '@/core/shared/domain/validators/entity-validation.error';
-import { Uuid } from '@/core/shared/domain/value-objects/uuid.vo';
 
 export class CategoryModelMapper {
   static toModel(entity: Category): CategoryModel {
@@ -16,7 +15,7 @@ export class CategoryModelMapper {
 
   static toEntity(model: CategoryModel): Category {
     const category = new Category({
-      id: new Uuid(model.id),
+      id: new CategoryId(model.id),
       name: model.name,
       description: model.description,
       is_active: model.is_active,

@@ -1,7 +1,6 @@
-import { CastMember } from '@/core/cast-member/domain/cast-member.entity';
+import { CastMember, CastMemberId } from '@/core/cast-member/domain/cast-member.entity';
 import { CastMemberModel } from '@/core/cast-member/infra/db/sequelize/cast-member.model';
 import { EntityValidationError } from '@/core/shared/domain/validators/entity-validation.error';
-import { Uuid } from '@/core/shared/domain/value-objects/uuid.vo';
 
 export class CastMemberModelMapper {
   static toModel(entity: CastMember): CastMemberModel {
@@ -15,7 +14,7 @@ export class CastMemberModelMapper {
 
   static toEntity(model: CastMemberModel): CastMember {
     const castMember = new CastMember({
-      id: new Uuid(model.id),
+      id: new CastMemberId(model.id),
       name: model.name,
       type: model.type,
       created_at: model.created_at,

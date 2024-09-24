@@ -1,10 +1,9 @@
-import { CastMember } from '@/core/cast-member/domain/cast-member.entity';
+import { CastMember, CastMemberId } from '@/core/cast-member/domain/cast-member.entity';
 import { CastMemberSearchParams, CastMemberSearchResult } from '@/core/cast-member/domain/cast-member.repository';
 import { CastMemberModelMapper } from '@/core/cast-member/infra/db/sequelize/cast-member-model.mapper';
 import { CastMemberSequelizeRepository } from '@/core/cast-member/infra/db/sequelize/cast-member-sequelize.repository';
 import { CastMemberModel } from '@/core/cast-member/infra/db/sequelize/cast-member.model';
 import { NotFoundError } from '@/core/shared/domain/errors/not-found';
-import { Uuid } from '@/core/shared/domain/value-objects/uuid.vo';
 import { setupSequelize } from '@/core/shared/infra/testing/helpers';
 
 describe('CastMemberSequelizeRepository Integration Tests', () => {
@@ -24,7 +23,7 @@ describe('CastMemberSequelizeRepository Integration Tests', () => {
   });
 
   it('should find a cast member by id', async () => {
-    let entity = await repository.findById(new Uuid());
+    let entity = await repository.findById(new CastMemberId());
     expect(entity).toBeNull();
     const castMember = CastMember.fake().aCastMember().build();
     await repository.insert(castMember);

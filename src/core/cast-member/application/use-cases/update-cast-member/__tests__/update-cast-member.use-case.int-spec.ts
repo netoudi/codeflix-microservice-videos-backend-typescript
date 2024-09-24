@@ -1,9 +1,9 @@
 import { UpdateCastMemberUseCase } from '@/core/cast-member/application/use-cases/update-cast-member/update-cast-member.use-case';
-import { CastMember } from '@/core/cast-member/domain/cast-member.entity';
+import { CastMember, CastMemberId } from '@/core/cast-member/domain/cast-member.entity';
 import { CastMemberSequelizeRepository } from '@/core/cast-member/infra/db/sequelize/cast-member-sequelize.repository';
 import { CastMemberModel } from '@/core/cast-member/infra/db/sequelize/cast-member.model';
 import { NotFoundError } from '@/core/shared/domain/errors/not-found';
-import { InvalidUuidError, Uuid } from '@/core/shared/domain/value-objects/uuid.vo';
+import { InvalidUuidError } from '@/core/shared/domain/value-objects/uuid.vo';
 import { setupSequelize } from '@/core/shared/infra/testing/helpers';
 
 describe('UpdateCastMemberUseCase Integration Tests', () => {
@@ -19,9 +19,9 @@ describe('UpdateCastMemberUseCase Integration Tests', () => {
 
   it('should throw error when entity not found', async () => {
     await expect(useCase.execute({ id: 'fake-id', name: 'test' })).rejects.toThrow(new InvalidUuidError());
-    const uuid = new Uuid();
-    await expect(useCase.execute({ id: uuid.value, name: 'test' })).rejects.toThrow(
-      new NotFoundError(uuid.value, CastMember),
+    const castMemberId = new CastMemberId();
+    await expect(useCase.execute({ id: castMemberId.value, name: 'test' })).rejects.toThrow(
+      new NotFoundError(castMemberId.value, CastMember),
     );
   });
 

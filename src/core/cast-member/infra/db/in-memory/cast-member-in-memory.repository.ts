@@ -1,11 +1,10 @@
-import { CastMember, CastMemberType } from '@/core/cast-member/domain/cast-member.entity';
+import { CastMember, CastMemberId, CastMemberType } from '@/core/cast-member/domain/cast-member.entity';
 import { CastMemberFilter, ICastMemberRepository } from '@/core/cast-member/domain/cast-member.repository';
 import { SortDirection } from '@/core/shared/domain/repository/search-params';
-import { Uuid } from '@/core/shared/domain/value-objects/uuid.vo';
 import { InMemorySearchableRepository } from '@/core/shared/infra/db/in-memory/in-memory.repository';
 
 export class CastMemberInMemoryRepository
-  extends InMemorySearchableRepository<CastMember, Uuid, CastMemberFilter>
+  extends InMemorySearchableRepository<CastMember, CastMemberId, CastMemberFilter>
   implements ICastMemberRepository
 {
   sortableFields: string[] = ['name', 'created_at'];

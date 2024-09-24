@@ -1,9 +1,8 @@
 import { instanceToPlain } from 'class-transformer';
 import request from 'supertest';
 import { CastMemberOutputMapper } from '@/core/cast-member/application/use-cases/common/cast-member-output.mapper';
-import { CastMember } from '@/core/cast-member/domain/cast-member.entity';
+import { CastMember, CastMemberId } from '@/core/cast-member/domain/cast-member.entity';
 import { ICastMemberRepository } from '@/core/cast-member/domain/cast-member.repository';
-import { Uuid } from '@/core/shared/domain/value-objects/uuid.vo';
 import { CastMembersController } from '@/modules/cast-members-module/cast-members.controller';
 import { CAST_MEMBER_PROVIDERS } from '@/modules/cast-members-module/cast-members.providers';
 import { UpdateCastMemberFixture } from '@/modules/cast-members-module/testing/cast-member-fixture';
@@ -94,7 +93,7 @@ describe('CastMembersController (e2e)', () => {
         expect(Object.keys(response.body)).toStrictEqual(['data']);
         expect(Object.keys(response.body.data)).toStrictEqual(keysInResponse);
         const id = response.body.data.id;
-        const castMemberUpdated = await repository.findById(new Uuid(id));
+        const castMemberUpdated = await repository.findById(new CastMemberId(id));
         const presenter = CastMembersController.serialize(CastMemberOutputMapper.toOutput(castMemberUpdated));
         const serialized = instanceToPlain(presenter);
         expect(response.body.data).toStrictEqual(serialized);

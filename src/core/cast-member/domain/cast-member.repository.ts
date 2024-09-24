@@ -1,8 +1,7 @@
-import { CastMember, CastMemberType } from '@/core/cast-member/domain/cast-member.entity';
+import { CastMember, CastMemberId, CastMemberType } from '@/core/cast-member/domain/cast-member.entity';
 import { ISearchableRepository } from '@/core/shared/domain/repository/repository-interface';
 import { SearchParams } from '@/core/shared/domain/repository/search-params';
 import { SearchResult } from '@/core/shared/domain/repository/search-result';
-import { Uuid } from '@/core/shared/domain/value-objects/uuid.vo';
 
 export type CastMemberFilter = {
   name?: string | null;
@@ -22,4 +21,10 @@ export class CastMemberSearchParams extends SearchParams<CastMemberFilter> {
 export class CastMemberSearchResult extends SearchResult<CastMember> {}
 
 export interface ICastMemberRepository
-  extends ISearchableRepository<CastMember, Uuid, CastMemberFilter, CastMemberSearchParams, CastMemberSearchResult> {}
+  extends ISearchableRepository<
+    CastMember,
+    CastMemberId,
+    CastMemberFilter,
+    CastMemberSearchParams,
+    CastMemberSearchResult
+  > {}
