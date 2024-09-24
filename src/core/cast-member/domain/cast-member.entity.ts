@@ -1,6 +1,6 @@
 import { CastMemberFakeBuilder } from '@/core/cast-member/domain/cast-member-fake.builder';
 import { CastMemberValidatorFactory } from '@/core/cast-member/domain/cast-member.validator';
-import { Entity } from '@/core/shared/domain/entity';
+import { AggregateRoot } from '@/core/shared/domain/aggregate-root';
 import { ValueObject } from '@/core/shared/domain/value-object';
 import { Uuid } from '@/core/shared/domain/value-objects/uuid.vo';
 
@@ -22,7 +22,7 @@ export type CastMemberCreateCommand = {
   created_at?: Date;
 };
 
-export class CastMember extends Entity {
+export class CastMember extends AggregateRoot {
   id: Uuid;
   name: string;
   type: CastMemberType;

@@ -1,6 +1,6 @@
 import { CategoryFakeBuilder } from '@/core/category/domain/category-fake.builder';
 import { CategoryValidatorFactory } from '@/core/category/domain/category.validator';
-import { Entity } from '@/core/shared/domain/entity';
+import { AggregateRoot } from '@/core/shared/domain/aggregate-root';
 import { ValueObject } from '@/core/shared/domain/value-object';
 import { Uuid } from '@/core/shared/domain/value-objects/uuid.vo';
 
@@ -19,7 +19,7 @@ export type CategoryCreateCommand = {
   created_at?: Date;
 };
 
-export class Category extends Entity {
+export class Category extends AggregateRoot {
   id: Uuid;
   name: string;
   description: string | null;
