@@ -53,7 +53,7 @@ describe('CategoriesController (e2e)', () => {
         expect(Object.keys(response.body.data)).toStrictEqual(keysInResponse);
         const id = response.body.data.id;
         const categoryCreated = await repository.findById(new CategoryId(id));
-        const presenter = CategoriesController.serialize(CategoryOutputMapper.toOutput(categoryCreated));
+        const presenter = CategoriesController.serialize(CategoryOutputMapper.toOutput(categoryCreated!));
         const serialized = instanceToPlain(presenter);
         expect(response.body.data).toStrictEqual({
           id: serialized.id,

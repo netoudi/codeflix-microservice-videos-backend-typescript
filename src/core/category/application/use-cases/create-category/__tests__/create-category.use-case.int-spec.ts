@@ -19,20 +19,20 @@ describe('CreateCategoryUseCase Integration Tests', () => {
     let output = await useCase.execute({ name: 'test' });
     let category = await repository.findById(new CategoryId(output.id));
     expect(output).toStrictEqual({
-      id: category.id.value,
+      id: category!.id.value,
       name: 'test',
       description: null,
       is_active: true,
-      created_at: category.created_at,
+      created_at: category!.created_at,
     });
     output = await useCase.execute({ name: 'test', description: 'some description', is_active: false });
     category = await repository.findById(new CategoryId(output.id));
     expect(output).toStrictEqual({
-      id: category.id.value,
+      id: category!.id.value,
       name: 'test',
       description: 'some description',
       is_active: false,
-      created_at: category.created_at,
+      created_at: category!.created_at,
     });
   });
 });

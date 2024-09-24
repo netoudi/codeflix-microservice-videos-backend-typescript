@@ -92,14 +92,14 @@ describe('CategoriesController (e2e)', () => {
         expect(Object.keys(response.body.data)).toStrictEqual(keysInResponse);
         const id = response.body.data.id;
         const categoryUpdated = await repository.findById(new CategoryId(id));
-        const presenter = CategoriesController.serialize(CategoryOutputMapper.toOutput(categoryUpdated));
+        const presenter = CategoriesController.serialize(CategoryOutputMapper.toOutput(categoryUpdated!));
         const serialized = instanceToPlain(presenter);
         expect(response.body.data).toStrictEqual(serialized);
         expect(response.body.data).toStrictEqual({
           id: serialized.id,
-          name: expected.name ?? categoryUpdated.name,
-          description: 'description' in expected ? expected.description : categoryUpdated.description,
-          is_active: expected.is_active ?? categoryUpdated.is_active,
+          name: expected.name ?? categoryUpdated!.name,
+          description: 'description' in expected ? expected.description : categoryUpdated!.description,
+          is_active: expected.is_active ?? categoryUpdated!.is_active,
           created_at: serialized.created_at,
         });
       });

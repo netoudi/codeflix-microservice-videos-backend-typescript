@@ -14,6 +14,7 @@ export class CastMemberInMemoryRepository
     return items.filter((i) => {
       if (
         filter.name !== undefined &&
+        filter.name !== null &&
         (filter.type === CastMemberType.ACTOR || filter.type === CastMemberType.DIRECTOR)
       )
         return i.name.toLowerCase().includes(filter.name.toLowerCase()) && i.type === filter.type;

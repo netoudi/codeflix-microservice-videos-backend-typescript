@@ -9,6 +9,7 @@ describe('CategoryModelMapper Integration Tests', () => {
 
   it('should throw error when category is invalid', async () => {
     expect.assertions(2);
+    //@ts-expect-error - This is an invalid cast member
     const model = CategoryModel.build({
       id: 'c30c0a92-1c8c-4b9e-9b0c-9b0c9b0c9b0c',
       name: 'x'.repeat(256),

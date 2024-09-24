@@ -5,7 +5,7 @@ export type SortDirection = 'asc' | 'desc';
 export type SearchParamsConstructor<Filter = string> = {
   page?: number;
   per_page?: number;
-  sort?: string;
+  sort?: string | null;
   sort_dir?: SortDirection | null;
   filter?: Filter | null;
 };
@@ -19,11 +19,11 @@ export class SearchParams<Filter = string> extends ValueObject {
 
   constructor(props: SearchParamsConstructor<Filter> = {}) {
     super();
-    this.page = props.page;
-    this.per_page = props.per_page;
-    this.sort = props.sort;
-    this.sort_dir = props.sort_dir;
-    this.filter = props.filter;
+    this.page = props.page!;
+    this.per_page = props.per_page!;
+    this.sort = props.sort!;
+    this.sort_dir = props.sort_dir!;
+    this.filter = props.filter!;
   }
 
   get page(): number {

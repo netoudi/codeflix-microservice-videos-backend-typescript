@@ -94,13 +94,13 @@ describe('CastMembersController (e2e)', () => {
         expect(Object.keys(response.body.data)).toStrictEqual(keysInResponse);
         const id = response.body.data.id;
         const castMemberUpdated = await repository.findById(new CastMemberId(id));
-        const presenter = CastMembersController.serialize(CastMemberOutputMapper.toOutput(castMemberUpdated));
+        const presenter = CastMembersController.serialize(CastMemberOutputMapper.toOutput(castMemberUpdated!));
         const serialized = instanceToPlain(presenter);
         expect(response.body.data).toStrictEqual(serialized);
         expect(response.body.data).toStrictEqual({
           id: serialized.id,
-          name: expected.name ?? castMemberUpdated.name,
-          type: expected.type ?? castMemberUpdated.type,
+          name: expected.name ?? castMemberUpdated!.name,
+          type: expected.type ?? castMemberUpdated!.type,
           created_at: serialized.created_at,
         });
       });

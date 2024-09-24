@@ -115,8 +115,8 @@ describe('UpdateCastMemberUseCase Integration Tests', () => {
       {
         input: {
           id: castMember.id.value,
-          name: null,
-          type: null,
+          name: null as any,
+          type: null as any,
         },
         output: {
           id: castMember.id.value,

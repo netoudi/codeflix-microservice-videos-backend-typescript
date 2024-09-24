@@ -49,13 +49,13 @@ describe('CastMembersController Integration Tests', () => {
     test.each(arrange)('when body is $send_data', async ({ send_data, expected }) => {
       const presenter = await controller.create(send_data);
       const entity = await repository.findById(new Uuid(presenter.id));
-      expect(entity.toJSON()).toStrictEqual({
+      expect(entity!.toJSON()).toStrictEqual({
         id: presenter.id,
         name: expected.name,
         type: expected.type,
         created_at: presenter.created_at,
       });
-      const output = CastMemberOutputMapper.toOutput(entity);
+      const output = CastMemberOutputMapper.toOutput(entity!);
       expect(presenter).toEqual(new CastMemberPresenter(output));
     });
   });
@@ -71,13 +71,13 @@ describe('CastMembersController Integration Tests', () => {
     test.each(arrange)('when body is $send_data', async ({ send_data, expected }) => {
       const presenter = await controller.update(castMember.id.value, send_data);
       const entity = await repository.findById(new Uuid(presenter.id));
-      expect(entity.toJSON()).toStrictEqual({
+      expect(entity!.toJSON()).toStrictEqual({
         id: presenter.id,
         name: expected.name ?? castMember.name,
         type: expected.type ?? castMember.type,
         created_at: presenter.created_at,
       });
-      const output = CastMemberOutputMapper.toOutput(entity);
+      const output = CastMemberOutputMapper.toOutput(entity!);
       expect(presenter).toEqual(new CastMemberPresenter(output));
     });
   });

@@ -64,7 +64,7 @@ export class CastMemberSequelizeRepository implements ICastMemberRepository {
         },
       }),
       ...(props.sort && this.sortableFields.includes(props.sort)
-        ? { order: this.formatSort(props.sort, props.sort_dir) }
+        ? { order: this.formatSort(props.sort, props.sort_dir!) }
         : { order: [['created_at', 'desc']] }),
       offset,
       limit,
@@ -78,7 +78,7 @@ export class CastMemberSequelizeRepository implements ICastMemberRepository {
   }
 
   private formatSort(sort: string, sort_dir: SortDirection) {
-    const dialect = this.castMemberModel.sequelize.getDialect() as 'msyql';
+    const dialect = this.castMemberModel.sequelize!.getDialect() as 'msyql';
     if (this.orderBy[dialect] && this.orderBy[dialect][sort]) {
       // mysql searching by ascii
       return this.orderBy[dialect][sort](sort_dir);

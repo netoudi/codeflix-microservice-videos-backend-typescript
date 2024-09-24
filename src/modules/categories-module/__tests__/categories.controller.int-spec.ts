@@ -46,14 +46,14 @@ describe('CategoriesController Integration Tests', () => {
     test.each(arrange)('when body is $send_data', async ({ send_data, expected }) => {
       const presenter = await controller.create(send_data);
       const entity = await repository.findById(new Uuid(presenter.id));
-      expect(entity.toJSON()).toStrictEqual({
+      expect(entity!.toJSON()).toStrictEqual({
         id: presenter.id,
         name: expected.name,
         description: expected.description,
         is_active: expected.is_active,
         created_at: presenter.created_at,
       });
-      const output = CategoryOutputMapper.toOutput(entity);
+      const output = CategoryOutputMapper.toOutput(entity!);
       expect(presenter).toEqual(new CategoryPresenter(output));
     });
   });
@@ -69,7 +69,7 @@ describe('CategoriesController Integration Tests', () => {
     test.each(arrange)('when body is $send_data', async ({ send_data, expected }) => {
       const presenter = await controller.update(category.id.value, send_data);
       const entity = await repository.findById(new Uuid(presenter.id));
-      expect(entity.toJSON()).toStrictEqual({
+      expect(entity!.toJSON()).toStrictEqual({
         id: presenter.id,
         name: expected.name ?? category.name,
         description: 'description' in expected ? expected.description : category.description,
@@ -77,7 +77,7 @@ describe('CategoriesController Integration Tests', () => {
           expected.is_active === true || expected.is_active === false ? expected.is_active : category.is_active,
         created_at: presenter.created_at,
       });
-      const output = CategoryOutputMapper.toOutput(entity);
+      const output = CategoryOutputMapper.toOutput(entity!);
       expect(presenter).toEqual(new CategoryPresenter(output));
     });
   });

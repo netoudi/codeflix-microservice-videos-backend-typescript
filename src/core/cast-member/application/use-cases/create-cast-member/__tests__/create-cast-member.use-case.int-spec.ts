@@ -19,18 +19,18 @@ describe('CreateCastMemberUseCase Integration Tests', () => {
     let output = await useCase.execute({ name: 'test', type: CastMemberType.ACTOR });
     let castMember = await repository.findById(new CastMemberId(output.id));
     expect(output).toStrictEqual({
-      id: castMember.id.value,
+      id: castMember!.id.value,
       name: 'test',
       type: 2,
-      created_at: castMember.created_at,
+      created_at: castMember!.created_at,
     });
     output = await useCase.execute({ name: 'test', type: CastMemberType.DIRECTOR });
     castMember = await repository.findById(new CastMemberId(output.id));
     expect(output).toStrictEqual({
-      id: castMember.id.value,
+      id: castMember!.id.value,
       name: 'test',
       type: 1,
-      created_at: castMember.created_at,
+      created_at: castMember!.created_at,
     });
   });
 });

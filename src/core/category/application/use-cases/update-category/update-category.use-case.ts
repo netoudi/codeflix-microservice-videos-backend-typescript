@@ -17,8 +17,8 @@ export class UpdateCategoryUseCase implements IUseCase<UpdateCategoryInput, Upda
 
     if (!category) throw new NotFoundError(input.id, Category);
 
-    'name' in input && category.changeName(input.name);
-    'description' in input && category.changeDescription(input.description);
+    'name' in input && input.name !== undefined && input.name !== null && category.changeName(input.name);
+    'description' in input && input.description !== undefined && category.changeDescription(input.description);
     'is_active' in input && category[input.is_active ? 'activate' : 'deactivate']();
 
     if (category.notification.hasErrors()) {

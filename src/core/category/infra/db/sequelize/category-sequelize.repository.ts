@@ -59,7 +59,7 @@ export class CategorySequelizeRepository implements ICategoryRepository {
     const { rows: models, count } = await this.categoryModel.findAndCountAll({
       ...(props.filter && { where: { name: { [Op.like]: `%${props.filter}%` } } }),
       ...(props.sort && this.sortableFields.includes(props.sort)
-        ? { order: this.formatSort(props.sort, props.sort_dir) }
+        ? { order: this.formatSort(props.sort, props.sort_dir!) }
         : { order: [['created_at', 'desc']] }),
       offset,
       limit,
@@ -73,7 +73,7 @@ export class CategorySequelizeRepository implements ICategoryRepository {
   }
 
   private formatSort(sort: string, sort_dir: SortDirection) {
-    const dialect = this.categoryModel.sequelize.getDialect() as 'msyql';
+    const dialect = this.categoryModel.sequelize!.getDialect() as 'msyql';
     if (this.orderBy[dialect] && this.orderBy[dialect][sort]) {
       // mysql searching by ascii
       return this.orderBy[dialect][sort](sort_dir);
