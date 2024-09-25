@@ -13,7 +13,11 @@ export class EntityValidationErrorFilter implements ExceptionFilter {
       error: 'Unprocessable Entity',
       message: union(
         ...exception.errors.reduce(
-          (acc, errors) => acc.concat(typeof errors === 'string' ? [[errors]] : Object.values(errors)),
+          (acc, errors) =>
+            acc.concat(
+              //@ts-expect-error - errors can be string
+              typeof errors === 'string' ? [[errors]] : Object.values(errors),
+            ),
           [],
         ),
       ),

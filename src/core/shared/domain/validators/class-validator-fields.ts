@@ -8,7 +8,7 @@ export class ClassValidatorFields implements IValidatorFields {
     if (errors.length) {
       for (const error of errors) {
         const field = error.property;
-        Object.values(error.constraints).forEach((message) => {
+        Object.values(error.constraints!).forEach((message) => {
           notification.addError(message, field);
         });
       }

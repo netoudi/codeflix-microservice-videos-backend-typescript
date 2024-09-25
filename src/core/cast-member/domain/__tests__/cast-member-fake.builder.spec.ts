@@ -1,7 +1,6 @@
 import { Chance } from 'chance';
 import { CastMemberFakeBuilder } from '@/core/cast-member/domain/cast-member-fake.builder';
-import { CastMemberType } from '@/core/cast-member/domain/cast-member.entity';
-import { Uuid } from '@/core/shared/domain/value-objects/uuid.vo';
+import { CastMemberId, CastMemberType } from '@/core/cast-member/domain/cast-member.entity';
 
 describe('CastMemberFakerBuilder Unit Tests', () => {
   describe('cast_member_id prop', () => {
@@ -18,7 +17,7 @@ describe('CastMemberFakerBuilder Unit Tests', () => {
     });
 
     test('withCastMemberId', () => {
-      const cast_member_id = new Uuid();
+      const cast_member_id = new CastMemberId();
       const $this = faker.withCastMemberId(cast_member_id);
       expect($this).toBeInstanceOf(CastMemberFakeBuilder);
       expect(faker['_cast_member_id']).toBe(cast_member_id);
@@ -32,12 +31,12 @@ describe('CastMemberFakerBuilder Unit Tests', () => {
 
     //TODO: - melhorar este nome
     test('should pass index to cast_member_id factory', () => {
-      let mockFactory = jest.fn(() => new Uuid());
+      let mockFactory = jest.fn(() => new CastMemberId());
       faker.withCastMemberId(mockFactory);
       faker.build();
       expect(mockFactory).toHaveBeenCalledTimes(1);
 
-      const castMemberId = new Uuid();
+      const castMemberId = new CastMemberId();
       mockFactory = jest.fn(() => castMemberId);
       const fakerMany = CastMemberFakeBuilder.theCastMembers(2);
       fakerMany.withCastMemberId(mockFactory);
@@ -146,13 +145,13 @@ describe('CastMemberFakerBuilder Unit Tests', () => {
     const faker = CastMemberFakeBuilder.aCastMember();
     let castMember = faker.build();
 
-    expect(castMember.id).toBeInstanceOf(Uuid);
+    expect(castMember.id).toBeInstanceOf(CastMemberId);
     expect(typeof castMember.name === 'string').toBeTruthy();
     expect(typeof castMember.type === 'number').toBeTruthy();
     expect(castMember.created_at).toBeInstanceOf(Date);
 
     const created_at = new Date();
-    const cast_member_id = new Uuid();
+    const cast_member_id = new CastMemberId();
     castMember = faker.withCastMemberId(cast_member_id).withName('name test').withCreatedAt(created_at).build();
 
     expect(castMember.id.value).toBe(cast_member_id.value);
@@ -166,14 +165,14 @@ describe('CastMemberFakerBuilder Unit Tests', () => {
     let castMembers = faker.build();
 
     castMembers.forEach((castMember) => {
-      expect(castMember.id).toBeInstanceOf(Uuid);
+      expect(castMember.id).toBeInstanceOf(CastMemberId);
       expect(typeof castMember.name === 'string').toBeTruthy();
       expect(typeof castMember.type === 'number').toBeTruthy();
       expect(castMember.created_at).toBeInstanceOf(Date);
     });
 
     const created_at = new Date();
-    const cast_member_id = new Uuid();
+    const cast_member_id = new CastMemberId();
     castMembers = faker.withCastMemberId(cast_member_id).withName('name test').withCreatedAt(created_at).build();
 
     castMembers.forEach((castMember) => {

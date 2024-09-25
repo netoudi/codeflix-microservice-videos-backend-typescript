@@ -1,6 +1,6 @@
 import { CastMemberFakeBuilder } from '@/core/cast-member/domain/cast-member-fake.builder';
 import { CastMemberValidatorFactory } from '@/core/cast-member/domain/cast-member.validator';
-import { Entity } from '@/core/shared/domain/entity';
+import { AggregateRoot } from '@/core/shared/domain/aggregate-root';
 import { ValueObject } from '@/core/shared/domain/value-object';
 import { Uuid } from '@/core/shared/domain/value-objects/uuid.vo';
 
@@ -10,7 +10,7 @@ export enum CastMemberType {
 }
 
 export type CastMemberConstructor = {
-  id?: Uuid;
+  id?: CastMemberId;
   name: string;
   type: CastMemberType;
   created_at?: Date;
@@ -22,15 +22,17 @@ export type CastMemberCreateCommand = {
   created_at?: Date;
 };
 
-export class CastMember extends Entity {
-  id: Uuid;
+export class CastMemberId extends Uuid {}
+
+export class CastMember extends AggregateRoot {
+  id: CastMemberId;
   name: string;
   type: CastMemberType;
   created_at: Date;
 
   constructor(props: CastMemberConstructor) {
     super();
-    this.id = props.id ?? new Uuid();
+    this.id = props.id ?? new CastMemberId();
     this.name = props.name;
     this.type = props.type;
     this.created_at = props.created_at ?? new Date();

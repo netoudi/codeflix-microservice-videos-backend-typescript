@@ -1,8 +1,8 @@
 import { UpdateCastMemberUseCase } from '@/core/cast-member/application/use-cases/update-cast-member/update-cast-member.use-case';
-import { CastMember, CastMemberType } from '@/core/cast-member/domain/cast-member.entity';
+import { CastMember, CastMemberId, CastMemberType } from '@/core/cast-member/domain/cast-member.entity';
 import { CastMemberInMemoryRepository } from '@/core/cast-member/infra/db/in-memory/cast-member-in-memory.repository';
 import { NotFoundError } from '@/core/shared/domain/errors/not-found';
-import { InvalidUuidError, Uuid } from '@/core/shared/domain/value-objects/uuid.vo';
+import { InvalidUuidError } from '@/core/shared/domain/value-objects/uuid.vo';
 
 describe('UpdateCastMemberUseCase Unit Tests', () => {
   let useCase: UpdateCastMemberUseCase;
@@ -22,9 +22,9 @@ describe('UpdateCastMemberUseCase Unit Tests', () => {
 
   it('should throw error when entity not found', async () => {
     await expect(useCase.execute({ id: 'fake-id', name: 'test' })).rejects.toThrow(new InvalidUuidError());
-    const uuid = new Uuid();
-    await expect(useCase.execute({ id: uuid.value, name: 'test' })).rejects.toThrow(
-      new NotFoundError(uuid.value, CastMember),
+    const castMemberId = new CastMemberId();
+    await expect(useCase.execute({ id: castMemberId.value, name: 'test' })).rejects.toThrow(
+      new NotFoundError(castMemberId.value, CastMember),
     );
   });
 
@@ -120,8 +120,8 @@ describe('UpdateCastMemberUseCase Unit Tests', () => {
       {
         input: {
           id: castMember.id.value,
-          name: null,
-          type: null,
+          name: null as any,
+          type: null as any,
         },
         output: {
           id: castMember.id.value,

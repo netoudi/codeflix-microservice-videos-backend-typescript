@@ -3,23 +3,22 @@ import {
   CategoryOutputMapper,
 } from '@/core/category/application/use-cases/common/category-output.mapper';
 import { UpdateCategoryInput } from '@/core/category/application/use-cases/update-category/update-category.input';
-import { Category } from '@/core/category/domain/category.entity';
+import { Category, CategoryId } from '@/core/category/domain/category.entity';
 import { ICategoryRepository } from '@/core/category/domain/category.repository';
 import { IUseCase } from '@/core/shared/application/use-case.interface';
 import { NotFoundError } from '@/core/shared/domain/errors/not-found';
 import { EntityValidationError } from '@/core/shared/domain/validators/entity-validation.error';
-import { Uuid } from '@/core/shared/domain/value-objects/uuid.vo';
 
 export class UpdateCategoryUseCase implements IUseCase<UpdateCategoryInput, UpdateCategoryOutput> {
   constructor(private readonly categoryRepository: ICategoryRepository) {}
 
   async execute(input: UpdateCategoryInput): Promise<UpdateCategoryOutput> {
-    const category = await this.categoryRepository.findById(new Uuid(input.id));
+    const category = await this.categoryRepository.findById(new CategoryId(input.id));
 
     if (!category) throw new NotFoundError(input.id, Category);
 
-    'name' in input && category.changeName(input.name);
-    'description' in input && category.changeDescription(input.description);
+    'name' in input && input.name !== undefined && input.name !== null && category.changeName(input.name);
+    'description' in input && input.description !== undefined && category.changeDescription(input.description);
     'is_active' in input && category[input.is_active ? 'activate' : 'deactivate']();
 
     if (category.notification.hasErrors()) {

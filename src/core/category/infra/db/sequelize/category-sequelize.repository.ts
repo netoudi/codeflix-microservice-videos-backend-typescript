@@ -1,5 +1,5 @@
-import { Op, literal } from 'sequelize';
-import { Category } from '@/core/category/domain/category.entity';
+import { literal, Op } from 'sequelize';
+import { Category, CategoryId } from '@/core/category/domain/category.entity';
 import {
   CategorySearchParams,
   CategorySearchResult,
@@ -9,7 +9,6 @@ import { CategoryModelMapper } from '@/core/category/infra/db/sequelize/category
 import { CategoryModel } from '@/core/category/infra/db/sequelize/category.model';
 import { NotFoundError } from '@/core/shared/domain/errors/not-found';
 import { SortDirection } from '@/core/shared/domain/repository/search-params';
-import { Uuid } from '@/core/shared/domain/value-objects/uuid.vo';
 
 export class CategorySequelizeRepository implements ICategoryRepository {
   sortableFields: string[] = ['name', 'created_at'];
@@ -36,7 +35,7 @@ export class CategorySequelizeRepository implements ICategoryRepository {
     await this.categoryModel.update(modelToUpdate.toJSON(), { where: { id: entity.id.value } });
   }
 
-  async delete(entityId: Uuid): Promise<void> {
+  async delete(entityId: CategoryId): Promise<void> {
     const model = await this.categoryModel.findByPk(entityId.value);
     if (!model) {
       throw new NotFoundError(entityId, this.getEntity());
@@ -44,7 +43,7 @@ export class CategorySequelizeRepository implements ICategoryRepository {
     await this.categoryModel.destroy({ where: { id: entityId.value } });
   }
 
-  async findById(entityId: Uuid): Promise<Category | null> {
+  async findById(entityId: CategoryId): Promise<Category | null> {
     const model = await this.categoryModel.findByPk(entityId.value);
     return model ? CategoryModelMapper.toEntity(model) : null;
   }
@@ -60,7 +59,7 @@ export class CategorySequelizeRepository implements ICategoryRepository {
     const { rows: models, count } = await this.categoryModel.findAndCountAll({
       ...(props.filter && { where: { name: { [Op.like]: `%${props.filter}%` } } }),
       ...(props.sort && this.sortableFields.includes(props.sort)
-        ? { order: this.formatSort(props.sort, props.sort_dir) }
+        ? { order: this.formatSort(props.sort, props.sort_dir!) }
         : { order: [['created_at', 'desc']] }),
       offset,
       limit,
@@ -74,7 +73,7 @@ export class CategorySequelizeRepository implements ICategoryRepository {
   }
 
   private formatSort(sort: string, sort_dir: SortDirection) {
-    const dialect = this.categoryModel.sequelize.getDialect() as 'msyql';
+    const dialect = this.categoryModel.sequelize!.getDialect() as 'msyql';
     if (this.orderBy[dialect] && this.orderBy[dialect][sort]) {
       // mysql searching by ascii
       return this.orderBy[dialect][sort](sort_dir);

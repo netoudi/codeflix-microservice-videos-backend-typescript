@@ -1,12 +1,11 @@
 import { Chance } from 'chance';
-import { CastMember, CastMemberType } from '@/core/cast-member/domain/cast-member.entity';
-import { Uuid } from '@/core/shared/domain/value-objects/uuid.vo';
+import { CastMember, CastMemberId, CastMemberType } from '@/core/cast-member/domain/cast-member.entity';
 
 type PropOrFactory<T> = T | ((index: number) => T);
 
 export class CastMemberFakeBuilder<TBuild = any> {
   // auto generated in entity
-  private _cast_member_id: PropOrFactory<Uuid> | undefined = undefined;
+  private _cast_member_id: PropOrFactory<CastMemberId> | undefined = undefined;
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   private _name: PropOrFactory<string> = (_index) => this.chance.word();
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -47,7 +46,7 @@ export class CastMemberFakeBuilder<TBuild = any> {
     this.chance = Chance();
   }
 
-  withCastMemberId(valueOrFactory: PropOrFactory<Uuid>) {
+  withCastMemberId(valueOrFactory: PropOrFactory<CastMemberId>) {
     this._cast_member_id = valueOrFactory;
     return this;
   }

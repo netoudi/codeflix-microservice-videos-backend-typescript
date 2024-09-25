@@ -35,7 +35,7 @@ export class ConfigModule extends NestConfigModule {
       isGlobal: true,
       envFilePath: [
         // first load .env overrides the next load .env
-        ...(Array.isArray(envFilePath) ? envFilePath : [envFilePath]),
+        ...(Array.isArray(envFilePath) ? envFilePath : [envFilePath as string]),
         join(process.cwd(), 'envs', `.env.${process.env.NODE_ENV}`),
         join(process.cwd(), 'envs', `.env`),
       ],

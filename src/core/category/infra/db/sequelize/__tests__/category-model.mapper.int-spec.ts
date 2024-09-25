@@ -1,8 +1,7 @@
-import { Category } from '@/core/category/domain/category.entity';
+import { Category, CategoryId } from '@/core/category/domain/category.entity';
 import { CategoryModelMapper } from '@/core/category/infra/db/sequelize/category-model.mapper';
 import { CategoryModel } from '@/core/category/infra/db/sequelize/category.model';
 import { EntityValidationError } from '@/core/shared/domain/validators/entity-validation.error';
-import { Uuid } from '@/core/shared/domain/value-objects/uuid.vo';
 import { setupSequelize } from '@/core/shared/infra/testing/helpers';
 
 describe('CategoryModelMapper Integration Tests', () => {
@@ -10,6 +9,7 @@ describe('CategoryModelMapper Integration Tests', () => {
 
   it('should throw error when category is invalid', async () => {
     expect.assertions(2);
+    //@ts-expect-error - This is an invalid cast member
     const model = CategoryModel.build({
       id: 'c30c0a92-1c8c-4b9e-9b0c-9b0c9b0c9b0c',
       name: 'x'.repeat(256),
@@ -39,7 +39,7 @@ describe('CategoryModelMapper Integration Tests', () => {
     const entity = CategoryModelMapper.toEntity(model);
     expect(entity.toJSON()).toStrictEqual(
       new Category({
-        id: new Uuid('c30c0a92-1c8c-4b9e-9b0c-9b0c9b0c9b0c'),
+        id: new CategoryId('c30c0a92-1c8c-4b9e-9b0c-9b0c9b0c9b0c'),
         name: 'Movie',
         description: 'Movie description',
         is_active: true,
@@ -51,7 +51,7 @@ describe('CategoryModelMapper Integration Tests', () => {
   it('should convert a category entity to a category model', async () => {
     const created_at = new Date();
     const entity = new Category({
-      id: new Uuid('c30c0a92-1c8c-4b9e-9b0c-9b0c9b0c9b0c'),
+      id: new CategoryId('c30c0a92-1c8c-4b9e-9b0c-9b0c9b0c9b0c'),
       name: 'Movie',
       description: 'Movie description',
       is_active: true,

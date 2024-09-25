@@ -4,6 +4,7 @@ import Joi from 'joi';
 import { CONFIG_DB_SCHEMA, ConfigModule } from '@/modules/config-module/config.module';
 
 function expectValidate(schema: Joi.Schema, value: any) {
+  //@ts-expect-error - if error not exists, the test will fail
   return expect(schema.validate(value, { abortEarly: false }).error.message);
 }
 
