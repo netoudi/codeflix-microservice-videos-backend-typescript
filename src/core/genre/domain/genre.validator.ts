@@ -1,5 +1,5 @@
 import { MaxLength } from 'class-validator';
-import { Genre } from '@/core/genre/domain/genre.entity';
+import { Genre } from '@/core/genre/domain/genre.aggregate';
 import { ClassValidatorFields } from '@/core/shared/domain/validators/class-validator-fields';
 import { Notification } from '@/core/shared/domain/validators/notification';
 

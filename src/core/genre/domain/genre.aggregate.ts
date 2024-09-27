@@ -47,7 +47,7 @@ export class Genre extends AggregateRoot {
       ...props,
       categories_id: new Map(props.categories_id.map((category_id) => [category_id.value, category_id])),
     });
-    genre.validate(['name']);
+    genre.validate();
     return genre;
   }
 
@@ -61,12 +61,12 @@ export class Genre extends AggregateRoot {
   }
 
   removeCategoryId(category_id: CategoryId) {
-    this.categories_id.set(category_id.value, category_id);
+    this.categories_id.delete(category_id.value);
   }
 
   syncCategoriesId(categories_id: CategoryId[]) {
     if (!categories_id.length) return;
-    this.categories_id = new categories_id.map((category_id) => [category_id.value, category_id]);
+    this.categories_id = new Map(categories_id.map((category_id) => [category_id.value, category_id]));
   }
 
   activate(): void {
