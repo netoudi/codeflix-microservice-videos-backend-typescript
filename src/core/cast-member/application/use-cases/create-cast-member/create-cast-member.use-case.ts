@@ -6,7 +6,7 @@ import { CreateCastMemberInput } from '@/core/cast-member/application/use-cases/
 import { CastMember } from '@/core/cast-member/domain/cast-member.entity';
 import { ICastMemberRepository } from '@/core/cast-member/domain/cast-member.repository';
 import { IUseCase } from '@/core/shared/application/use-case.interface';
-import { EntityValidationError } from '@/core/shared/domain/validators/entity-validation.error';
+import { EntityValidationError } from '@/core/shared/domain/validators/validation.error';
 
 export class CreateCastMemberUseCase implements IUseCase<CreateCastMemberInput, CreateCastMemberOutput> {
   constructor(private readonly castMemberRepository: ICastMemberRepository) {}

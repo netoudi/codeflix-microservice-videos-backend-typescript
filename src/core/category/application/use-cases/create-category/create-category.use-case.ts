@@ -6,7 +6,7 @@ import { CreateCategoryInput } from '@/core/category/application/use-cases/creat
 import { Category } from '@/core/category/domain/category.entity';
 import { ICategoryRepository } from '@/core/category/domain/category.repository';
 import { IUseCase } from '@/core/shared/application/use-case.interface';
-import { EntityValidationError } from '@/core/shared/domain/validators/entity-validation.error';
+import { EntityValidationError } from '@/core/shared/domain/validators/validation.error';
 
 export class CreateCategoryUseCase implements IUseCase<CreateCategoryInput, CreateCategoryOutput> {
   constructor(private readonly categoryRepository: ICategoryRepository) {}
