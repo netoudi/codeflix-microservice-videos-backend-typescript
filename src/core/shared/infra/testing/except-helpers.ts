@@ -1,5 +1,6 @@
 import { Notification } from '@/core/shared/domain/validators/notification';
 import { FieldsErrors } from '@/core/shared/domain/validators/validator-fields-interface';
+import { ValueObject } from '@/core/shared/domain/value-object';
 
 expect.extend({
   notificationContainsErrorMessages(expected: Notification, received: Array<FieldsErrors>) {
@@ -19,6 +20,16 @@ expect.extend({
           pass: false,
           message: () => {
             return `The validation errors not contains ${JSON.stringify(received)}. Current: ${JSON.stringify(expected.toJSON())}`;
+          },
+        };
+  },
+  toBeValueObject(expected: ValueObject, received: ValueObject) {
+    return expected.equals(received)
+      ? { pass: true, message: () => '' }
+      : {
+          pass: false,
+          message: () => {
+            return `The values object are not equal. Expected: ${JSON.stringify(expected)} | Received: ${JSON.stringify(received)}`;
           },
         };
   },

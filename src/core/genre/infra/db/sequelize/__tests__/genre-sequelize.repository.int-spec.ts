@@ -7,16 +7,19 @@ import { GenreModelMapper } from '@/core/genre/infra/db/sequelize/genre-model.ma
 import { GenreSequelizeRepository } from '@/core/genre/infra/db/sequelize/genre-sequelize.repository';
 import { GenreModel, GenreCategoryModel } from '@/core/genre/infra/db/sequelize/genre.model';
 import { NotFoundError } from '@/core/shared/domain/errors/not-found';
+import { UnitOfWorkSequelize } from '@/core/shared/infra/db/sequelize/unit-of-work-sequelize';
 import { setupSequelize } from '@/core/shared/infra/testing/helpers';
 
 describe('GenreSequelizeRepository Integration Tests', () => {
-  setupSequelize({ models: [GenreModel, GenreCategoryModel, CategoryModel] });
+  const sequelizeHelper = setupSequelize({ models: [GenreModel, GenreCategoryModel, CategoryModel] });
 
+  let uow: UnitOfWorkSequelize;
   let genreRepo: GenreSequelizeRepository;
   let categoryRepo: CategorySequelizeRepository;
 
   beforeEach(async () => {
-    genreRepo = new GenreSequelizeRepository(GenreModel);
+    uow = new UnitOfWorkSequelize(sequelizeHelper.sequelize);
+    genreRepo = new GenreSequelizeRepository(GenreModel, uow);
     categoryRepo = new CategorySequelizeRepository(CategoryModel);
   });
 
@@ -717,6 +720,201 @@ describe('GenreSequelizeRepository Integration Tests', () => {
             categories_id: expect.arrayContaining(i.categories_id),
           })),
         });
+      });
+    });
+  });
+
+  describe('transaction mode', () => {
+    describe('insert method', () => {
+      it('should insert a genre', async () => {
+        const category = Category.fake().aCategory().build();
+        await categoryRepo.insert(category);
+        const genre = Genre.fake().aGenre().addCategoryId(category.id).build();
+
+        await uow.start();
+        await genreRepo.insert(genre);
+        await uow.commit();
+
+        const result = await genreRepo.findById(genre.id);
+        expect(genre.id).toBeValueObject(result!.id);
+      });
+
+      it('rollback the insertion', async () => {
+        const category = Category.fake().aCategory().build();
+        await categoryRepo.insert(category);
+        const genre = Genre.fake().aGenre().addCategoryId(category.id).build();
+
+        await uow.start();
+        await genreRepo.insert(genre);
+        await uow.rollback();
+
+        await expect(genreRepo.findById(genre.id)).resolves.toBeNull();
+      });
+    });
+
+    describe('bulkInsert method', () => {
+      it('should insert a list of genres', async () => {
+        const category = Category.fake().aCategory().build();
+        await categoryRepo.insert(category);
+        const genres = Genre.fake().theGenres(2).addCategoryId(category.id).build();
+
+        await uow.start();
+        await genreRepo.bulkInsert(genres);
+        await uow.commit();
+
+        const [genre1, genre2] = await Promise.all([
+          genreRepo.findById(genres[0].id),
+          genreRepo.findById(genres[1].id),
+        ]);
+        expect(genre1!.id).toBeValueObject(genres[0].id);
+        expect(genre2!.id).toBeValueObject(genres[1].id);
+      });
+
+      it('rollback the bulk insertion', async () => {
+        const category = Category.fake().aCategory().build();
+        await categoryRepo.insert(category);
+        const genres = Genre.fake().theGenres(2).addCategoryId(category.id).build();
+
+        await uow.start();
+        await genreRepo.bulkInsert(genres);
+        await uow.rollback();
+
+        await expect(genreRepo.findById(genres[0].id)).resolves.toBeNull();
+        await expect(genreRepo.findById(genres[1].id)).resolves.toBeNull();
+      });
+    });
+
+    describe('findById method', () => {
+      it('should return a genre', async () => {
+        const category = Category.fake().aCategory().build();
+        await categoryRepo.insert(category);
+        const genre = Genre.fake().aGenre().addCategoryId(category.id).build();
+
+        await uow.start();
+        await genreRepo.insert(genre);
+        const result = await genreRepo.findById(genre.id);
+        expect(result!.id).toBeValueObject(genre.id);
+        await uow.commit();
+      });
+    });
+
+    describe('findAll method', () => {
+      it('should return a list of genres', async () => {
+        const category = Category.fake().aCategory().build();
+        await categoryRepo.insert(category);
+        const genres = Genre.fake().theGenres(2).addCategoryId(category.id).build();
+
+        await uow.start();
+        await genreRepo.bulkInsert(genres);
+        const result = await genreRepo.findAll();
+        expect(result.length).toBe(2);
+        await uow.commit();
+      });
+    });
+
+    describe('findByIds method', () => {
+      it('should return a list of genres', async () => {
+        const category = Category.fake().aCategory().build();
+        await categoryRepo.insert(category);
+        const genres = Genre.fake().theGenres(2).addCategoryId(category.id).build();
+
+        await uow.start();
+        await genreRepo.bulkInsert(genres);
+        const result = await genreRepo.findByIds(genres.map((g) => g.id));
+        expect(result.length).toBe(2);
+        await uow.commit();
+      });
+    });
+
+    describe('existsById method', () => {
+      it('should return true if the genre exists', async () => {
+        const category = Category.fake().aCategory().build();
+        await categoryRepo.insert(category);
+        const genre = Genre.fake().aGenre().addCategoryId(category.id).build();
+
+        await uow.start();
+        await genreRepo.insert(genre);
+        const existsResult = await genreRepo.existsById([genre.id]);
+        expect(existsResult.exists[0]).toBeValueObject(genre.id);
+        await uow.commit();
+      });
+    });
+
+    describe('update method', () => {
+      it('should update a genre', async () => {
+        const category = Category.fake().aCategory().build();
+        await categoryRepo.insert(category);
+        const genre = Genre.fake().aGenre().addCategoryId(category.id).build();
+        await genreRepo.insert(genre);
+
+        await uow.start();
+        genre.changeName('new name');
+        await genreRepo.update(genre);
+        await uow.commit();
+
+        const result = await genreRepo.findById(genre.id);
+        expect(result!.name).toBe(genre.name);
+      });
+
+      it('rollback the update', async () => {
+        const category = Category.fake().aCategory().build();
+        await categoryRepo.insert(category);
+        const genre = Genre.fake().aGenre().addCategoryId(category.id).build();
+        await genreRepo.insert(genre);
+        await uow.start();
+        genre.changeName('new name');
+        await genreRepo.update(genre);
+        await uow.rollback();
+        const notChangeGenre = await genreRepo.findById(genre.id);
+        expect(notChangeGenre!.name).not.toBe(genre.name);
+      });
+    });
+
+    describe('delete method', () => {
+      it('should delete a genre', async () => {
+        const category = Category.fake().aCategory().build();
+        await categoryRepo.insert(category);
+        const genre = Genre.fake().aGenre().addCategoryId(category.id).build();
+        await genreRepo.insert(genre);
+
+        await uow.start();
+        await genreRepo.delete(genre.id);
+        await uow.commit();
+
+        await expect(genreRepo.findById(genre.id)).resolves.toBeNull();
+      });
+
+      it('rollback the deletion', async () => {
+        const category = Category.fake().aCategory().build();
+        await categoryRepo.insert(category);
+        const genre = Genre.fake().aGenre().addCategoryId(category.id).build();
+        await genreRepo.insert(genre);
+
+        await uow.start();
+        await genreRepo.delete(genre.id);
+        await uow.rollback();
+
+        const result = await genreRepo.findById(genre.id);
+        expect(result!.id).toBeValueObject(genre.id);
+        expect(result?.categories_id.size).toBe(1);
+      });
+    });
+
+    describe('search method', () => {
+      it('should return a list of genres', async () => {
+        const category = Category.fake().aCategory().build();
+        await categoryRepo.insert(category);
+        const genres = Genre.fake().theGenres(2).withName('genre').addCategoryId(category.id).build();
+
+        await uow.start();
+        await genreRepo.bulkInsert(genres);
+        const searchParams = GenreSearchParams.create({
+          filter: { name: 'genre' },
+        });
+        const result = await genreRepo.search(searchParams);
+        expect(result.items.length).toBe(2);
+        expect(result.total).toBe(2);
+        await uow.commit();
       });
     });
   });
