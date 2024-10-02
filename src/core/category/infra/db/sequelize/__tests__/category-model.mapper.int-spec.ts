@@ -1,7 +1,7 @@
 import { Category, CategoryId } from '@/core/category/domain/category.entity';
 import { CategoryModelMapper } from '@/core/category/infra/db/sequelize/category-model.mapper';
 import { CategoryModel } from '@/core/category/infra/db/sequelize/category.model';
-import { EntityValidationError } from '@/core/shared/domain/validators/entity-validation.error';
+import { EntityValidationError } from '@/core/shared/domain/validators/validation.error';
 import { setupSequelize } from '@/core/shared/infra/testing/helpers';
 
 describe('CategoryModelMapper Integration Tests', () => {

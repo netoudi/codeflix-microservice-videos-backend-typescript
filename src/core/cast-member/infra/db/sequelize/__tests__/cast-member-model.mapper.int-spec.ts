@@ -1,7 +1,7 @@
 import { CastMember, CastMemberId } from '@/core/cast-member/domain/cast-member.entity';
 import { CastMemberModelMapper } from '@/core/cast-member/infra/db/sequelize/cast-member-model.mapper';
 import { CastMemberModel } from '@/core/cast-member/infra/db/sequelize/cast-member.model';
-import { EntityValidationError } from '@/core/shared/domain/validators/entity-validation.error';
+import { EntityValidationError } from '@/core/shared/domain/validators/validation.error';
 import { setupSequelize } from '@/core/shared/infra/testing/helpers';
 
 describe('CastMemberModelMapper Integration Tests', () => {

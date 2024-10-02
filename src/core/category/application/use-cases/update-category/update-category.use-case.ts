@@ -7,7 +7,7 @@ import { Category, CategoryId } from '@/core/category/domain/category.entity';
 import { ICategoryRepository } from '@/core/category/domain/category.repository';
 import { IUseCase } from '@/core/shared/application/use-case.interface';
 import { NotFoundError } from '@/core/shared/domain/errors/not-found';
-import { EntityValidationError } from '@/core/shared/domain/validators/entity-validation.error';
+import { EntityValidationError } from '@/core/shared/domain/validators/validation.error';
 
 export class UpdateCategoryUseCase implements IUseCase<UpdateCategoryInput, UpdateCategoryOutput> {
   constructor(private readonly categoryRepository: ICategoryRepository) {}
