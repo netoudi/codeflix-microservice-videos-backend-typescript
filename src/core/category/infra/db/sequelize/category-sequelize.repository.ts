@@ -7,6 +7,7 @@ import {
 } from '@/core/category/domain/category.repository';
 import { CategoryModelMapper } from '@/core/category/infra/db/sequelize/category-model.mapper';
 import { CategoryModel } from '@/core/category/infra/db/sequelize/category.model';
+import { InvalidArgumentError } from '@/core/shared/domain/errors/invalid-argument.error';
 import { NotFoundError } from '@/core/shared/domain/errors/not-found';
 import { SortDirection } from '@/core/shared/domain/repository/search-params';
 
@@ -51,6 +52,38 @@ export class CategorySequelizeRepository implements ICategoryRepository {
   async findAll(): Promise<Category[]> {
     const models = await this.categoryModel.findAll();
     return CategoryModelMapper.toEntities(models);
+  }
+
+  async findByIds(ids: CategoryId[]): Promise<Category[]> {
+    const models = await this.categoryModel.findAll({
+      where: {
+        id: {
+          [Op.in]: ids.map((id) => id.value),
+        },
+      },
+    });
+    return CategoryModelMapper.toEntities(models);
+  }
+
+  async existsById(ids: CategoryId[]): Promise<{ exists: CategoryId[]; not_exists: CategoryId[] }> {
+    if (!ids.length) {
+      throw new InvalidArgumentError('ids must be an array with at least one element');
+    }
+
+    const existsCategoryModels = await this.categoryModel.findAll({
+      attributes: ['id'],
+      where: {
+        id: {
+          [Op.in]: ids.map((id) => id.value),
+        },
+      },
+    });
+    const existsCategoryIds = existsCategoryModels.map((m) => new CategoryId(m.id));
+    const notExistsCategoryIds = ids.filter((id) => !existsCategoryIds.some((e) => e.equals(id)));
+    return {
+      exists: existsCategoryIds,
+      not_exists: notExistsCategoryIds,
+    };
   }
 
   async search(props: CategorySearchParams): Promise<CategorySearchResult> {
