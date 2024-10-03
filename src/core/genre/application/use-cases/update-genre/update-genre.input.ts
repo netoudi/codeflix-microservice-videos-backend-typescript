@@ -1,9 +1,18 @@
-import { IsBoolean, IsNotEmpty, IsOptional, IsString, ValidationError, validateSync } from 'class-validator';
+import {
+  IsArray,
+  IsBoolean,
+  IsNotEmpty,
+  IsOptional,
+  IsString,
+  IsUUID,
+  ValidationError,
+  validateSync,
+} from 'class-validator';
 
 export type UpdateGenreInputConstructor = {
   id: string;
   name?: string;
-  description?: string | null;
+  categories_id?: string[];
   is_active?: boolean;
 };
 
@@ -16,9 +25,10 @@ export class UpdateGenreInput {
   @IsOptional()
   name?: string;
 
-  @IsString()
+  @IsUUID('4', { each: true })
+  @IsArray()
   @IsOptional()
-  description?: string | null;
+  categories_id?: string[];
 
   @IsBoolean()
   @IsOptional()
@@ -28,7 +38,7 @@ export class UpdateGenreInput {
     if (!props) return;
     this.id = props.id;
     props.name && (this.name = props.name);
-    props.description && (this.description = props.description);
+    props.categories_id && props.categories_id.length > 0 && (this.categories_id = props.categories_id);
     props.is_active !== undefined && props.is_active !== null && (this.is_active = props.is_active);
   }
 }

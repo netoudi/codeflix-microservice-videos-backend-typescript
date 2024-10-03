@@ -1,8 +1,17 @@
-import { IsBoolean, IsNotEmpty, IsOptional, IsString, validateSync, ValidationError } from 'class-validator';
+import {
+  IsArray,
+  IsBoolean,
+  IsNotEmpty,
+  IsOptional,
+  IsString,
+  IsUUID,
+  ValidationError,
+  validateSync,
+} from 'class-validator';
 
 export type CreateGenreInputConstructor = {
   name: string;
-  description?: string | null;
+  categories_id: string[];
   is_active?: boolean;
 };
 
@@ -11,9 +20,10 @@ export class CreateGenreInput {
   @IsNotEmpty()
   name: string;
 
-  @IsString()
-  @IsOptional()
-  description?: string | null;
+  @IsUUID('4', { each: true })
+  @IsArray()
+  @IsNotEmpty()
+  categories_id: string[];
 
   @IsBoolean()
   @IsOptional()
@@ -22,8 +32,8 @@ export class CreateGenreInput {
   constructor(props: CreateGenreInputConstructor) {
     if (!props) return;
     this.name = props.name;
-    this.description = props.description;
-    this.is_active = props.is_active;
+    this.categories_id = props.categories_id;
+    this.is_active = props.is_active ?? true;
   }
 }
 
