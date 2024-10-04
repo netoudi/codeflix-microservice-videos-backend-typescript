@@ -3,19 +3,19 @@ import { SearchInput } from '@/core/shared/application/search-input';
 import { SortDirection } from '@/core/shared/domain/repository/search-params';
 
 export class ListGenresFilter {
-  name?: string | null;
+  name?: string;
   @IsUUID('4', { each: true })
   @IsArray()
-  categories_id?: string[] | null;
+  categories_id?: string[];
 }
 
 export class ListGenresInput implements SearchInput<ListGenresFilter> {
   page?: number;
   per_page?: number;
   sort?: string;
-  sort_dir?: SortDirection | null;
+  sort_dir?: SortDirection;
   @ValidateNested()
-  filter?: ListGenresFilter | null;
+  filter?: ListGenresFilter;
 }
 
 export class ValidateListGenresInput {
