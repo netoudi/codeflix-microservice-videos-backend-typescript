@@ -1,170 +1,158 @@
-import { UpdateGenreUseCase } from '@/core/genre/application/use-cases/update-genre/update-genre.use-case';
-import { Genre } from '@/core/genre/domain/genre.aggregate';
+import { CategoriesIdExistsInDatabaseValidator } from '@/core/category/application/validations/categories-id-exists-in-database.validator';
+import { Category } from '@/core/category/domain/category.entity';
+import { CategorySequelizeRepository } from '@/core/category/infra/db/sequelize/category-sequelize.repository';
+import { CategoryModel } from '@/core/category/infra/db/sequelize/category.model';
+import { UpdateGenreInput } from '@/core/genre/application/use-cases/update-genre/update-genre.input';
+import {
+  UpdateGenreUseCase,
+  UpdateGenreOutput,
+} from '@/core/genre/application/use-cases/update-genre/update-genre.use-case';
+import { Genre, GenreId } from '@/core/genre/domain/genre.aggregate';
 import { GenreSequelizeRepository } from '@/core/genre/infra/db/sequelize/genre-sequelize.repository';
-import { GenreModel } from '@/core/genre/infra/db/sequelize/genre.model';
-import { NotFoundError } from '@/core/shared/domain/errors/not-found';
-import { InvalidUuidError, Uuid } from '@/core/shared/domain/value-objects/uuid.vo';
+import { GenreModel, GenreCategoryModel } from '@/core/genre/infra/db/sequelize/genre.model';
+import { UnitOfWorkSequelize } from '@/core/shared/infra/db/sequelize/unit-of-work-sequelize';
 import { setupSequelize } from '@/core/shared/infra/testing/helpers';
 
 describe('UpdateGenreUseCase Integration Tests', () => {
+  let uow: UnitOfWorkSequelize;
+  let genreRepository: GenreSequelizeRepository;
+  let categoryRepository: CategorySequelizeRepository;
+  let categoriesIdExistsInDatabase: CategoriesIdExistsInDatabaseValidator;
   let useCase: UpdateGenreUseCase;
-  let repository: GenreSequelizeRepository;
 
-  setupSequelize({ models: [GenreModel] });
+  const sequelizeHelper = setupSequelize({ models: [GenreModel, GenreCategoryModel, CategoryModel] });
 
   beforeEach(() => {
-    repository = new GenreSequelizeRepository(GenreModel);
-    useCase = new UpdateGenreUseCase(repository);
-  });
-
-  it('should throw error when entity not found', async () => {
-    await expect(useCase.execute({ id: 'fake-id', name: 'test' })).rejects.toThrow(new InvalidUuidError());
-    const uuid = new Uuid();
-    await expect(useCase.execute({ id: uuid.value, name: 'test' })).rejects.toThrow(
-      new NotFoundError(uuid.value, Genre),
-    );
+    uow = new UnitOfWorkSequelize(sequelizeHelper.sequelize);
+    genreRepository = new GenreSequelizeRepository(GenreModel, uow);
+    categoryRepository = new CategorySequelizeRepository(CategoryModel);
+    categoriesIdExistsInDatabase = new CategoriesIdExistsInDatabaseValidator(categoryRepository);
+    useCase = new UpdateGenreUseCase(uow, genreRepository, categoryRepository, categoriesIdExistsInDatabase);
   });
 
   it('should update a genre', async () => {
-    const genre = Genre.fake().aGenre().withDescription(null).build();
-    await repository.insert(genre);
-    const output = await useCase.execute({ id: genre.id.value, name: 'test' });
+    const categories = Category.fake().theCategories(3).build();
+    await categoryRepository.bulkInsert(categories);
+    const entity = Genre.fake().aGenre().addCategoryId(categories[1].id).build();
+    await genreRepository.insert(entity);
+
+    let output = await useCase.execute(
+      new UpdateGenreInput({
+        id: entity.id.value,
+        name: 'test',
+        categories_id: [categories[0].id.value],
+      }),
+    );
     expect(output).toStrictEqual({
-      id: genre.id.value,
+      id: entity.id.value,
       name: 'test',
-      description: null,
+      categories: expect.arrayContaining(
+        [categories[0]].map((e) => ({
+          id: e.id.value,
+          name: e.name,
+          created_at: e.created_at,
+        })),
+      ),
+      categories_id: expect.arrayContaining([categories[0].id.value]),
       is_active: true,
-      created_at: genre.created_at,
+      created_at: entity.created_at,
     });
+
     type Arrange = {
-      input: {
-        id: string;
-        name?: string;
-        description?: string | null;
-        is_active?: boolean;
-      };
-      output: {
-        id: string;
-        name: string;
-        description: string | null;
-        is_active: boolean;
-        created_at: Date;
-      };
+      input: UpdateGenreInput;
+      expected: UpdateGenreOutput;
     };
+
     const arrange: Arrange[] = [
       {
         input: {
-          id: genre.id.value,
-          name: 'test',
-          description: 'some description',
-        },
-        output: {
-          id: genre.id.value,
-          name: 'test',
-          description: 'some description',
-          is_active: true,
-          created_at: genre.created_at,
-        },
-      },
-      {
-        input: {
-          id: genre.id.value,
-          name: 'test',
-        },
-        output: {
-          id: genre.id.value,
-          name: 'test',
-          description: 'some description',
-          is_active: true,
-          created_at: genre.created_at,
-        },
-      },
-      {
-        input: {
-          id: genre.id.value,
-          name: 'test',
-          is_active: false,
-        },
-        output: {
-          id: genre.id.value,
-          name: 'test',
-          description: 'some description',
-          is_active: false,
-          created_at: genre.created_at,
-        },
-      },
-      {
-        input: {
-          id: genre.id.value,
-          name: 'test',
-        },
-        output: {
-          id: genre.id.value,
-          name: 'test',
-          description: 'some description',
-          is_active: false,
-          created_at: genre.created_at,
-        },
-      },
-      {
-        input: {
-          id: genre.id.value,
-          name: 'test',
+          id: entity.id.value,
+          categories_id: [categories[1].id.value, categories[2].id.value],
           is_active: true,
         },
-        output: {
-          id: genre.id.value,
+        expected: {
+          id: entity.id.value,
           name: 'test',
-          description: 'some description',
+          categories: expect.arrayContaining(
+            [categories[1], categories[2]].map((e) => ({
+              id: e.id.value,
+              name: e.name,
+              created_at: e.created_at,
+            })),
+          ),
+          categories_id: expect.arrayContaining([categories[1].id.value, categories[2].id.value]),
           is_active: true,
-          created_at: genre.created_at,
+          created_at: entity.created_at,
         },
       },
       {
         input: {
-          id: genre.id.value,
-          name: 'test',
-          description: 'some description',
+          id: entity.id.value,
+          name: 'test changed',
+          categories_id: [categories[1].id.value, categories[2].id.value],
           is_active: false,
         },
-        output: {
-          id: genre.id.value,
-          name: 'test',
-          description: 'some description',
+        expected: {
+          id: entity.id.value,
+          name: 'test changed',
+          categories: expect.arrayContaining(
+            [categories[1], categories[2]].map((e) => ({
+              id: e.id.value,
+              name: e.name,
+              created_at: e.created_at,
+            })),
+          ),
+          categories_id: expect.arrayContaining([categories[1].id.value, categories[2].id.value]),
           is_active: false,
-          created_at: genre.created_at,
-        },
-      },
-      {
-        input: {
-          id: genre.id.value,
-          description: null,
-        },
-        output: {
-          id: genre.id.value,
-          name: 'test',
-          description: null,
-          is_active: false,
-          created_at: genre.created_at,
+          created_at: entity.created_at,
         },
       },
     ];
+
     for (const i of arrange) {
-      const output = await useCase.execute({
-        id: i.input.id,
-        ...('name' in i.input && { name: i.input.name }),
-        ...('description' in i.input && { description: i.input.description }),
-        ...('is_active' in i.input && { is_active: i.input.is_active }),
+      output = await useCase.execute(i.input);
+      const entityUpdated = await genreRepository.findById(new GenreId(i.input.id));
+      expect(output).toStrictEqual({
+        id: entity.id.value,
+        name: i.expected.name,
+        categories: i.expected.categories,
+        categories_id: i.expected.categories_id,
+        is_active: i.expected.is_active,
+        created_at: i.expected.created_at,
       });
-      expect(output).toStrictEqual(i.output);
-      // check if really saved in the database
-      const genreUpdated = await repository.findById(genre.id);
-      expect(genreUpdated).not.toBeNull();
-      expect(genreUpdated?.id.value).toBe(i.output.id);
-      expect(genreUpdated?.name).toBe(i.output.name);
-      expect(genreUpdated?.description).toBe(i.output.description);
-      expect(genreUpdated?.is_active).toBe(i.output.is_active);
-      expect(genreUpdated?.created_at).toBeDefined();
+      expect(entityUpdated!.toJSON()).toStrictEqual({
+        id: entity.id.value,
+        name: i.expected.name,
+        categories_id: i.expected.categories_id,
+        is_active: i.expected.is_active,
+        created_at: i.expected.created_at,
+      });
     }
+  });
+
+  it('rollback transaction', async () => {
+    const category = Category.fake().aCategory().build();
+    await categoryRepository.insert(category);
+    const entity = Genre.fake().aGenre().addCategoryId(category.id).build();
+    await genreRepository.insert(entity);
+
+    GenreModel.afterBulkUpdate('hook-test', () => {
+      return Promise.reject(new Error('Generic Error'));
+    });
+
+    await expect(
+      useCase.execute(
+        new UpdateGenreInput({
+          id: entity.id.value,
+          name: 'test',
+          categories_id: [category.id.value],
+        }),
+      ),
+    ).rejects.toThrow(new Error('Generic Error'));
+
+    GenreModel.removeHook('afterBulkUpdate', 'hook-test');
+
+    const notUpdatedGenre = await genreRepository.findById(entity.id);
+    expect(notUpdatedGenre!.name).toStrictEqual(entity.name);
   });
 });
