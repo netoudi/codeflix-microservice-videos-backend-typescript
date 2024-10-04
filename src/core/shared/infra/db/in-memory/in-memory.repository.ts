@@ -1,4 +1,5 @@
 import { Entity } from '@/core/shared/domain/entity';
+import { InvalidArgumentError } from '@/core/shared/domain/errors/invalid-argument.error';
 import { NotFoundError } from '@/core/shared/domain/errors/not-found';
 import { IRepository, ISearchableRepository } from '@/core/shared/domain/repository/repository-interface';
 import { SearchParams, SortDirection } from '@/core/shared/domain/repository/search-params';
@@ -34,6 +35,35 @@ export abstract class InMemoryRepository<E extends Entity, EntityId extends Valu
 
   async findAll(): Promise<E[]> {
     return this.items;
+  }
+
+  async findByIds(ids: EntityId[]): Promise<E[]> {
+    //avoid to return repeated items
+    return this.items.filter((entity) => {
+      return ids.some((id) => entity.entityId.equals(id));
+    });
+  }
+
+  async existsById(ids: EntityId[]): Promise<{ exists: EntityId[]; not_exists: EntityId[] }> {
+    if (!ids.length) {
+      throw new InvalidArgumentError('ids must be an array with at least one element');
+    }
+    if (this.items.length === 0) {
+      return {
+        exists: [],
+        not_exists: ids,
+      };
+    }
+    const existsId = new Set<EntityId>();
+    const notExistsId = new Set<EntityId>();
+    ids.forEach((id) => {
+      const item = this.items.find((entity) => entity.entityId.equals(id));
+      item ? existsId.add(id) : notExistsId.add(id);
+    });
+    return {
+      exists: Array.from(existsId.values()),
+      not_exists: Array.from(notExistsId.values()),
+    };
   }
 
   private findIndexOrFail(value: E | EntityId): number {

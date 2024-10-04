@@ -7,6 +7,7 @@ import {
 } from '@/core/cast-member/domain/cast-member.repository';
 import { CastMemberModelMapper } from '@/core/cast-member/infra/db/sequelize/cast-member-model.mapper';
 import { CastMemberModel } from '@/core/cast-member/infra/db/sequelize/cast-member.model';
+import { InvalidArgumentError } from '@/core/shared/domain/errors/invalid-argument.error';
 import { NotFoundError } from '@/core/shared/domain/errors/not-found';
 import { SortDirection } from '@/core/shared/domain/repository/search-params';
 
@@ -51,6 +52,38 @@ export class CastMemberSequelizeRepository implements ICastMemberRepository {
   async findAll(): Promise<CastMember[]> {
     const models = await this.castMemberModel.findAll();
     return CastMemberModelMapper.toEntities(models);
+  }
+
+  async findByIds(ids: CastMemberId[]): Promise<CastMember[]> {
+    const models = await this.castMemberModel.findAll({
+      where: {
+        id: {
+          [Op.in]: ids.map((id) => id.value),
+        },
+      },
+    });
+    return CastMemberModelMapper.toEntities(models);
+  }
+
+  async existsById(ids: CastMemberId[]): Promise<{ exists: CastMemberId[]; not_exists: CastMemberId[] }> {
+    if (!ids.length) {
+      throw new InvalidArgumentError('ids must be an array with at least one element');
+    }
+
+    const existsCastMemberModels = await this.castMemberModel.findAll({
+      attributes: ['id'],
+      where: {
+        id: {
+          [Op.in]: ids.map((id) => id.value),
+        },
+      },
+    });
+    const existsCastMemberIds = existsCastMemberModels.map((m) => new CastMemberId(m.id));
+    const notExistsCastMemberIds = ids.filter((id) => !existsCastMemberIds.some((e) => e.equals(id)));
+    return {
+      exists: existsCastMemberIds,
+      not_exists: notExistsCastMemberIds,
+    };
   }
 
   async search(props: CastMemberSearchParams): Promise<CastMemberSearchResult> {
