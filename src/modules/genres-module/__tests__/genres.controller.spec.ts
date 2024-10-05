@@ -1,10 +1,10 @@
-import { CreateGenreInput } from '@/core/genre/application/use-cases/create-genre/create-genre.input';
 import { CreateGenreOutput } from '@/core/genre/application/use-cases/create-genre/create-genre.use-case';
 import { GetGenreOutput } from '@/core/genre/application/use-cases/get-genre/get-genre.use-case';
 import { ListGenresOutput } from '@/core/genre/application/use-cases/list-genre/list-genres.use-case';
-import { UpdateGenreInput } from '@/core/genre/application/use-cases/update-genre/update-genre.input';
 import { UpdateGenreOutput } from '@/core/genre/application/use-cases/update-genre/update-genre.use-case';
-import { SearchGenresDto } from '@/modules/genres-module/dto/search-genres.dto';
+import { SortDirection } from '@/core/shared/domain/repository/search-params';
+import { CreateGenreDto } from '@/modules/genres-module/dto/create-genre.dto';
+import { UpdateGenreDto } from '@/modules/genres-module/dto/update-genre.dto';
 import { GenresController } from '@/modules/genres-module/genres.controller';
 import { GenreCollectionPresenter, GenrePresenter } from '@/modules/genres-module/genres.presenter';
 
@@ -17,10 +17,17 @@ describe('GenresController Unit Tests', () => {
 
   it('should create a genre', async () => {
     const output: CreateGenreOutput = {
-      id: 'c3c3c3c3-c3c3-c3c3-c3c3-c3c3c3c3c3c3',
-      name: 'Movie',
-      description: 'some description',
+      id: '9366b7dc-2d71-4799-b91c-c64adb205104',
+      name: 'action',
+      categories: [
+        {
+          id: '8d0b0c9e-9b1a-4e8a-9e1a-3b2c1d7c6b5a',
+          name: 'category',
+          created_at: new Date(),
+        },
+      ],
       is_active: true,
+      categories_id: ['8d0b0c9e-9b1a-4e8a-9e1a-3b2c1d7c6b5a'],
       created_at: new Date(),
     };
     const mockCreateUseCase = {
@@ -28,10 +35,9 @@ describe('GenresController Unit Tests', () => {
     };
     //@ts-expect-error defined part of methods
     controller['createUseCase'] = mockCreateUseCase;
-    const input: CreateGenreInput = {
-      name: 'Movie',
-      description: 'some description',
-      is_active: true,
+    const input: CreateGenreDto = {
+      name: 'action',
+      categories_id: ['8d0b0c9e-9b1a-4e8a-9e1a-3b2c1d7c6b5a'],
     };
     const presenter = await controller.create(input);
     expect(mockCreateUseCase.execute).toHaveBeenCalledWith(input);
@@ -40,12 +46,19 @@ describe('GenresController Unit Tests', () => {
   });
 
   it('should update a genre', async () => {
-    const id = 'c3c3c3c3-c3c3-c3c3-c3c3-c3c3c3c3c3c3';
+    const id = '9366b7dc-2d71-4799-b91c-c64adb205104';
     const output: UpdateGenreOutput = {
       id,
-      name: 'Movie',
-      description: 'some description',
+      name: 'action',
+      categories: [
+        {
+          id: '8d0b0c9e-9b1a-4e8a-9e1a-3b2c1d7c6b5a',
+          name: 'category',
+          created_at: new Date(),
+        },
+      ],
       is_active: true,
+      categories_id: ['8d0b0c9e-9b1a-4e8a-9e1a-3b2c1d7c6b5a'],
       created_at: new Date(),
     };
     const mockUpdateUseCase = {
@@ -53,10 +66,9 @@ describe('GenresController Unit Tests', () => {
     };
     //@ts-expect-error defined part of methods
     controller['updateUseCase'] = mockUpdateUseCase;
-    const input: Omit<UpdateGenreInput, 'id'> = {
-      name: 'Movie',
-      description: 'some description',
-      is_active: true,
+    const input: UpdateGenreDto = {
+      name: 'action',
+      categories_id: ['8d0b0c9e-9b1a-4e8a-9e1a-3b2c1d7c6b5a'],
     };
     const presenter = await controller.update(id, input);
     expect(mockUpdateUseCase.execute).toHaveBeenCalledWith({ id, ...input });
@@ -65,12 +77,19 @@ describe('GenresController Unit Tests', () => {
   });
 
   it('should get a genre', async () => {
-    const id = 'c3c3c3c3-c3c3-c3c3-c3c3-c3c3c3c3c3c3';
+    const id = '9366b7dc-2d71-4799-b91c-c64adb205104';
     const output: GetGenreOutput = {
       id,
-      name: 'Movie',
-      description: 'some description',
+      name: 'action',
+      categories: [
+        {
+          id: '8d0b0c9e-9b1a-4e8a-9e1a-3b2c1d7c6b5a',
+          name: 'category',
+          created_at: new Date(),
+        },
+      ],
       is_active: true,
+      categories_id: ['8d0b0c9e-9b1a-4e8a-9e1a-3b2c1d7c6b5a'],
       created_at: new Date(),
     };
     const mockGetUseCase = {
@@ -88,10 +107,17 @@ describe('GenresController Unit Tests', () => {
     const output: ListGenresOutput = {
       items: [
         {
-          id: 'c3c3c3c3-c3c3-c3c3-c3c3-c3c3c3c3c3c3',
-          name: 'Movie',
-          description: 'some description',
+          id: '9366b7dc-2d71-4799-b91c-c64adb205104',
+          name: 'action',
+          categories: [
+            {
+              id: '8d0b0c9e-9b1a-4e8a-9e1a-3b2c1d7c6b5a',
+              name: 'category',
+              created_at: new Date(),
+            },
+          ],
           is_active: true,
+          categories_id: ['8d0b0c9e-9b1a-4e8a-9e1a-3b2c1d7c6b5a'],
           created_at: new Date(),
         },
       ],
@@ -105,17 +131,17 @@ describe('GenresController Unit Tests', () => {
     };
     //@ts-expect-error defined part of methods
     controller['listUseCase'] = mockListUseCase;
-    const searchParams: SearchGenresDto = {
+    const searchParams = {
       page: 1,
-      per_page: 1,
+      per_page: 2,
       sort: 'name',
-      sort_dir: 'asc',
-      filter: 'test',
+      sort_dir: 'desc' as SortDirection,
+      filter: { name: 'actor test' },
     };
     const presenter = await controller.search(searchParams);
-    expect(mockListUseCase.execute).toHaveBeenCalledWith(searchParams);
     expect(presenter).toBeInstanceOf(GenreCollectionPresenter);
-    expect(presenter).toStrictEqual(new GenreCollectionPresenter(output));
+    expect(mockListUseCase.execute).toHaveBeenCalledWith(searchParams);
+    expect(presenter).toEqual(new GenreCollectionPresenter(output));
   });
 
   it('should delete a genre', async () => {
@@ -125,10 +151,10 @@ describe('GenresController Unit Tests', () => {
     };
     //@ts-expect-error defined part of methods
     controller['deleteUseCase'] = mockDeleteUseCase;
-    const id = 'c3c3c3c3-c3c3-c3c3-c3c3-c3c3c3c3c3c3';
-    const output = await controller.remove(id);
+    const id = '9366b7dc-2d71-4799-b91c-c64adb205104';
     expect(controller.remove(id)).toBeInstanceOf(Promise);
+    const output = await controller.remove(id);
     expect(mockDeleteUseCase.execute).toHaveBeenCalledWith({ id });
-    expect(output).toStrictEqual(expectedOutput);
+    expect(expectedOutput).toStrictEqual(output);
   });
 });

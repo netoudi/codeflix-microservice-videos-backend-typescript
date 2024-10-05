@@ -1,27 +1,43 @@
-import { Transform } from 'class-transformer';
-import { GenreOutput } from '@/core/genre/application/use-cases/common/genre-output.mapper';
+import { Transform, Type } from 'class-transformer';
+import { GenreCategoryOutput, GenreOutput } from '@/core/genre/application/use-cases/common/genre-output.mapper';
 import { ListGenresOutput } from '@/core/genre/application/use-cases/list-genre/list-genres.use-case';
 import { CollectionPresenter } from '@/modules/shared-module/collection.presenter';
+
+export class GenreCategoryPresenter {
+  id: string;
+  name: string;
+  @Transform(({ value }: { value: Date }) => value.toISOString())
+  created_at: Date;
+
+  constructor(output: GenreCategoryOutput) {
+    this.id = output.id;
+    this.name = output.name;
+    this.created_at = output.created_at;
+  }
+}
 
 export class GenrePresenter {
   id: string;
   name: string;
-  description: string | null;
+  categories_id: string[];
+  @Type(() => GenreCategoryPresenter)
+  categories: GenreCategoryPresenter[];
   is_active: boolean;
-
   @Transform(({ value }: { value: Date }) => value.toISOString())
   created_at: Date;
 
   constructor(output: GenreOutput) {
     this.id = output.id;
     this.name = output.name;
-    this.description = output.description;
+    this.categories_id = output.categories_id;
+    this.categories = output.categories.map((item) => new GenreCategoryPresenter(item));
     this.is_active = output.is_active;
     this.created_at = output.created_at;
   }
 }
 
 export class GenreCollectionPresenter extends CollectionPresenter {
+  @Type(() => GenrePresenter)
   data: GenrePresenter[];
 
   constructor(output: ListGenresOutput) {

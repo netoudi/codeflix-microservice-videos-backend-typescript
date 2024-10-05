@@ -1,6 +1,8 @@
+import { Category } from '@/core/category/domain/category.entity';
 import { Genre } from '@/core/genre/domain/genre.aggregate';
+import { SortDirection } from '@/core/shared/domain/repository/search-params';
 
-const _keysInResponse = ['id', 'name', 'description', 'is_active', 'created_at'];
+const _keysInResponse = ['id', 'name', 'categories_id', 'categories', 'is_active', 'created_at'];
 
 export class GetGenreFixture {
   static keysInResponse = _keysInResponse;
@@ -9,68 +11,89 @@ export class GetGenreFixture {
 export class CreateGenreFixture {
   static keysInResponse = _keysInResponse;
 
-  static arrangeForCreate() {
-    const faker = Genre.fake().aGenre().withName('Movie').withDescription('description test');
-    return [
-      {
-        send_data: {
-          name: faker.name,
-        },
-        expected: {
-          name: faker.name,
-          description: null,
-          is_active: true,
-        },
+  static arrangeForSave() {
+    const faker = Genre.fake().aGenre().withName('test name');
+
+    const category = Category.fake().aCategory().build();
+
+    const case1 = {
+      relations: {
+        categories: [category],
       },
-      {
-        send_data: {
-          name: faker.name,
-          description: faker.description,
-        },
-        expected: {
-          name: faker.name,
-          description: faker.description,
-          is_active: true,
-        },
+      send_data: {
+        name: faker.name,
+        categories_id: [category.id.value],
       },
-      {
-        send_data: {
-          name: faker.name,
-          is_active: true,
-        },
-        expected: {
-          name: faker.name,
-          description: null,
-          is_active: true,
-        },
+      expected: {
+        name: faker.name,
+        categories: expect.arrayContaining([
+          {
+            id: category.id.value,
+            name: category.name,
+            created_at: category.created_at.toISOString(),
+          },
+        ]),
+        categories_id: expect.arrayContaining([category.id.value]),
+        is_active: true,
       },
-      {
-        send_data: {
-          name: faker.name,
-          is_active: false,
-        },
-        expected: {
-          name: faker.name,
-          description: null,
-          is_active: false,
-        },
+    };
+
+    const categories = Category.fake().theCategories(3).build();
+    const case2 = {
+      relations: {
+        categories,
       },
-      {
-        send_data: {
-          name: faker.name,
-          description: faker.description,
-          is_active: true,
-        },
-        expected: {
-          name: faker.name,
-          description: faker.description,
-          is_active: true,
-        },
+      send_data: {
+        name: faker.name,
+        categories_id: [categories[0].id.value, categories[1].id.value, categories[2].id.value],
+        categories: expect.arrayContaining([
+          {
+            id: categories[0].id.value,
+            name: categories[0].name,
+            created_at: categories[0].created_at.toISOString(),
+          },
+          {
+            id: categories[1].id.value,
+            name: categories[1].name,
+            created_at: categories[1].created_at.toISOString(),
+          },
+          {
+            id: categories[2].id.value,
+            name: categories[2].name,
+            created_at: categories[2].created_at.toISOString(),
+          },
+        ]),
+        is_active: false,
       },
-    ];
+      expected: {
+        name: faker.name,
+        categories_id: expect.arrayContaining([categories[0].id.value, categories[1].id.value, categories[2].id.value]),
+        categories: expect.arrayContaining([
+          {
+            id: categories[0].id.value,
+            name: categories[0].name,
+            created_at: categories[0].created_at.toISOString(),
+          },
+          {
+            id: categories[1].id.value,
+            name: categories[1].name,
+            created_at: categories[1].created_at.toISOString(),
+          },
+          {
+            id: categories[2].id.value,
+            name: categories[2].name,
+            created_at: categories[2].created_at.toISOString(),
+          },
+        ]),
+        is_active: false,
+      },
+    };
+
+    return [case1, case2];
   }
 
   static arrangeInvalidRequest() {
+    const faker = Genre.fake().aGenre();
     const defaultExpected = {
       statusCode: 422,
       error: 'Unprocessable Entity',
@@ -80,13 +103,20 @@ export class CreateGenreFixture {
       EMPTY: {
         send_data: {},
         expected: {
-          message: ['name should not be empty', 'name must be a string'],
+          message: [
+            'name should not be empty',
+            'name must be a string',
+            'categories_id should not be empty',
+            'categories_id must be an array',
+            'each value in categories_id must be a UUID',
+          ],
           ...defaultExpected,
         },
       },
       NAME_UNDEFINED: {
         send_data: {
           name: undefined,
+          categories_id: [faker.categories_id[0].value],
         },
         expected: {
           message: ['name should not be empty', 'name must be a string'],
@@ -96,6 +126,7 @@ export class CreateGenreFixture {
       NAME_NULL: {
         send_data: {
           name: null,
+          categories_id: [faker.categories_id[0].value],
         },
         expected: {
           message: ['name should not be empty', 'name must be a string'],
@@ -105,27 +136,62 @@ export class CreateGenreFixture {
       NAME_EMPTY: {
         send_data: {
           name: '',
+          categories_id: [faker.categories_id[0].value],
         },
         expected: {
           message: ['name should not be empty'],
           ...defaultExpected,
         },
       },
-      DESCRIPTION_NOT_A_STRING: {
+      CATEGORIES_ID_UNDEFINED: {
         send_data: {
-          description: 5,
+          name: faker.name,
+          categories_id: undefined,
         },
         expected: {
-          message: ['name should not be empty', 'name must be a string', 'description must be a string'],
+          message: [
+            'categories_id should not be empty',
+            'categories_id must be an array',
+            'each value in categories_id must be a UUID',
+          ],
           ...defaultExpected,
         },
       },
-      IS_ACTIVE_NOT_A_BOOLEAN: {
+      CATEGORIES_ID_NULL: {
         send_data: {
-          is_active: 'a',
+          name: faker.name,
+          categories_id: null,
         },
         expected: {
-          message: ['name should not be empty', 'name must be a string', 'is_active must be a boolean value'],
+          message: [
+            'categories_id should not be empty',
+            'categories_id must be an array',
+            'each value in categories_id must be a UUID',
+          ],
+          ...defaultExpected,
+        },
+      },
+      CATEGORIES_ID_EMPTY: {
+        send_data: {
+          name: faker.name,
+          categories_id: '',
+        },
+        expected: {
+          message: [
+            'categories_id should not be empty',
+            'categories_id must be an array',
+            'each value in categories_id must be a UUID',
+          ],
+          ...defaultExpected,
+        },
+      },
+      CATEGORIES_ID_NOT_VALID: {
+        send_data: {
+          name: faker.name,
+          categories_id: ['a'],
+        },
+        expected: {
+          message: ['each value in categories_id must be a UUID'],
           ...defaultExpected,
         },
       },
@@ -143,9 +209,23 @@ export class CreateGenreFixture {
       NAME_TOO_LONG: {
         send_data: {
           name: faker.withInvalidNameTooLong().name,
+          categories_id: ['d8952775-5f69-42d5-9e94-00f097e1b98c'],
         },
         expected: {
-          message: ['name must be shorter than or equal to 255 characters'],
+          message: [
+            'name must be shorter than or equal to 255 characters',
+            'Category Not Found using ID d8952775-5f69-42d5-9e94-00f097e1b98c',
+          ],
+          ...defaultExpected,
+        },
+      },
+      CATEGORIES_ID_NOT_EXISTS: {
+        send_data: {
+          name: faker.withName('action').name,
+          categories_id: ['d8952775-5f69-42d5-9e94-00f097e1b98c'],
+        },
+        expected: {
+          message: ['Category Not Found using ID d8952775-5f69-42d5-9e94-00f097e1b98c'],
           ...defaultExpected,
         },
       },
@@ -156,67 +236,110 @@ export class CreateGenreFixture {
 export class UpdateGenreFixture {
   static keysInResponse = _keysInResponse;
 
-  static arrangeForUpdate() {
-    const faker = Genre.fake().aGenre().withName('Movie').withDescription('description test');
-    return [
-      {
-        send_data: {
-          name: faker.name,
-          description: null,
-          is_active: true,
-        },
-        expected: {
-          name: faker.name,
-          description: null,
-          is_active: true,
-        },
+  static arrangeForSave() {
+    const faker = Genre.fake().aGenre().withName('test name');
+
+    const category = Category.fake().aCategory().build();
+
+    const case1 = {
+      entity: faker.addCategoryId(category.id).build(),
+      relations: {
+        categories: [category],
       },
-      {
-        send_data: {
-          name: faker.name,
-          description: faker.description,
-        },
-        expected: {
-          name: faker.name,
-          description: faker.description,
-          is_active: true,
-        },
+      send_data: {
+        name: faker.name,
+        categories_id: [category.id.value],
       },
-      {
-        send_data: {
-          name: faker.name,
-          is_active: false,
-        },
-        expected: {
-          name: faker.name,
-          is_active: false,
-        },
+      expected: {
+        name: faker.name,
+        categories_id: expect.arrayContaining([category.id.value]),
+        categories: expect.arrayContaining([
+          {
+            id: category.id.value,
+            name: category.name,
+            created_at: category.created_at.toISOString(),
+          },
+        ]),
+        is_active: true,
       },
-    ];
+    };
+
+    const case2 = {
+      entity: faker.addCategoryId(category.id).build(),
+      relations: {
+        categories: [category],
+      },
+      send_data: {
+        name: faker.name,
+        categories_id: [category.id.value],
+        is_active: false,
+      },
+      expected: {
+        name: faker.name,
+        categories_id: expect.arrayContaining([category.id.value]),
+        categories: expect.arrayContaining([
+          {
+            id: category.id.value,
+            name: category.name,
+            created_at: category.created_at.toISOString(),
+          },
+        ]),
+        is_active: false,
+      },
+    };
+
+    const categories = Category.fake().theCategories(3).build();
+    const case3 = {
+      entity: faker.addCategoryId(category.id).build(),
+      relations: {
+        categories: [category, ...categories],
+      },
+      send_data: {
+        name: faker.name,
+        categories_id: [categories[0].id.value, categories[1].id.value, categories[2].id.value],
+      },
+      expected: {
+        name: faker.name,
+        categories_id: expect.arrayContaining([categories[0].id.value, categories[1].id.value, categories[2].id.value]),
+        categories: expect.arrayContaining([
+          {
+            id: categories[0].id.value,
+            name: categories[0].name,
+            created_at: categories[0].created_at.toISOString(),
+          },
+          {
+            id: categories[1].id.value,
+            name: categories[1].name,
+            created_at: categories[1].created_at.toISOString(),
+          },
+          {
+            id: categories[2].id.value,
+            name: categories[2].name,
+            created_at: categories[2].created_at.toISOString(),
+          },
+        ]),
+        is_active: true,
+      },
+    };
+
+    return [case1, case2, case3];
   }
 
   static arrangeInvalidRequest() {
+    const faker = Genre.fake().aGenre();
     const defaultExpected = {
       statusCode: 422,
       error: 'Unprocessable Entity',
     };
 
     return {
-      DESCRIPTION_NOT_A_STRING: {
+      CATEGORIES_ID_NOT_VALID: {
         send_data: {
-          description: 5,
+          name: faker.name,
+          categories_id: ['a'],
         },
         expected: {
-          message: ['description must be a string'],
-          ...defaultExpected,
-        },
-      },
-      IS_ACTIVE_NOT_A_BOOLEAN: {
-        send_data: {
-          is_active: 'a',
-        },
-        expected: {
-          message: ['is_active must be a boolean value'],
+          message: ['each value in categories_id must be a UUID'],
           ...defaultExpected,
         },
       },
@@ -231,12 +354,13 @@ export class UpdateGenreFixture {
     };
 
     return {
-      NAME_TOO_LONG: {
+      CATEGORIES_ID_NOT_EXISTS: {
         send_data: {
-          name: faker.withInvalidNameTooLong().name,
+          name: faker.withName('action').name,
+          categories_id: ['d8952775-5f69-42d5-9e94-00f097e1b98c'],
         },
         expected: {
-          message: ['name must be shorter than or equal to 255 characters'],
+          message: ['Category Not Found using ID d8952775-5f69-42d5-9e94-00f097e1b98c'],
           ...defaultExpected,
         },
       },
@@ -246,8 +370,10 @@ export class UpdateGenreFixture {
 
 export class ListGenresFixture {
   static arrangeIncrementedWithCreatedAt() {
+    const category = Category.fake().aCategory().build();
     const _entities = Genre.fake()
       .theGenres(4)
+      .addCategoryId(category.id)
       .withName((i) => i + '')
       .withCreatedAt((i) => new Date(new Date().getTime() + i * 2000))
       .build();
@@ -257,6 +383,10 @@ export class ListGenresFixture {
       second: _entities[1],
       third: _entities[2],
       fourth: _entities[3],
+    };
+
+    const relations = {
+      categories: new Map([[category.id.value, category]]),
     };
 
     const arrange = [
@@ -304,30 +434,69 @@ export class ListGenresFixture {
       },
     ];
 
-    return { arrange, entitiesMap };
+    return { arrange, entitiesMap, relations };
   }
 
   static arrangeUnsorted() {
-    const faker = Genre.fake().aGenre();
+    const categories = Category.fake().theCategories(4).build();
 
-    const entitiesMap = {
-      a: faker.withName('a').build(),
-      AAA: faker.withName('AAA').build(),
-      AaA: faker.withName('AaA').build(),
-      b: faker.withName('b').build(),
-      c: faker.withName('c').build(),
+    const relations = {
+      categories: new Map(categories.map((category) => [category.id.value, category])),
     };
 
-    const arrange = [
+    const created_at = new Date();
+
+    const entitiesMap = {
+      test: Genre.fake()
+        .aGenre()
+        .addCategoryId(categories[0].id)
+        .addCategoryId(categories[1].id)
+        .withName('test')
+        .withCreatedAt(new Date(created_at.getTime() + 1000))
+        .build(),
+      a: Genre.fake()
+        .aGenre()
+        .addCategoryId(categories[0].id)
+        .addCategoryId(categories[1].id)
+        .withName('a')
+        .withCreatedAt(new Date(created_at.getTime() + 2000))
+        .build(),
+      TEST: Genre.fake()
+        .aGenre()
+        .addCategoryId(categories[0].id)
+        .addCategoryId(categories[1].id)
+        .addCategoryId(categories[2].id)
+        .withName('TEST')
+        .withCreatedAt(new Date(created_at.getTime() + 3000))
+        .build(),
+      e: Genre.fake()
+        .aGenre()
+        .addCategoryId(categories[3].id)
+        .withName('e')
+        .withCreatedAt(new Date(created_at.getTime() + 4000))
+        .build(),
+      TeSt: Genre.fake()
+        .aGenre()
+        .addCategoryId(categories[1].id)
+        .addCategoryId(categories[2].id)
+        .withName('TeSt')
+        .withCreatedAt(new Date(created_at.getTime() + 5000))
+        .build(),
+    };
+
+    const arrange_filter_by_name_sort_name_asc = [
       {
         send_data: {
           page: 1,
           per_page: 2,
           sort: 'name',
-          filter: 'a',
+          filter: { name: 'TEST' },
+        },
+        get label() {
+          return JSON.stringify(this.send_data);
         },
         expected: {
-          entities: [entitiesMap.AAA, entitiesMap.AaA],
+          entities: [entitiesMap.TEST, entitiesMap.TeSt],
           meta: {
             total: 3,
             current_page: 1,
@@ -341,10 +510,13 @@ export class ListGenresFixture {
           page: 2,
           per_page: 2,
           sort: 'name',
-          filter: 'a',
+          filter: { name: 'TEST' },
+        },
+        get label() {
+          return JSON.stringify(this.send_data);
         },
         expected: {
-          entities: [entitiesMap.a],
+          entities: [entitiesMap.test],
           meta: {
             total: 3,
             current_page: 2,
@@ -355,6 +527,113 @@ export class ListGenresFixture {
       },
     ];
 
-    return { arrange, entitiesMap };
+    const arrange_filter_by_categories_id_and_sort_by_created_desc = [
+      {
+        send_data: {
+          page: 1,
+          per_page: 2,
+          sort: 'created_at',
+          sort_dir: 'desc' as SortDirection,
+          filter: { categories_id: [categories[0].id.value] },
+        },
+        get label() {
+          return JSON.stringify({
+            ...this.send_data,
+            filter: { categories_id_length: 1 },
+          });
+        },
+        expected: {
+          entities: [entitiesMap.TEST, entitiesMap.a],
+          meta: {
+            total: 3,
+            current_page: 1,
+            last_page: 2,
+            per_page: 2,
+          },
+        },
+      },
+      {
+        send_data: {
+          page: 2,
+          per_page: 2,
+          sort: 'created_at',
+          sort_dir: 'desc' as SortDirection,
+          filter: { categories_id: [categories[0].id.value] },
+        },
+        get label() {
+          return JSON.stringify({
+            ...this.send_data,
+            filter: { categories_id_length: 1 },
+          });
+        },
+        expected: {
+          entities: [entitiesMap.test],
+          meta: {
+            total: 3,
+            current_page: 2,
+            last_page: 2,
+            per_page: 2,
+          },
+        },
+      },
+      {
+        send_data: {
+          page: 1,
+          per_page: 2,
+          sort: 'created_at',
+          sort_dir: 'desc' as SortDirection,
+          filter: {
+            categories_id: [categories[0].id.value, categories[1].id.value],
+          },
+        },
+        get label() {
+          return JSON.stringify({
+            ...this.send_data,
+            filter: { categories_id_length: 2 },
+          });
+        },
+        expected: {
+          entities: [entitiesMap.TeSt, entitiesMap.TEST],
+          meta: {
+            total: 4,
+            current_page: 1,
+            last_page: 2,
+            per_page: 2,
+          },
+        },
+      },
+      {
+        send_data: {
+          page: 2,
+          per_page: 2,
+          sort: 'created_at',
+          sort_dir: 'desc' as SortDirection,
+          filter: {
+            categories_id: [categories[0].id.value, categories[1].id.value],
+          },
+        },
+        get label() {
+          return JSON.stringify({
+            ...this.send_data,
+            filter: { categories_id_length: 2 },
+          });
+        },
+        expected: {
+          entities: [entitiesMap.a, entitiesMap.test],
+          meta: {
+            total: 4,
+            current_page: 2,
+            last_page: 2,
+            per_page: 2,
+          },
+        },
+      },
+    ];
+
+    return {
+      arrange: [...arrange_filter_by_name_sort_name_asc, ...arrange_filter_by_categories_id_and_sort_by_created_desc],
+      entitiesMap,
+      relations,
+    };
   }
 }

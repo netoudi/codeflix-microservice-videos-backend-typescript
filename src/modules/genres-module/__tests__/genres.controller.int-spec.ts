@@ -1,18 +1,24 @@
+import { getConnectionToken } from '@nestjs/sequelize';
 import { Test, TestingModule } from '@nestjs/testing';
+import { Sequelize } from 'sequelize';
+import { Category } from '@/core/category/domain/category.entity';
+import { ICategoryRepository } from '@/core/category/domain/category.repository';
 import { GenreOutputMapper } from '@/core/genre/application/use-cases/common/genre-output.mapper';
 import { CreateGenreUseCase } from '@/core/genre/application/use-cases/create-genre/create-genre.use-case';
 import { DeleteGenreUseCase } from '@/core/genre/application/use-cases/delete-genre/delete-genre.use-case';
 import { GetGenreUseCase } from '@/core/genre/application/use-cases/get-genre/get-genre.use-case';
 import { ListGenresUseCase } from '@/core/genre/application/use-cases/list-genre/list-genres.use-case';
 import { UpdateGenreUseCase } from '@/core/genre/application/use-cases/update-genre/update-genre.use-case';
-import { Genre } from '@/core/genre/domain/genre.aggregate';
+import { Genre, GenreId } from '@/core/genre/domain/genre.aggregate';
 import { IGenreRepository } from '@/core/genre/domain/genre.repository';
 import { Uuid } from '@/core/shared/domain/value-objects/uuid.vo';
+import { UnitOfWorkSequelize } from '@/core/shared/infra/db/sequelize/unit-of-work-sequelize';
+import { CATEGORY_PROVIDERS } from '@/modules/categories-module/categories.providers';
 import { ConfigModule } from '@/modules/config-module/config.module';
 import { DatabaseModule } from '@/modules/database-module/database.module';
 import { GenresController } from '@/modules/genres-module/genres.controller';
 import { GenresModule } from '@/modules/genres-module/genres.module';
-import { GenreCollectionPresenter, GenrePresenter } from '@/modules/genres-module/genres.presenter';
+import { GenreCollectionPresenter } from '@/modules/genres-module/genres.presenter';
 import { GENRE_PROVIDERS } from '@/modules/genres-module/genres.providers';
 import {
   CreateGenreFixture,
@@ -22,14 +28,24 @@ import {
 
 describe('GenresController Integration Tests', () => {
   let controller: GenresController;
-  let repository: IGenreRepository;
+  let genreRepository: IGenreRepository;
+  let categoryRepository: ICategoryRepository;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       imports: [ConfigModule.forRoot(), DatabaseModule, GenresModule],
-    }).compile();
-    controller = module.get<GenresController>(GenresController);
-    repository = module.get<IGenreRepository>(GENRE_PROVIDERS.REPOSITORIES.GENRE_REPOSITORY.provide);
+    })
+      .overrideProvider('UnitOfWork')
+      .useFactory({
+        factory: (sequelize: Sequelize) => {
+          return new UnitOfWorkSequelize(sequelize);
+        },
+        inject: [getConnectionToken()],
+      })
+      .compile();
+    controller = module.get(GenresController);
+    genreRepository = module.get(GENRE_PROVIDERS.REPOSITORIES.GENRE_REPOSITORY.provide);
+    categoryRepository = module.get(CATEGORY_PROVIDERS.REPOSITORIES.CATEGORY_REPOSITORY.provide);
   });
 
   it('should be defined', () => {
@@ -42,106 +58,146 @@ describe('GenresController Integration Tests', () => {
   });
 
   describe('should create a genre', () => {
-    const arrange = CreateGenreFixture.arrangeForCreate();
-    test.each(arrange)('when body is $send_data', async ({ send_data, expected }) => {
+    const arrange = CreateGenreFixture.arrangeForSave();
+
+    test.each(arrange)('when body is $send_data', async ({ send_data, expected, relations }) => {
+      await categoryRepository.bulkInsert(relations.categories);
       const presenter = await controller.create(send_data);
-      const entity = await repository.findById(new Uuid(presenter.id));
-      expect(entity.toJSON()).toStrictEqual({
-        id: presenter.id,
-        name: expected.name,
-        description: expected.description,
-        is_active: expected.is_active,
+      const entity = await genreRepository.findById(new Uuid(presenter.id));
+
+      expect(entity!.toJSON()).toStrictEqual({
+        genre_id: presenter.id,
         created_at: presenter.created_at,
+        name: expected.name,
+        categories_id: expected.categories_id,
+        is_active: expected.is_active,
       });
-      const output = GenreOutputMapper.toOutput(entity);
-      expect(presenter).toEqual(new GenrePresenter(output));
+
+      const expectedPresenter = GenresController.serialize(GenreOutputMapper.toOutput(entity!, relations.categories));
+      expectedPresenter.categories = expect.arrayContaining(expectedPresenter.categories);
+      expectedPresenter.categories_id = expect.arrayContaining(expectedPresenter.categories_id);
+      expect(presenter).toEqual(expectedPresenter);
     });
   });
 
   describe('should update a genre', () => {
-    const arrange = UpdateGenreFixture.arrangeForUpdate();
-    const genre = Genre.fake().aGenre().build();
+    const arrange = UpdateGenreFixture.arrangeForSave();
 
-    beforeEach(async () => {
-      await repository.insert(genre);
-    });
-
-    test.each(arrange)('when body is $send_data', async ({ send_data, expected }) => {
+    test.each(arrange)('with request $send_data', async ({ entity: genre, send_data, expected, relations }) => {
+      await categoryRepository.bulkInsert(relations.categories);
+      await genreRepository.insert(genre);
       const presenter = await controller.update(genre.id.value, send_data);
-      const entity = await repository.findById(new Uuid(presenter.id));
-      expect(entity.toJSON()).toStrictEqual({
-        id: presenter.id,
-        name: expected.name ?? genre.name,
-        description: 'description' in expected ? expected.description : genre.description,
-        is_active: expected.is_active === true || expected.is_active === false ? expected.is_active : genre.is_active,
+      const genreUpdated = await genreRepository.findById(new GenreId(presenter.id));
+
+      expect(genreUpdated!.toJSON()).toStrictEqual({
+        genre_id: presenter.id,
         created_at: presenter.created_at,
+        name: expected.name ?? genre.name,
+        categories_id: expected.categories_id ? expected.categories_id : genre.categories_id,
+        is_active: expected.is_active === true || expected.is_active === false ? expected.is_active : genre.is_active,
       });
-      const output = GenreOutputMapper.toOutput(entity);
-      expect(presenter).toEqual(new GenrePresenter(output));
+      const categoriesOfGenre = relations.categories.filter((c) => genreUpdated!.categories_id.has(c.id.value));
+
+      const expectedPresenter = GenresController.serialize(
+        GenreOutputMapper.toOutput(genreUpdated!, categoriesOfGenre),
+      );
+      expectedPresenter.categories = expect.arrayContaining(expectedPresenter.categories);
+      expectedPresenter.categories_id = expect.arrayContaining(expectedPresenter.categories_id);
+      expect(presenter).toEqual(expectedPresenter);
     });
   });
 
   it('should delete a genre', async () => {
-    const genre = Genre.fake().aGenre().build();
-    await repository.insert(genre);
+    const category = Category.fake().aCategory().build();
+    await categoryRepository.insert(category);
+    const genre = Genre.fake().aGenre().addCategoryId(category.id).build();
+    await genreRepository.insert(genre);
     const response = await controller.remove(genre.id.value);
     expect(response).not.toBeDefined();
-    await expect(repository.findById(genre.id)).resolves.toBeNull();
+    await expect(genreRepository.findById(genre.id)).resolves.toBeNull();
   });
 
   it('should get a genre', async () => {
-    const genre = Genre.fake().aGenre().build();
-    await repository.insert(genre);
+    const category = Category.fake().aCategory().build();
+    await categoryRepository.insert(category);
+    const genre = Genre.fake().aGenre().addCategoryId(category.id).build();
+    await genreRepository.insert(genre);
     const presenter = await controller.findOne(genre.id.value);
     expect(presenter.id).toBe(genre.id.value);
     expect(presenter.name).toBe(genre.name);
-    expect(presenter.description).toBe(genre.description);
-    expect(presenter.is_active).toBe(genre.is_active);
+    expect(presenter.categories).toEqual([
+      {
+        id: category.id.value,
+        name: category.name,
+        created_at: category.created_at,
+      },
+    ]);
+    expect(presenter.categories_id).toEqual(expect.arrayContaining(Array.from(genre.categories_id.keys())));
     expect(presenter.created_at).toStrictEqual(genre.created_at);
   });
 
   describe('search method', () => {
-    describe('should sorted genres by created_at', () => {
-      const { entitiesMap, arrange } = ListGenresFixture.arrangeIncrementedWithCreatedAt();
+    describe('should return genres using query empty ordered by created_at', () => {
+      const { relations, entitiesMap, arrange } = ListGenresFixture.arrangeIncrementedWithCreatedAt();
 
       beforeEach(async () => {
-        await repository.bulkInsert(Object.values(entitiesMap));
+        await categoryRepository.bulkInsert(Array.from(relations.categories.values()));
+        await genreRepository.bulkInsert(Object.values(entitiesMap));
       });
 
       test.each(arrange)('when send_data is $send_data', async ({ send_data, expected }) => {
         const presenter = await controller.search(send_data);
         const { entities, ...paginationProps } = expected;
-        expect(presenter).toEqual(
-          new GenreCollectionPresenter({
-            items: entities.map(GenreOutputMapper.toOutput),
-            current_page: paginationProps.meta.current_page,
-            last_page: paginationProps.meta.last_page,
-            per_page: paginationProps.meta.per_page,
-            total: paginationProps.meta.total,
-          }),
-        );
+        const expectedPresenter = new GenreCollectionPresenter({
+          items: entities.map((e) => ({
+            ...e.toJSON(),
+            id: e.id.value,
+            categories_id: expect.arrayContaining(Array.from(e.categories_id.keys())),
+            categories: Array.from(e.categories_id.keys()).map((id) => ({
+              id: relations.categories.get(id)!.id.value,
+              name: relations.categories.get(id)!.name,
+              created_at: relations.categories.get(id)!.created_at,
+            })),
+          })),
+          ...paginationProps.meta,
+        });
+        presenter.data = presenter.data.map((item) => ({
+          ...item,
+          categories: expect.arrayContaining(item.categories),
+        }));
+        expect(presenter).toEqual(expectedPresenter);
       });
     });
 
     describe('should return genres using pagination, sort and filter', () => {
-      const { entitiesMap, arrange } = ListGenresFixture.arrangeUnsorted();
+      const { relations, entitiesMap, arrange } = ListGenresFixture.arrangeUnsorted();
 
       beforeEach(async () => {
-        await repository.bulkInsert(Object.values(entitiesMap));
+        await categoryRepository.bulkInsert(Array.from(relations.categories.values()));
+        await genreRepository.bulkInsert(Object.values(entitiesMap));
       });
 
-      test.each(arrange)('when send_data is $send_data', async ({ send_data, expected }) => {
+      test.each(arrange)('when send_data is $label', async ({ send_data, expected }) => {
         const presenter = await controller.search(send_data);
         const { entities, ...paginationProps } = expected;
-        expect(presenter).toEqual(
-          new GenreCollectionPresenter({
-            items: entities.map(GenreOutputMapper.toOutput),
-            current_page: paginationProps.meta.current_page,
-            last_page: paginationProps.meta.last_page,
-            per_page: paginationProps.meta.per_page,
-            total: paginationProps.meta.total,
-          }),
-        );
+        const expectedPresenter = new GenreCollectionPresenter({
+          items: entities.map((e) => ({
+            ...e.toJSON(),
+            id: e.id.value,
+            categories_id: expect.arrayContaining(Array.from(e.categories_id.keys())),
+            categories: Array.from(e.categories_id.keys()).map((id) => ({
+              id: relations.categories.get(id)!.id.value,
+              name: relations.categories.get(id)!.name,
+              created_at: relations.categories.get(id)!.created_at,
+            })),
+          })),
+          ...paginationProps.meta,
+        });
+        presenter.data = presenter.data.map((item) => ({
+          ...item,
+          categories: expect.arrayContaining(item.categories),
+        }));
+        expect(presenter).toEqual(expectedPresenter);
       });
     });
   });
