@@ -3,9 +3,10 @@ import { CastMembersModule } from '@/modules/cast-members-module/cast-members.mo
 import { CategoriesModule } from '@/modules/categories-module/categories.module';
 import { ConfigModule } from '@/modules/config-module/config.module';
 import { DatabaseModule } from '@/modules/database-module/database.module';
+import { GenresModule } from '@/modules/genres-module/genres.module';
 import { SharedModule } from '@/modules/shared-module/shared.module';
 
 @Module({
-  imports: [ConfigModule.forRoot(), DatabaseModule, CategoriesModule, CastMembersModule, SharedModule],
+  imports: [ConfigModule.forRoot(), DatabaseModule, CategoriesModule, CastMembersModule, GenresModule, SharedModule],
 })
 export class AppModule {}

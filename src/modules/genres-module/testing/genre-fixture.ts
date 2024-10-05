@@ -214,7 +214,7 @@ export class CreateGenreFixture {
         expected: {
           message: [
             'name must be shorter than or equal to 255 characters',
-            'Category Not Found using ID d8952775-5f69-42d5-9e94-00f097e1b98c',
+            'Entity Category with id d8952775-5f69-42d5-9e94-00f097e1b98c not found',
           ],
           ...defaultExpected,
         },
@@ -225,7 +225,7 @@ export class CreateGenreFixture {
           categories_id: ['d8952775-5f69-42d5-9e94-00f097e1b98c'],
         },
         expected: {
-          message: ['Category Not Found using ID d8952775-5f69-42d5-9e94-00f097e1b98c'],
+          message: ['Entity Category with id d8952775-5f69-42d5-9e94-00f097e1b98c not found'],
           ...defaultExpected,
         },
       },
@@ -360,7 +360,7 @@ export class UpdateGenreFixture {
           categories_id: ['d8952775-5f69-42d5-9e94-00f097e1b98c'],
         },
         expected: {
-          message: ['Category Not Found using ID d8952775-5f69-42d5-9e94-00f097e1b98c'],
+          message: ['Entity Category with id d8952775-5f69-42d5-9e94-00f097e1b98c not found'],
           ...defaultExpected,
         },
       },
