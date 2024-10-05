@@ -66,7 +66,7 @@ describe('GenresController Integration Tests', () => {
       const entity = await genreRepository.findById(new Uuid(presenter.id));
 
       expect(entity!.toJSON()).toStrictEqual({
-        genre_id: presenter.id,
+        id: presenter.id,
         created_at: presenter.created_at,
         name: expected.name,
         categories_id: expected.categories_id,
@@ -90,7 +90,7 @@ describe('GenresController Integration Tests', () => {
       const genreUpdated = await genreRepository.findById(new GenreId(presenter.id));
 
       expect(genreUpdated!.toJSON()).toStrictEqual({
-        genre_id: presenter.id,
+        id: presenter.id,
         created_at: presenter.created_at,
         name: expected.name ?? genre.name,
         categories_id: expected.categories_id ? expected.categories_id : genre.categories_id,
