@@ -4,6 +4,7 @@ import { GenreId } from '@/core/genre/domain/genre.aggregate';
 import { AggregateRoot } from '@/core/shared/domain/aggregate-root';
 import { ValueObject } from '@/core/shared/domain/value-object';
 import { Uuid } from '@/core/shared/domain/value-objects/uuid.vo';
+import { Rating } from '@/core/video/domain/rating.vo';
 
 export type VideoConstructor = {
   id?: VideoId;
@@ -11,6 +12,7 @@ export type VideoConstructor = {
   description: string;
   year_launched: number;
   duration: number;
+  rating: Rating;
   is_opened: boolean;
   is_published: boolean;
   categories_id: Map<string, CategoryId>;
@@ -24,6 +26,7 @@ export type VideoCreateCommand = {
   description: string;
   year_launched: number;
   duration: number;
+  rating: Rating;
   is_opened: boolean;
   categories_id: CategoryId[];
   genres_id: GenreId[];
