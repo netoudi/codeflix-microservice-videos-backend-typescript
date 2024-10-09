@@ -10,6 +10,7 @@ import { ThumbnailHalf } from '@/core/video/domain/thumbnail-half.vo';
 import { Thumbnail } from '@/core/video/domain/thumbnail.vo';
 import { TrailerMedia } from '@/core/video/domain/trailer-media.vo';
 import { VideoMedia } from '@/core/video/domain/video-media.vo';
+import { VideoValidatorFactory } from '@/core/video/domain/video.validator';
 
 export type VideoConstructor = {
   id?: VideoId;
@@ -117,11 +118,13 @@ export class Video extends AggregateRoot {
       cast_members_id: new Map(props.cast_members_id.map((id) => [id.value, id])),
       is_published: false,
     });
+    video.validate(['title']);
     return video;
   }
 
   changeTitle(title: string): void {
     this.title = title;
+    this.validate(['title']);
   }
 
   changeDescription(description: string): void {
@@ -181,6 +184,11 @@ export class Video extends AggregateRoot {
   syncCastMemberId(castMembersId: CastMemberId[]): void {
     if (!castMembersId.length) return;
     this.cast_members_id = new Map(castMembersId.map((id) => [id.value, id]));
+  }
+
+  validate(fields?: string[]): boolean {
+    const validator = VideoValidatorFactory.create();
+    return validator.validate(this.notification, this, fields);
   }
 
   toJSON() {
