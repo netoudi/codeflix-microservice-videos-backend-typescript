@@ -3,6 +3,7 @@ import { CategoryId } from '@/core/category/domain/category.entity';
 import { GenreId } from '@/core/genre/domain/genre.aggregate';
 import { AggregateRoot } from '@/core/shared/domain/aggregate-root';
 import { ValueObject } from '@/core/shared/domain/value-object';
+import { AudioVideoMediaStatus } from '@/core/shared/domain/value-objects/audio-video-media.vo';
 import { Uuid } from '@/core/shared/domain/value-objects/uuid.vo';
 import { Banner } from '@/core/video/domain/banner.vo';
 import { Rating } from '@/core/video/domain/rating.vo';
@@ -145,6 +146,39 @@ export class Video extends AggregateRoot {
 
   markAsNotOpened(): void {
     this.is_opened = false;
+  }
+
+  replaceBanner(banner: Banner): void {
+    this.banner = banner;
+  }
+
+  replaceThumbnail(thumbnail: Thumbnail): void {
+    this.thumbnail = thumbnail;
+  }
+
+  replaceThumbnailHalf(thumbnailHalf: ThumbnailHalf): void {
+    this.thumbnail_half = thumbnailHalf;
+  }
+
+  replaceTrailer(trailer: TrailerMedia): void {
+    this.trailer = trailer;
+    this.markAsPublished();
+  }
+
+  replaceVideo(video: VideoMedia): void {
+    this.video = video;
+    this.markAsPublished();
+  }
+
+  private markAsPublished() {
+    if (
+      this.trailer &&
+      this.video &&
+      this.trailer.status === AudioVideoMediaStatus.COMPLETED &&
+      this.video.status === AudioVideoMediaStatus.COMPLETED
+    ) {
+      this.is_published = true;
+    }
   }
 
   addCategoryId(categoryId: CategoryId): void {
