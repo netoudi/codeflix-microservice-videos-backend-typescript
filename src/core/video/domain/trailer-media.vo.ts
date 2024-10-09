@@ -18,11 +18,18 @@ export class TrailerMedia extends AudioVideoMedia {
     return Either.safe(() => {
       const mediaFileValidator = new MediaFileValidator(TrailerMedia.max_size, TrailerMedia.mime_types);
       const { name: newName } = mediaFileValidator.validate(props);
-      return new TrailerMedia({
+      return TrailerMedia.create({
         name: newName,
         raw_location: `videos/${props.video_id}/videos`,
-        status: AudioVideoMediaStatus.PENDING,
       });
+    });
+  }
+
+  static create({ name, raw_location }) {
+    return new TrailerMedia({
+      name,
+      raw_location,
+      status: AudioVideoMediaStatus.PENDING,
     });
   }
 

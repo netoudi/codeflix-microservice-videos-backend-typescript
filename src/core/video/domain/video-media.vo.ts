@@ -18,11 +18,18 @@ export class VideoMedia extends AudioVideoMedia {
     return Either.safe(() => {
       const mediaFileValidator = new MediaFileValidator(VideoMedia.max_size, VideoMedia.mime_types);
       const { name: newName } = mediaFileValidator.validate(props);
-      return new VideoMedia({
+      return VideoMedia.create({
         name: newName,
         raw_location: `videos/${props.video_id}/videos`,
-        status: AudioVideoMediaStatus.PENDING,
       });
+    });
+  }
+
+  static create({ name, raw_location }) {
+    return new VideoMedia({
+      name,
+      raw_location,
+      status: AudioVideoMediaStatus.PENDING,
     });
   }
 

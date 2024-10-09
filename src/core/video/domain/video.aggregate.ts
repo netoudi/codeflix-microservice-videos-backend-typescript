@@ -10,6 +10,7 @@ import { Rating } from '@/core/video/domain/rating.vo';
 import { ThumbnailHalf } from '@/core/video/domain/thumbnail-half.vo';
 import { Thumbnail } from '@/core/video/domain/thumbnail.vo';
 import { TrailerMedia } from '@/core/video/domain/trailer-media.vo';
+import { VideoFakeBuilder } from '@/core/video/domain/video-fake.builder';
 import { VideoMedia } from '@/core/video/domain/video-media.vo';
 import { VideoValidatorFactory } from '@/core/video/domain/video.validator';
 
@@ -120,6 +121,7 @@ export class Video extends AggregateRoot {
       is_published: false,
     });
     video.validate(['title']);
+    video.markAsPublished();
     return video;
   }
 
@@ -138,6 +140,10 @@ export class Video extends AggregateRoot {
 
   changeDuration(duration: number): void {
     this.duration = duration;
+  }
+
+  changeRating(rating: Rating): void {
+    this.rating = rating;
   }
 
   markAsOpened(): void {
@@ -223,6 +229,10 @@ export class Video extends AggregateRoot {
   validate(fields?: string[]): boolean {
     const validator = VideoValidatorFactory.create();
     return validator.validate(this.notification, this, fields);
+  }
+
+  static fake() {
+    return VideoFakeBuilder;
   }
 
   toJSON() {

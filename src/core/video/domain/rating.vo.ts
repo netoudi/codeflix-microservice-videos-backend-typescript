@@ -18,36 +18,34 @@ export class Rating extends ValueObject {
 
   private validate() {
     const isValid = Object.values(RatingValues).includes(this.value);
-    if (!isValid) {
-      throw new InvalidRatingError(this.value);
-    }
+    if (!isValid) throw new InvalidRatingError(this.value);
   }
 
   static create(value: RatingValues): Either<Rating, InvalidRatingError> {
     return Either.safe(() => new Rating(value));
   }
 
-  static createL(): Rating {
+  static createRL(): Rating {
     return new Rating(RatingValues.RL);
   }
 
-  static create10(): Rating {
+  static createR10(): Rating {
     return new Rating(RatingValues.R10);
   }
 
-  static create12(): Rating {
+  static createR12(): Rating {
     return new Rating(RatingValues.R12);
   }
 
-  static create14(): Rating {
+  static createR14(): Rating {
     return new Rating(RatingValues.R14);
   }
 
-  static create16(): Rating {
+  static createR16(): Rating {
     return new Rating(RatingValues.R16);
   }
 
-  static create18(): Rating {
+  static createR18(): Rating {
     return new Rating(RatingValues.R18);
   }
 
