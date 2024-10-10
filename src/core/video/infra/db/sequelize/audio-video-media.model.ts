@@ -8,7 +8,7 @@ export enum AudioVideoMediaRelatedField {
   VIDEO = 'video',
 }
 
-export class AudioVideoMediaModelProps {
+export type AudioVideoMediaModelProps = {
   audio_video_media_id: string;
   name: string;
   raw_location: string;
@@ -16,7 +16,7 @@ export class AudioVideoMediaModelProps {
   status: AudioVideoMediaStatus;
   video_id: string;
   video_related_field: AudioVideoMediaRelatedField;
-}
+};
 
 @Table({
   tableName: 'audio_video_medias',

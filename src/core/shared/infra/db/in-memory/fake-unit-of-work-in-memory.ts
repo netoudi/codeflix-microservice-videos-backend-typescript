@@ -2,15 +2,15 @@ import { IUnitOfWork } from '@/core/shared/domain/repository/unit-of-work.interf
 
 export class FakeUnitOfWorkInMemory implements IUnitOfWork {
   start(): Promise<void> {
-    throw new Error('Method not implemented.');
+    return new Promise((resolve) => resolve());
   }
 
   commit(): Promise<void> {
-    throw new Error('Method not implemented.');
+    return new Promise((resolve) => resolve());
   }
 
   rollback(): Promise<void> {
-    throw new Error('Method not implemented.');
+    return new Promise((resolve) => resolve());
   }
 
   do<T>(workFn: (uow: IUnitOfWork) => Promise<T>): Promise<T> {
@@ -18,6 +18,6 @@ export class FakeUnitOfWorkInMemory implements IUnitOfWork {
   }
 
   getTransaction() {
-    throw new Error('Method not implemented.');
+    return;
   }
 }
