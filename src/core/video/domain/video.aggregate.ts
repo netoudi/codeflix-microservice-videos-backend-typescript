@@ -129,7 +129,7 @@ export class Video extends AggregateRoot {
       is_published: false,
     });
     video.validate(['title']);
-    this.apply(
+    video.applyEvent(
       new VideoCreatedEvent({
         video_id: video.id,
         title: video.title,

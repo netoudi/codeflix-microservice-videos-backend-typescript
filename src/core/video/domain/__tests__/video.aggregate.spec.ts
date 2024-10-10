@@ -132,7 +132,8 @@ describe('Video Unit Tests', () => {
       const genres_id = [new GenreId()];
       const cast_members_id = [new CastMemberId()];
 
-      const markAsPublished = jest.spyOn(Video.prototype as any, 'markAsPublished');
+      const spyOnVideCreated = jest.spyOn(Video.prototype, 'onVideoCreated');
+      const tryMarkAsPublished = jest.spyOn(Video.prototype as any, 'tryMarkAsPublished');
       const video = Video.create({
         title: 'test title',
         description: 'test description',
@@ -162,7 +163,8 @@ describe('Video Unit Tests', () => {
       expect(video.cast_members_id).toEqual(new Map(cast_members_id.map((id) => [id.value, id])));
       expect(video.created_at).toBeInstanceOf(Date);
       expect(video.is_published).toBeFalsy();
-      expect(markAsPublished).toHaveBeenCalledTimes(1);
+      expect(spyOnVideCreated).toHaveBeenCalledTimes(1);
+      expect(tryMarkAsPublished).toHaveBeenCalledTimes(1);
     });
 
     test('should create a video and published video', () => {
@@ -170,7 +172,8 @@ describe('Video Unit Tests', () => {
       const genres_id = [new GenreId()];
       const cast_members_id = [new CastMemberId()];
 
-      const markAsPublished = jest.spyOn(Video.prototype as any, 'markAsPublished');
+      const spyOnVideCreated = jest.spyOn(Video.prototype, 'onVideoCreated');
+      const tryMarkAsPublished = jest.spyOn(Video.prototype as any, 'tryMarkAsPublished');
 
       const trailer = TrailerMedia.create({
         name: 'test name trailer',
@@ -212,7 +215,8 @@ describe('Video Unit Tests', () => {
       expect(video.cast_members_id).toEqual(new Map(cast_members_id.map((id) => [id.value, id])));
       expect(video.created_at).toBeInstanceOf(Date);
       expect(video.is_published).toBeTruthy();
-      expect(markAsPublished).toHaveBeenCalledTimes(1);
+      expect(spyOnVideCreated).toHaveBeenCalledTimes(1);
+      expect(tryMarkAsPublished).toHaveBeenCalledTimes(1);
     });
   });
 
@@ -421,9 +425,9 @@ describe('Video Unit Tests', () => {
     });
   });
 
-  test('markAsPublished method', () => {
+  test('tryMarkAsPublished method', () => {
     let video = Video.fake().aVideoWithoutMedias().build();
-    video['markAsPublished']();
+    video['tryMarkAsPublished']();
     expect(video.is_published).toBeFalsy();
 
     video = Video.fake().aVideoWithoutMedias().build();
@@ -438,7 +442,7 @@ describe('Video Unit Tests', () => {
 
     video.replaceTrailer(trailer);
     video.replaceVideo(videoMedia);
-    video['markAsPublished']();
+    video['tryMarkAsPublished']();
     expect(video.is_published).toBeTruthy();
   });
 
