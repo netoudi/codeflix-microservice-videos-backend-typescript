@@ -261,7 +261,7 @@ export class Video extends AggregateRoot {
     this.cast_members_id.delete(castMemberId.value);
   }
 
-  syncCastMemberId(castMembersId: CastMemberId[]): void {
+  syncCastMembersId(castMembersId: CastMemberId[]): void {
     if (!castMembersId.length) return;
     this.cast_members_id = new Map(castMembersId.map((id) => [id.value, id]));
   }
