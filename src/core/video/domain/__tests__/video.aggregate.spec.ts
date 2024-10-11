@@ -416,9 +416,9 @@ describe('Video Unit Tests', () => {
       const castMemberId1 = new CastMemberId();
       const castMemberId2 = new CastMemberId();
       const video = Video.fake().aVideoWithoutMedias().build();
-      video.syncCastMemberId([]);
+      video.syncCastMembersId([]);
       expect(video.cast_members_id.size).toBe(1);
-      video.syncCastMemberId([castMemberId1, castMemberId2]);
+      video.syncCastMembersId([castMemberId1, castMemberId2]);
       expect(video.cast_members_id.size).toBe(2);
       expect(video.cast_members_id.get(castMemberId1.value)).toBe(castMemberId1);
       expect(video.cast_members_id.get(castMemberId2.value)).toBe(castMemberId2);

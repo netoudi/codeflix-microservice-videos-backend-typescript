@@ -29,12 +29,12 @@ export type VideoConstructor = {
   is_opened: boolean;
   is_published: boolean;
 
-  banner?: Banner;
-  thumbnail?: Thumbnail;
-  thumbnail_half?: ThumbnailHalf;
+  banner?: Banner | null;
+  thumbnail?: Thumbnail | null;
+  thumbnail_half?: ThumbnailHalf | null;
 
-  trailer?: TrailerMedia;
-  video?: VideoMedia;
+  trailer?: TrailerMedia | null;
+  video?: VideoMedia | null;
 
   categories_id: Map<string, CategoryId>;
   genres_id: Map<string, GenreId>;
@@ -261,7 +261,7 @@ export class Video extends AggregateRoot {
     this.cast_members_id.delete(castMemberId.value);
   }
 
-  syncCastMemberId(castMembersId: CastMemberId[]): void {
+  syncCastMembersId(castMembersId: CastMemberId[]): void {
     if (!castMembersId.length) return;
     this.cast_members_id = new Map(castMembersId.map((id) => [id.value, id]));
   }

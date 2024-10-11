@@ -10,7 +10,7 @@ export enum AudioVideoMediaStatus {
 export type AudioVideoMediaProps = {
   name: string;
   raw_location: string;
-  encoded_location?: string;
+  encoded_location?: string | null;
   status: AudioVideoMediaStatus;
 };
 
@@ -35,7 +35,9 @@ export abstract class AudioVideoMedia extends ValueObject {
   toJSON() {
     return {
       name: this.name,
-      location: this.raw_location,
+      raw_location: this.raw_location,
+      encoded_location: this.encoded_location,
+      status: this.status,
     };
   }
 }
