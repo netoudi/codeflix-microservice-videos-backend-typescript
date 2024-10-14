@@ -24,11 +24,11 @@ export class UploadImageMediasUseCase implements IUseCase<UploadImageMediasInput
 
     const imagesMap = {
       banner: Banner,
-      Thumbnail: Thumbnail,
+      thumbnail: Thumbnail,
       thumbnail_half: ThumbnailHalf,
     };
 
-    const [image, errorImage] = imagesMap[input.field].createFromFile({ ...input, video_id: video.id }).asArray();
+    const [image, errorImage] = imagesMap[input.field].createFromFile({ ...input.file, video_id: video.id }).asArray();
 
     if (errorImage) {
       throw new EntityValidationError([{ [input.field]: [errorImage.message] }]);
