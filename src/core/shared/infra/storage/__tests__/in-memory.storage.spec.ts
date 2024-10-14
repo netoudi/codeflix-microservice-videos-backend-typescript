@@ -7,6 +7,10 @@ describe('InMemoryStorage', () => {
     storage = new InMemoryStorage();
   });
 
+  it('should throw error when file not found', async () => {
+    await expect(storage.get('invalid-id')).rejects.toThrow(new Error('File invalid-id not found'));
+  });
+
   describe('store', () => {
     it('should store data in the storage', async () => {
       const id = 'test-id';
