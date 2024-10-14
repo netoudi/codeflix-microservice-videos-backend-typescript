@@ -1,3 +1,4 @@
+import { IStorage } from '@/core/shared/application/storage.interface';
 import { IUseCase } from '@/core/shared/application/use-case.interface';
 import { NotFoundError } from '@/core/shared/domain/errors/not-found';
 import { IUnitOfWork } from '@/core/shared/domain/repository/unit-of-work.interface';
@@ -13,6 +14,7 @@ export class UploadImageMediasUseCase implements IUseCase<UploadImageMediasInput
   constructor(
     private readonly uow: IUnitOfWork,
     private readonly videoRepository: IVideoRepository,
+    private readonly storage: IStorage,
   ) {}
 
   async execute(input: UploadImageMediasInput): Promise<UploadImageMediasOutput> {
