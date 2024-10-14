@@ -9,8 +9,8 @@ import { VideoModelMapper } from '@/core/video/infra/db/sequelize/video-model.ma
 import { VideoModel } from '@/core/video/infra/db/sequelize/video.model';
 
 export class VideoSequelizeRepository implements IVideoRepository {
-  sortableFields: string[] = ['name', 'created_at'];
-  orderBy = { mysql: { name: (sort_dir: SortDirection) => `binary ${this.videoModel.name}.name ${sort_dir}` } };
+  sortableFields: string[] = ['title', 'created_at'];
+  orderBy = { mysql: { name: (sort_dir: SortDirection) => `binary ${this.videoModel.name}.title ${sort_dir}` } };
   relations_include = ['categories_id', 'genres_id', 'cast_members_id', 'image_medias', 'audio_video_medias'];
 
   constructor(
@@ -306,13 +306,13 @@ export class VideoSequelizeRepository implements IVideoRepository {
       'SELECT',
       `DISTINCT ${videoAlias}.\`id\`,${columnOrder} FROM ${videoTableName} as ${videoAlias}`,
       props.filter?.categories_id
-        ? `INNER JOIN ${videoCategoryTableName} ON ${videoAlias}.\`id\` = ${videoCategoryTableName}.\`category_id\``
+        ? `INNER JOIN ${videoCategoryTableName} ON ${videoAlias}.\`id\` = ${videoCategoryTableName}.\`video_id\``
         : '',
       props.filter?.genres_id
-        ? `INNER JOIN ${videoGenreTableName} ON ${videoAlias}.\`id\` = ${videoGenreTableName}.\`genre_id\``
+        ? `INNER JOIN ${videoGenreTableName} ON ${videoAlias}.\`id\` = ${videoGenreTableName}.\`video_id\``
         : '',
       props.filter?.cast_members_id
-        ? `INNER JOIN ${videoGenreTableName} ON ${videoAlias}.\`id\` = ${videoGenreTableName}.\`cast_member_id\``
+        ? `INNER JOIN ${videoGenreTableName} ON ${videoAlias}.\`id\` = ${videoGenreTableName}.\`video_id\``
         : '',
       wheres.length ? `WHERE ${wheres.map((w) => w.rawCondition).join(' AND ')}` : '',
       `ORDER BY ${orderBy}`,
