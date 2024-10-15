@@ -5,8 +5,17 @@ import { ConfigModule } from '@/modules/config-module/config.module';
 import { DatabaseModule } from '@/modules/database-module/database.module';
 import { GenresModule } from '@/modules/genres-module/genres.module';
 import { SharedModule } from '@/modules/shared-module/shared.module';
+import { VideosModule } from '@/modules/videos-module/videos.module';
 
 @Module({
-  imports: [ConfigModule.forRoot(), DatabaseModule, CategoriesModule, CastMembersModule, GenresModule, SharedModule],
+  imports: [
+    ConfigModule.forRoot(),
+    DatabaseModule,
+    SharedModule,
+    CategoriesModule,
+    CastMembersModule,
+    GenresModule,
+    VideosModule,
+  ],
 })
 export class AppModule {}
