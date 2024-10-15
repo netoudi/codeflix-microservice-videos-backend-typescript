@@ -1,10 +1,13 @@
+import EventEmitter2 from 'eventemitter2';
 import { CastMember } from '@/core/cast-member/domain/cast-member.entity';
 import { CastMemberInMemoryRepository } from '@/core/cast-member/infra/db/in-memory/cast-member-in-memory.repository';
 import { Category } from '@/core/category/domain/category.entity';
 import { CategoryInMemoryRepository } from '@/core/category/infra/db/in-memory/category-in-memory.repository';
 import { Genre } from '@/core/genre/domain/genre.aggregate';
 import { GenreInMemoryRepository } from '@/core/genre/infra/db/in-memory/genre-in-memory.repository';
+import { ApplicationService } from '@/core/shared/application/application.service';
 import { NotFoundError } from '@/core/shared/domain/errors/not-found';
+import { DomainEventMediator } from '@/core/shared/domain/events/domain-event-mediator';
 import { EntityValidationError } from '@/core/shared/domain/validators/validation.error';
 import { FakeUnitOfWorkInMemory } from '@/core/shared/infra/db/in-memory/fake-unit-of-work-in-memory';
 import { InMemoryStorage } from '@/core/shared/infra/storage/in-memory.storage';
@@ -14,6 +17,7 @@ import { VideoInMemoryRepository } from '@/core/video/infra/db/in-memory/video-i
 
 describe('UploadAudioVideoMediasUseCase Unit Tests', () => {
   let uow: FakeUnitOfWorkInMemory;
+  let appService: ApplicationService;
   let videoRepository: VideoInMemoryRepository;
   let categoryRepository: CategoryInMemoryRepository;
   let genreRepository: GenreInMemoryRepository;
@@ -23,12 +27,13 @@ describe('UploadAudioVideoMediasUseCase Unit Tests', () => {
 
   beforeEach(() => {
     uow = new FakeUnitOfWorkInMemory();
+    appService = new ApplicationService(uow, new DomainEventMediator(new EventEmitter2()));
     videoRepository = new VideoInMemoryRepository();
     categoryRepository = new CategoryInMemoryRepository();
     genreRepository = new GenreInMemoryRepository();
     castMemberRepository = new CastMemberInMemoryRepository();
     storageService = new InMemoryStorage();
-    useCase = new UploadAudioVideoMediasUseCase(uow, videoRepository, storageService);
+    useCase = new UploadAudioVideoMediasUseCase(appService, videoRepository, storageService);
   });
 
   it('should throw error when video not found', async () => {
