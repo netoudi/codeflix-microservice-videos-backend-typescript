@@ -33,5 +33,6 @@ import { GoogleCloudStorage } from '@/core/shared/infra/storage/google-cloud.sto
       scope: Scope.REQUEST,
     },
   ],
+  exports: ['IStorage', ApplicationService],
 })
 export class SharedModule {}

@@ -5,6 +5,8 @@ import { CategoriesIdExistsInDatabaseValidator } from '@/core/category/applicati
 import { ICategoryRepository } from '@/core/category/domain/category.repository';
 import { GenresIdExistsInDatabaseValidator } from '@/core/genre/application/validations/genres-id-exists-in-database.validator';
 import { IGenreRepository } from '@/core/genre/domain/genre.repository';
+import { ApplicationService } from '@/core/shared/application/application.service';
+import { IStorage } from '@/core/shared/application/storage.interface';
 import { IUnitOfWork } from '@/core/shared/domain/repository/unit-of-work.interface';
 import { UnitOfWorkSequelize } from '@/core/shared/infra/db/sequelize/unit-of-work-sequelize';
 import { CreateVideoUseCase } from '@/core/video/application/use-cases/create-video/create-video.use-case';
@@ -12,6 +14,7 @@ import { DeleteVideoUseCase } from '@/core/video/application/use-cases/delete-vi
 import { GetVideoUseCase } from '@/core/video/application/use-cases/get-video/get-video.use-case';
 import { ListVideosUseCase } from '@/core/video/application/use-cases/list-video/list-videos.use-case';
 import { UpdateVideoUseCase } from '@/core/video/application/use-cases/update-video/update-video.use-case';
+import { UploadAudioVideoMediasUseCase } from '@/core/video/application/use-cases/upload-audio-video-medias/upload-audio-video-medias.use-case';
 import { IVideoRepository } from '@/core/video/domain/video.repository';
 import { VideoInMemoryRepository } from '@/core/video/infra/db/in-memory/video-in-memory.repository';
 import { VideoSequelizeRepository } from '@/core/video/infra/db/sequelize/video-sequelize.repository';
@@ -129,6 +132,13 @@ export const USE_CASES = {
       GENRE_PROVIDERS.VALIDATIONS.GENRES_ID_EXISTS_IN_DATABASE_VALIDATOR.provide,
       CAST_MEMBER_PROVIDERS.VALIDATIONS.CAST_MEMBERS_ID_EXISTS_IN_DATABASE_VALIDATOR.provide,
     ],
+  },
+  UPLOAD_AUDIO_VIDEO_MEDIAS_USE_CASE: {
+    provide: UploadAudioVideoMediasUseCase,
+    useFactory: (appService: ApplicationService, videoRepository: IVideoRepository, storage: IStorage) => {
+      return new UploadAudioVideoMediasUseCase(appService, videoRepository, storage);
+    },
+    inject: [ApplicationService, REPOSITORIES.VIDEO_REPOSITORY.provide, 'IStorage'],
   },
 };
 

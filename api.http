@@ -145,3 +145,25 @@ Content-Type: application/json
   "rating": "18",
   "is_opened": true
 }
+
+### upload a trailer
+PATCH {{baseUrl}}/videos/{{videoId}}/upload
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
+
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="trailer"; filename="trailer.mp4"
+Content-Type: video/mp4
+
+< ./package.json
+------WebKitFormBoundary7MA4YWxkTrZu0gW--
+
+### upload a video
+PATCH {{baseUrl}}/videos/{{videoId}}/upload
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
+
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="video"; filename="video.mp4"
+Content-Type: video/mp4
+
+< ./package.json
+------WebKitFormBoundary7MA4YWxkTrZu0gW--
