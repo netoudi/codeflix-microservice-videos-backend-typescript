@@ -24,6 +24,8 @@ import { ListVideosUseCase } from '@/core/video/application/use-cases/list-video
 import { UpdateVideoUseCase } from '@/core/video/application/use-cases/update-video/update-video.use-case';
 import { UploadAudioVideoMediasInput } from '@/core/video/application/use-cases/upload-audio-video-medias/upload-audio-video-medias.input';
 import { UploadAudioVideoMediasUseCase } from '@/core/video/application/use-cases/upload-audio-video-medias/upload-audio-video-medias.use-case';
+import { UploadImageMediasInput } from '@/core/video/application/use-cases/upload-image-medias/upload-image-medias.input';
+import { UploadImageMediasUseCase } from '@/core/video/application/use-cases/upload-image-medias/upload-image-medias.use-case';
 import { CreateVideoDto } from '@/modules/videos-module/dto/create-video.dto';
 import { SearchVideosDto } from '@/modules/videos-module/dto/search-videos.dto';
 import { UpdateVideoDto } from '@/modules/videos-module/dto/update-video.dto';
@@ -48,6 +50,9 @@ export class VideosController {
 
   @Inject(UploadAudioVideoMediasUseCase)
   private uploadAudioVideoMedia: UploadAudioVideoMediasUseCase;
+
+  @Inject(UploadImageMediasUseCase)
+  private uploadImageMedia: UploadImageMediasUseCase;
 
   @Post()
   async create(@Body() createVideoDto: CreateVideoDto) {
@@ -125,6 +130,22 @@ export class VideosController {
         type: 'body',
       });
       await this.uploadAudioVideoMedia.execute(input);
+    } else {
+      const dto: UploadImageMediasInput = {
+        video_id: id,
+        field: fieldField,
+        file: {
+          raw_name: file.originalname,
+          data: file.buffer,
+          mime_type: file.mimetype,
+          size: file.size,
+        },
+      };
+      const input = await new ValidationPipe({ errorHttpStatusCode: 422 }).transform(dto, {
+        metatype: UploadImageMediasInput,
+        type: 'body',
+      });
+      await this.uploadImageMedia.execute(input);
     }
 
     const output = await this.getUseCase.execute({ id });

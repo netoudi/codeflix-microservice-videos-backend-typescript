@@ -15,6 +15,7 @@ import { GetVideoUseCase } from '@/core/video/application/use-cases/get-video/ge
 import { ListVideosUseCase } from '@/core/video/application/use-cases/list-video/list-videos.use-case';
 import { UpdateVideoUseCase } from '@/core/video/application/use-cases/update-video/update-video.use-case';
 import { UploadAudioVideoMediasUseCase } from '@/core/video/application/use-cases/upload-audio-video-medias/upload-audio-video-medias.use-case';
+import { UploadImageMediasUseCase } from '@/core/video/application/use-cases/upload-image-medias/upload-image-medias.use-case';
 import { IVideoRepository } from '@/core/video/domain/video.repository';
 import { VideoInMemoryRepository } from '@/core/video/infra/db/in-memory/video-in-memory.repository';
 import { VideoSequelizeRepository } from '@/core/video/infra/db/sequelize/video-sequelize.repository';
@@ -139,6 +140,13 @@ export const USE_CASES = {
       return new UploadAudioVideoMediasUseCase(appService, videoRepository, storage);
     },
     inject: [ApplicationService, REPOSITORIES.VIDEO_REPOSITORY.provide, 'IStorage'],
+  },
+  UPLOAD_IMAGE_MEDIAS_USE_CASE: {
+    provide: UploadImageMediasUseCase,
+    useFactory: (uow: IUnitOfWork, videoRepository: IVideoRepository, storage: IStorage) => {
+      return new UploadImageMediasUseCase(uow, videoRepository, storage);
+    },
+    inject: ['UnitOfWork', REPOSITORIES.VIDEO_REPOSITORY.provide, 'IStorage'],
   },
 };
 
