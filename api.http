@@ -123,3 +123,12 @@ Content-Type: application/json
   "cast_members_id": ["{{castMemberId}}"]
 }
 
+### list all videos
+
+# @name videos
+@videoId = {{videos.response.body.data.0.id}}
+
+GET {{baseUrl}}/videos
+
+### list a video
+GET {{baseUrl}}/videos/{{videoId}}
