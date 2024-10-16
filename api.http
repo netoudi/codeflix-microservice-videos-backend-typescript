@@ -132,3 +132,16 @@ GET {{baseUrl}}/videos
 
 ### list a video
 GET {{baseUrl}}/videos/{{videoId}}
+
+### udpate a video
+PATCH {{baseUrl}}/videos/{{videoId}}
+Content-Type: application/json
+
+{
+  "title": "some title updated",
+  "description": "some description updated",
+  "year_launched": 2021,
+  "duration": 180,
+  "rating": "18",
+  "is_opened": true
+}
