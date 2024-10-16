@@ -93,7 +93,7 @@ export const USE_CASES = {
 
 export const VALIDATIONS = {
   GENRES_ID_EXISTS_IN_DATABASE_VALIDATOR: {
-    provide: CategoriesIdExistsInDatabaseValidator,
+    provide: GenresIdExistsInDatabaseValidator,
     useFactory: (genreRepository: IGenreRepository) => {
       return new GenresIdExistsInDatabaseValidator(genreRepository);
     },

@@ -67,3 +67,59 @@ Content-Type: application/json
 
 ### delete a cast member
 DELETE {{baseUrl}}/cast-members/{{castMemberId}}
+
+///
+/// GENRES
+///
+
+### create a genre
+POST {{baseUrl}}/genres
+Content-Type: application/json
+
+{
+  "name": "Action",
+  "categories_id": ["{{categoryId}}"]
+}
+
+### list all genres
+
+# @name genres
+@genreId = {{genres.response.body.data.0.id}}
+
+GET {{baseUrl}}/genres
+
+### list a genre
+GET {{baseUrl}}/genres/{{genreId}}
+
+### udpate a genre
+PATCH {{baseUrl}}/genres/{{genreId}}
+Content-Type: application/json
+
+{
+  "name": "some description"
+}
+
+### delete a genre
+DELETE {{baseUrl}}/genres/{{genreId}}
+
+
+///
+/// VIDEOS
+///
+
+### create video
+POST {{baseUrl}}/videos
+Content-Type: application/json
+
+{
+  "title": "some title",
+  "description": "some description...",
+  "year_launched": 2020,
+  "duration": 120,
+  "rating": "18",
+  "is_opened": false,
+  "categories_id": ["{{categoryId}}"],
+  "genres_id": ["{{genreId}}"],
+  "cast_members_id": ["{{castMemberId}}"]
+}
+
