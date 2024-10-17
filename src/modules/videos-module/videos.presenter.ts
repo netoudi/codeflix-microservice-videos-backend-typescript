@@ -88,7 +88,7 @@ export class VideoPresenter {
     this.genres = output.genres.map((item) => new VideoGenrePresenter(item));
     this.genres_id = output.genres_id;
 
-    this.cast_members = output.cast_members.map((item) => new VideoGenrePresenter(item));
+    this.cast_members = output.cast_members.map((item) => new VideoCastMemberPresenter(item));
     this.cast_members_id = output.cast_members_id;
 
     this.created_at = output.created_at;
