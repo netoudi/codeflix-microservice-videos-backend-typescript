@@ -1,32 +1,32 @@
-import { DataType, Sequelize } from 'sequelize-typescript';
+import { DataTypes, Sequelize } from 'sequelize';
 import type { MigrationFn } from 'umzug';
 
-export const up: MigrationFn = async ({ context: sequelize }) => {
-  await (sequelize as Sequelize).getQueryInterface().createTable('categories', {
+export const up: MigrationFn<Sequelize> = async ({ context: sequelize }) => {
+  await sequelize.getQueryInterface().createTable('categories', {
     id: {
-      type: DataType.UUID,
+      type: DataTypes.UUID,
       allowNull: false,
       primaryKey: true,
     },
     name: {
-      type: DataType.STRING(255),
+      type: DataTypes.STRING(255),
       allowNull: false,
     },
     description: {
-      type: DataType.TEXT,
+      type: DataTypes.TEXT,
       allowNull: true,
     },
     is_active: {
-      type: DataType.BOOLEAN,
+      type: DataTypes.BOOLEAN,
       allowNull: false,
     },
     created_at: {
-      type: DataType.DATE(3),
+      type: DataTypes.DATE(3),
       allowNull: false,
     },
   });
 };
 
-export const down: MigrationFn = async ({ context: sequelize }) => {
-  await (sequelize as Sequelize).getQueryInterface().dropTable('categories');
+export const down: MigrationFn<Sequelize> = async ({ context: sequelize }) => {
+  await sequelize.getQueryInterface().dropTable('categories');
 };

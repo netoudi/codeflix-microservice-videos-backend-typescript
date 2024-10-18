@@ -60,26 +60,32 @@ export class VideoOutputMapper {
       is_opened: video.is_opened,
       is_published: video.is_published,
 
-      categories: categories.map((c) => ({
-        id: c.id.value,
-        name: c.name,
-        created_at: c.created_at,
-      })),
-      categories_id: categories.map((c) => c.id.value),
+      categories: categories
+        .filter((c) => video.categories_id.has(c.id.value))
+        .map((c) => ({
+          id: c.id.value,
+          name: c.name,
+          created_at: c.created_at,
+        })),
+      categories_id: [...video.categories_id.values()].map((e) => e.value),
 
-      genres: genres.map((c) => ({
-        id: c.id.value,
-        name: c.name,
-        created_at: c.created_at,
-      })),
-      genres_id: genres.map((c) => c.id.value),
+      genres: genres
+        .filter((c) => video.genres_id.has(c.id.value))
+        .map((c) => ({
+          id: c.id.value,
+          name: c.name,
+          created_at: c.created_at,
+        })),
+      genres_id: [...video.genres_id.values()].map((e) => e.value),
 
-      cast_members: cast_members.map((c) => ({
-        id: c.id.value,
-        name: c.name,
-        created_at: c.created_at,
-      })),
-      cast_members_id: cast_members.map((c) => c.id.value),
+      cast_members: cast_members
+        .filter((c) => video.cast_members_id.has(c.id.value))
+        .map((c) => ({
+          id: c.id.value,
+          name: c.name,
+          created_at: c.created_at,
+        })),
+      cast_members_id: [...video.cast_members_id.values()].map((e) => e.value),
 
       created_at: video.created_at,
     };

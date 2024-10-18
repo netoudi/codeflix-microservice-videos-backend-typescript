@@ -2,7 +2,7 @@ import { DataTypes, Sequelize } from 'sequelize';
 import { MigrationFn } from 'umzug';
 
 export const up: MigrationFn<Sequelize> = async ({ context: sequelize }) => {
-  await sequelize.getQueryInterface().createTable('cast_members', {
+  await sequelize.getQueryInterface().createTable('genres', {
     id: {
       type: DataTypes.UUID,
       allowNull: false,
@@ -12,17 +12,17 @@ export const up: MigrationFn<Sequelize> = async ({ context: sequelize }) => {
       type: DataTypes.STRING(255),
       allowNull: false,
     },
-    type: {
-      type: DataTypes.SMALLINT,
+    is_active: {
+      type: DataTypes.BOOLEAN,
       allowNull: false,
     },
     created_at: {
-      type: DataTypes.DATE(3),
+      type: DataTypes.DATE(6),
       allowNull: false,
     },
   });
 };
 
 export const down: MigrationFn<Sequelize> = async ({ context: sequelize }) => {
-  await sequelize.getQueryInterface().dropTable('cast_members');
+  await sequelize.getQueryInterface().dropTable('genres');
 };

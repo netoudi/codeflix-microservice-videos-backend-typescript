@@ -67,3 +67,136 @@ Content-Type: application/json
 
 ### delete a cast member
 DELETE {{baseUrl}}/cast-members/{{castMemberId}}
+
+///
+/// GENRES
+///
+
+### create a genre
+POST {{baseUrl}}/genres
+Content-Type: application/json
+
+{
+  "name": "Action",
+  "categories_id": ["{{categoryId}}"]
+}
+
+### list all genres
+
+# @name genres
+@genreId = {{genres.response.body.data.0.id}}
+
+GET {{baseUrl}}/genres
+
+### list a genre
+GET {{baseUrl}}/genres/{{genreId}}
+
+### udpate a genre
+PATCH {{baseUrl}}/genres/{{genreId}}
+Content-Type: application/json
+
+{
+  "name": "some description"
+}
+
+### delete a genre
+DELETE {{baseUrl}}/genres/{{genreId}}
+
+
+///
+/// VIDEOS
+///
+
+### create video
+POST {{baseUrl}}/videos
+Content-Type: application/json
+
+{
+  "title": "some title",
+  "description": "some description...",
+  "year_launched": 2020,
+  "duration": 120,
+  "rating": "18",
+  "is_opened": false,
+  "categories_id": ["{{categoryId}}"],
+  "genres_id": ["{{genreId}}"],
+  "cast_members_id": ["{{castMemberId}}"]
+}
+
+### list all videos
+
+# @name videos
+@videoId = {{videos.response.body.data.0.id}}
+
+GET {{baseUrl}}/videos
+
+### list a video
+GET {{baseUrl}}/videos/{{videoId}}
+
+### udpate a video
+PATCH {{baseUrl}}/videos/{{videoId}}
+Content-Type: application/json
+
+{
+  "title": "some title updated",
+  "description": "some description updated",
+  "year_launched": 2021,
+  "duration": 180,
+  "rating": "18",
+  "is_opened": true
+}
+
+### upload a trailer
+PATCH {{baseUrl}}/videos/{{videoId}}/upload
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
+
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="trailer"; filename="trailer.mp4"
+Content-Type: video/mp4
+
+< ./package.json
+------WebKitFormBoundary7MA4YWxkTrZu0gW--
+
+### upload a video
+PATCH {{baseUrl}}/videos/{{videoId}}/upload
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
+
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="video"; filename="video.mp4"
+Content-Type: video/mp4
+
+< ./package.json
+------WebKitFormBoundary7MA4YWxkTrZu0gW--
+
+### upload a banner
+PATCH {{baseUrl}}/videos/{{videoId}}/upload
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
+
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="banner"; filename="banner.jpg"
+Content-Type: image/jpeg
+
+< ./package.json
+------WebKitFormBoundary7MA4YWxkTrZu0gW--
+
+### upload a thumbnail
+PATCH {{baseUrl}}/videos/{{videoId}}/upload
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
+
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="thumbnail"; filename="thumbnail.jpg"
+Content-Type: image/jpeg
+
+< ./package.json
+------WebKitFormBoundary7MA4YWxkTrZu0gW--
+
+### upload a thumbnail_half
+PATCH {{baseUrl}}/videos/{{videoId}}/upload
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
+
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="thumbnail_half"; filename="thumbnail_half.jpg"
+Content-Type: image/jpeg
+
+< ./package.json
+------WebKitFormBoundary7MA4YWxkTrZu0gW--

@@ -4,10 +4,30 @@ import { SequelizeModule, getConnectionToken } from '@nestjs/sequelize';
 import { Sequelize } from 'sequelize';
 import { CastMemberModel } from '@/core/cast-member/infra/db/sequelize/cast-member.model';
 import { CategoryModel } from '@/core/category/infra/db/sequelize/category.model';
+import { GenreCategoryModel, GenreModel } from '@/core/genre/infra/db/sequelize/genre.model';
 import { UnitOfWorkSequelize } from '@/core/shared/infra/db/sequelize/unit-of-work-sequelize';
+import { AudioVideoMediaModel } from '@/core/video/infra/db/sequelize/audio-video-media.model';
+import { ImageMediaModel } from '@/core/video/infra/db/sequelize/image-media.model';
+import {
+  VideoCastMemberModel,
+  VideoCategoryModel,
+  VideoGenreModel,
+  VideoModel,
+} from '@/core/video/infra/db/sequelize/video.model';
 import { DB_SCHEMA_TYPE } from '@/modules/config-module/config.module';
 
-const MODELS = [CategoryModel, CastMemberModel];
+const MODELS = [
+  CategoryModel,
+  CastMemberModel,
+  GenreModel,
+  GenreCategoryModel,
+  VideoModel,
+  VideoCategoryModel,
+  VideoGenreModel,
+  VideoCastMemberModel,
+  ImageMediaModel,
+  AudioVideoMediaModel,
+];
 
 @Global()
 @Module({
