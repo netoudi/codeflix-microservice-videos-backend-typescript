@@ -29,7 +29,11 @@ import { VIDEO_PROVIDERS } from '@/modules/videos-module/videos.providers';
     CastMembersModule,
   ],
   controllers: [VideosController],
-  providers: [...Object.values(VIDEO_PROVIDERS.REPOSITORIES), ...Object.values(VIDEO_PROVIDERS.USE_CASES)],
+  providers: [
+    ...Object.values(VIDEO_PROVIDERS.REPOSITORIES),
+    ...Object.values(VIDEO_PROVIDERS.USE_CASES),
+    ...Object.values(VIDEO_PROVIDERS.HANDLERS),
+  ],
   exports: [VIDEO_PROVIDERS.REPOSITORIES.VIDEO_REPOSITORY.provide],
 })
 export class VideosModule {}

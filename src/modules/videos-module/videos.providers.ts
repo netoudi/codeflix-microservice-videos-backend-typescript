@@ -9,6 +9,7 @@ import { ApplicationService } from '@/core/shared/application/application.servic
 import { IStorage } from '@/core/shared/application/storage.interface';
 import { IUnitOfWork } from '@/core/shared/domain/repository/unit-of-work.interface';
 import { UnitOfWorkSequelize } from '@/core/shared/infra/db/sequelize/unit-of-work-sequelize';
+import { PublishVideoMediaReplacedInQueueHandler } from '@/core/video/application/handlers/publish-video-media-replaced-in-queue.handler';
 import { CreateVideoUseCase } from '@/core/video/application/use-cases/create-video/create-video.use-case';
 import { DeleteVideoUseCase } from '@/core/video/application/use-cases/delete-video/delete-video.use-case';
 import { GetVideoUseCase } from '@/core/video/application/use-cases/get-video/get-video.use-case';
@@ -150,4 +151,11 @@ export const USE_CASES = {
   },
 };
 
-export const VIDEO_PROVIDERS = { REPOSITORIES, USE_CASES };
+export const HANDLERS = {
+  PUBLISH_VIDEO_MEDIA_REPLACED_IN_QUEUE_HANDLER: {
+    provide: PublishVideoMediaReplacedInQueueHandler,
+    useClass: PublishVideoMediaReplacedInQueueHandler,
+  },
+};
+
+export const VIDEO_PROVIDERS = { REPOSITORIES, USE_CASES, HANDLERS };
