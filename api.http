@@ -200,3 +200,11 @@ Content-Type: image/jpeg
 
 < ./package.json
 ------WebKitFormBoundary7MA4YWxkTrZu0gW--
+
+
+///
+/// EVENTS
+///
+
+###
+GET {{baseUrl}}/fake-event
