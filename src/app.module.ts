@@ -7,6 +7,7 @@ import { EventModule } from '@/modules/event-module/event.module';
 import { GenresModule } from '@/modules/genres-module/genres.module';
 import { SharedModule } from '@/modules/shared-module/shared.module';
 import { VideosModule } from '@/modules/videos-module/videos.module';
+import { UseCaseModule } from './modules/use-case-module/use-case.module';
 
 @Module({
   imports: [
@@ -14,6 +15,7 @@ import { VideosModule } from '@/modules/videos-module/videos.module';
     DatabaseModule,
     SharedModule,
     EventModule,
+    UseCaseModule,
     CategoriesModule,
     CastMembersModule,
     GenresModule,
