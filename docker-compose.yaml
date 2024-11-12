@@ -30,6 +30,7 @@ services:
     image: rabbitmq:3.8-management-alpine
     container_name: codeflix-videos-rabbitmq
     ports:
+      - 5672:5672
       - 15672:15672
     environment:
       - RABBITMQ_DEFAULT_USER=admin

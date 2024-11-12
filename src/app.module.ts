@@ -5,6 +5,7 @@ import { ConfigModule } from '@/modules/config-module/config.module';
 import { DatabaseModule } from '@/modules/database-module/database.module';
 import { EventModule } from '@/modules/event-module/event.module';
 import { GenresModule } from '@/modules/genres-module/genres.module';
+import { RabbitmqFakeModule } from '@/modules/rabbitmq-fake/rabbitmq-fake.module';
 import { SharedModule } from '@/modules/shared-module/shared.module';
 import { VideosModule } from '@/modules/videos-module/videos.module';
 import { UseCaseModule } from './modules/use-case-module/use-case.module';
@@ -20,6 +21,7 @@ import { UseCaseModule } from './modules/use-case-module/use-case.module';
     CastMembersModule,
     GenresModule,
     VideosModule,
+    RabbitmqFakeModule,
   ],
 })
 export class AppModule {}
