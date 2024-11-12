@@ -25,3 +25,14 @@ services:
       - /var/lib/mysql
     security_opt:
       - seccomp:unconfined
+
+  rabbitmq:
+    image: rabbitmq:3.8-management-alpine
+    container_name: codeflix-videos-rabbitmq
+    ports:
+      - 15672:15672
+    environment:
+      - RABBITMQ_DEFAULT_USER=admin
+      - RABBITMQ_DEFAULT_PASS=admin
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
