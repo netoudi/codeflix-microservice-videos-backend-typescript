@@ -24,6 +24,10 @@ export class VideoAudioMediaReplacedEvent implements IDomainEvent {
     this.occurred_on = new Date();
     this.event_version = 1;
   }
+
+  getIntegrationEvent(): VideoAudioMediaReplacedIntegrationEvent {
+    return new VideoAudioMediaReplacedIntegrationEvent(this);
+  }
 }
 
 export class VideoAudioMediaReplacedIntegrationEvent implements IIntegrationEvent {
@@ -33,7 +37,7 @@ export class VideoAudioMediaReplacedIntegrationEvent implements IIntegrationEven
   payload: any;
 
   constructor(event: VideoAudioMediaReplacedEvent) {
-    this.event_name = VideoAudioMediaReplacedEvent.name;
+    this.event_name = this.constructor.name;
     this.event_version = event.event_version;
     this.occurred_on = event.occurred_on;
     this.payload = { video_id: event.aggregate_id.value, media: event.media.toJSON() };

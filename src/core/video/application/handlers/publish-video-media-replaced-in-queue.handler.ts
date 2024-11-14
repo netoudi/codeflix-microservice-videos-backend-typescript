@@ -1,4 +1,3 @@
-import * as console from 'node:console';
 import { OnEvent } from '@nestjs/event-emitter';
 import { IIntegrationEventHandler } from '@/core/shared/application/domain-event-handler.interface';
 import { IMessageBroker } from '@/core/shared/application/message-broker.interface';
@@ -13,5 +12,6 @@ export class PublishVideoMediaReplacedInQueueHandler implements IIntegrationEven
   @OnEvent(VideoAudioMediaReplacedIntegrationEvent.name)
   async handle(event: IIntegrationEvent): Promise<void> {
     console.log(event);
+    await this.messageBroker.publishEvent(event);
   }
 }
