@@ -15,4 +15,12 @@ export class DomainEventMediator {
       await this.eventEmitter.emitAsync(eventClassName, event);
     }
   }
+
+  async publishIntegrationEvents(aggregateRoot: AggregateRoot) {
+    for (const event of aggregateRoot.events) {
+      const integrationEvent = event.getIntegrationEvent?.();
+      if (!integrationEvent) continue;
+      await this.eventEmitter.emitAsync(integrationEvent.event_name, integrationEvent);
+    }
+  }
 }
