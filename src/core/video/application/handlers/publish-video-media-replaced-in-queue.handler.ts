@@ -1,11 +1,11 @@
 import { OnEvent } from '@nestjs/event-emitter';
-import { IDomainEventHandler } from '@/core/shared/application/domain-event-handler.interface';
-import { IDomainEvent } from '@/core/shared/domain/events/domain-event.interface';
-import { VideoAudioMediaReplacedEvent } from '@/core/video/domain/domain-events/video-audio-media-replaced.event';
+import { IIntegrationEventHandler } from '@/core/shared/application/domain-event-handler.interface';
+import { IIntegrationEvent } from '@/core/shared/domain/events/domain-event.interface';
+import { VideoAudioMediaReplacedIntegrationEvent } from '@/core/video/domain/domain-events/video-audio-media-replaced.event';
 
-export class PublishVideoMediaReplacedInQueueHandler implements IDomainEventHandler {
-  @OnEvent(VideoAudioMediaReplacedEvent.name)
-  async handle(event: IDomainEvent): Promise<void> {
+export class PublishVideoMediaReplacedInQueueHandler implements IIntegrationEventHandler {
+  @OnEvent(VideoAudioMediaReplacedIntegrationEvent.name)
+  async handle(event: IIntegrationEvent): Promise<void> {
     console.log(event);
   }
 }
