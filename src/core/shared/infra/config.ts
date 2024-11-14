@@ -23,6 +23,11 @@ export class Config {
     return JSON.parse(Config.env.GOOGLE_CLOUD_CREDENTIALS);
   }
 
+  static rabbitmqUri() {
+    Config.readEnv();
+    return Config.env.RABBITMQ_URI;
+  }
+
   static readEnv() {
     if (Config.env) return;
     Config.env = readEnv({ path: join(__dirname, `../../../../envs/.env.${process.env.NODE_ENV}`) }).parsed;

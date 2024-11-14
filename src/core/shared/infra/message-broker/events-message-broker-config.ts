@@ -5,4 +5,8 @@ export const EVENTS_MESSAGE_BROKER_CONFIG = {
     exchange: 'amq.direct',
     routing_key: VideoAudioMediaReplacedEvent.name,
   },
+  TestEvent: {
+    exchange: 'test-exchange',
+    routing_key: 'TestEvent',
+  },
 };
