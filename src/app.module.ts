@@ -5,10 +5,10 @@ import { ConfigModule } from '@/modules/config-module/config.module';
 import { DatabaseModule } from '@/modules/database-module/database.module';
 import { EventModule } from '@/modules/event-module/event.module';
 import { GenresModule } from '@/modules/genres-module/genres.module';
-import { RabbitmqFakeModule } from '@/modules/rabbitmq-fake/rabbitmq-fake.module';
+import { RabbitmqModule } from '@/modules/rabbitmq-module/rabbitmq.module';
 import { SharedModule } from '@/modules/shared-module/shared.module';
+import { UseCaseModule } from '@/modules/use-case-module/use-case.module';
 import { VideosModule } from '@/modules/videos-module/videos.module';
-import { UseCaseModule } from './modules/use-case-module/use-case.module';
 
 @Module({
   imports: [
@@ -17,11 +17,11 @@ import { UseCaseModule } from './modules/use-case-module/use-case.module';
     SharedModule,
     EventModule,
     UseCaseModule,
+    RabbitmqModule.forRoot(),
     CategoriesModule,
     CastMembersModule,
     GenresModule,
     VideosModule,
-    RabbitmqFakeModule,
   ],
 })
 export class AppModule {}

@@ -11,6 +11,7 @@ import {
 import { CastMembersModule } from '@/modules/cast-members-module/cast-members.module';
 import { CategoriesModule } from '@/modules/categories-module/categories.module';
 import { GenresModule } from '@/modules/genres-module/genres.module';
+import { RabbitmqModule } from '@/modules/rabbitmq-module/rabbitmq.module';
 import { VideosController } from '@/modules/videos-module/videos.controller';
 import { VIDEO_PROVIDERS } from '@/modules/videos-module/videos.providers';
 
@@ -24,6 +25,7 @@ import { VIDEO_PROVIDERS } from '@/modules/videos-module/videos.providers';
       ImageMediaModel,
       AudioVideoMediaModel,
     ]),
+    RabbitmqModule.forFeature(),
     CategoriesModule,
     GenresModule,
     CastMembersModule,
