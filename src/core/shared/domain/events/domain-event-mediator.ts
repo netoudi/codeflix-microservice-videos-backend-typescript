@@ -20,7 +20,7 @@ export class DomainEventMediator {
     for (const event of aggregateRoot.events) {
       const integrationEvent = event.getIntegrationEvent?.();
       if (!integrationEvent) continue;
-      await this.eventEmitter.emitAsync(integrationEvent.event_name, integrationEvent);
+      await this.eventEmitter.emitAsync(integrationEvent.constructor.name, integrationEvent);
     }
   }
 }
