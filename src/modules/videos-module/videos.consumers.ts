@@ -15,6 +15,7 @@ export class VideoConsumers {
     exchange: 'amq.direct',
     routingKey: 'videos.convert',
     queue: 'micro-videos/videos.convert',
+    allowNonJsonMessages: true,
   })
   onProcessVideo(msg: OnProcessVideoCommand) {
     console.log(msg);
