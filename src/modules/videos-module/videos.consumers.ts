@@ -1,9 +1,10 @@
 import { RabbitSubscribe } from '@golevelup/nestjs-rabbitmq';
-import { Injectable, ValidationPipe } from '@nestjs/common';
+import { Injectable, UseFilters, ValidationPipe } from '@nestjs/common';
 import { ModuleRef } from '@nestjs/core';
 import { AudioVideoMediaStatus } from '@/core/shared/domain/value-objects/audio-video-media.vo';
 import { ProcessAudioVideoMediasUseCaseInput } from '@/core/video/application/use-cases/process-audio-video-medias/process-audio-video-medias-use-case.input';
 import { ProcessAudioVideoMediasUseCase } from '@/core/video/application/use-cases/process-audio-video-medias/process-audio-video-medias.use-case';
+import { RabbitmqConsumeErrorFilter } from '@/modules/rabbitmq-module/rabbitmq-consume-error/rabbitmq-consume-error.filter';
 
 type OnProcessVideoCommand = {
   video: {
@@ -13,6 +14,7 @@ type OnProcessVideoCommand = {
   };
 };
 
+@UseFilters(new RabbitmqConsumeErrorFilter())
 @Injectable()
 export class VideoConsumers {
   constructor(private moduleRef: ModuleRef) {}
