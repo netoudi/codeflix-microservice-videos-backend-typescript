@@ -14,7 +14,7 @@ type OnProcessVideoCommand = {
   };
 };
 
-@UseFilters(new RabbitmqConsumeErrorFilter())
+@UseFilters(RabbitmqConsumeErrorFilter)
 @Injectable()
 export class VideoConsumers {
   constructor(private moduleRef: ModuleRef) {}
@@ -27,13 +27,13 @@ export class VideoConsumers {
   })
   async onProcessVideo(msg: OnProcessVideoCommand) {
     console.log(msg);
-    const resource_id = `${msg.video.resource_id}`;
+    const resource_id = `${msg?.video?.resource_id}`;
     const [video_id, field] = resource_id.split('.');
     const input = new ProcessAudioVideoMediasUseCaseInput({
       video_id,
       field,
-      status: msg.video.status as AudioVideoMediaStatus,
-      encoded_location: msg.video.encoded_video_folder,
+      status: msg?.video?.status as AudioVideoMediaStatus,
+      encoded_location: msg?.video?.encoded_video_folder,
     });
 
     await new ValidationPipe({ errorHttpStatusCode: 422 }).transform(input, {
