@@ -12,7 +12,7 @@ import { IUnitOfWork } from '@/core/shared/domain/repository/unit-of-work.interf
         return new ApplicationService(uow, domainEventMediator);
       },
       inject: ['UnitOfWork', DomainEventMediator],
-      scope: Scope.REQUEST,
+      // scope: Scope.REQUEST,
     },
   ],
   exports: [ApplicationService],
