@@ -15,6 +15,7 @@ import { CreateVideoUseCase } from '@/core/video/application/use-cases/create-vi
 import { DeleteVideoUseCase } from '@/core/video/application/use-cases/delete-video/delete-video.use-case';
 import { GetVideoUseCase } from '@/core/video/application/use-cases/get-video/get-video.use-case';
 import { ListVideosUseCase } from '@/core/video/application/use-cases/list-video/list-videos.use-case';
+import { ProcessAudioVideoMediasUseCase } from '@/core/video/application/use-cases/process-audio-video-medias/process-audio-video-medias.use-case';
 import { UpdateVideoUseCase } from '@/core/video/application/use-cases/update-video/update-video.use-case';
 import { UploadAudioVideoMediasUseCase } from '@/core/video/application/use-cases/upload-audio-video-medias/upload-audio-video-medias.use-case';
 import { UploadImageMediasUseCase } from '@/core/video/application/use-cases/upload-image-medias/upload-image-medias.use-case';
@@ -149,6 +150,13 @@ export const USE_CASES = {
       return new UploadImageMediasUseCase(uow, videoRepository, storage);
     },
     inject: ['UnitOfWork', REPOSITORIES.VIDEO_REPOSITORY.provide, 'IStorage'],
+  },
+  PROCESS_AUDIO_VIDEO_MEDIAS_USE_CASE: {
+    provide: ProcessAudioVideoMediasUseCase,
+    useFactory: (uow: IUnitOfWork, videoRepository: IVideoRepository) => {
+      return new ProcessAudioVideoMediasUseCase(uow, videoRepository);
+    },
+    inject: ['UnitOfWork', REPOSITORIES.VIDEO_REPOSITORY.provide],
   },
 };
 
