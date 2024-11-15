@@ -1,4 +1,4 @@
-import { IsEnum, IsIn, IsNotEmpty, IsString, ValidationError, validateSync } from 'class-validator';
+import { IsEnum, IsIn, IsNotEmpty, IsString, IsUUID, MaxLength, ValidationError, validateSync } from 'class-validator';
 import { AudioVideoMediaStatus } from '@/core/shared/domain/value-objects/audio-video-media.vo';
 
 export type ProcessAudioVideoMediasUseCaseInputProps = {
@@ -9,6 +9,7 @@ export type ProcessAudioVideoMediasUseCaseInputProps = {
 };
 
 export class ProcessAudioVideoMediasUseCaseInput {
+  @IsUUID('4')
   @IsString()
   @IsNotEmpty()
   video_id: string;
@@ -21,6 +22,7 @@ export class ProcessAudioVideoMediasUseCaseInput {
   @IsNotEmpty()
   status: AudioVideoMediaStatus;
 
+  @MaxLength(255)
   @IsString()
   @IsNotEmpty()
   encoded_location: string;
