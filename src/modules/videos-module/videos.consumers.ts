@@ -24,6 +24,10 @@ export class VideoConsumers {
     routingKey: 'videos.convert',
     queue: 'micro-videos/videos.convert',
     allowNonJsonMessages: true,
+    queueOptions: {
+      deadLetterExchange: 'dlx.exchange',
+      deadLetterRoutingKey: 'videos.convert',
+    },
   })
   async onProcessVideo(msg: OnProcessVideoCommand) {
     console.log(msg);
