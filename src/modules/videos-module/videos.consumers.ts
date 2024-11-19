@@ -20,7 +20,7 @@ export class VideoConsumers {
   constructor(private moduleRef: ModuleRef) {}
 
   @RabbitSubscribe({
-    exchange: 'amq.direct',
+    exchange: 'direct.delayed',
     routingKey: 'videos.convert',
     queue: 'micro-videos/videos.convert',
     allowNonJsonMessages: true,

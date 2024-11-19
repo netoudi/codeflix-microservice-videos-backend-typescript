@@ -18,6 +18,15 @@ export class RabbitmqModule {
                   name: 'dlx.exchange',
                   type: 'topic',
                 },
+                {
+                  name: 'direct.delayed',
+                  type: 'x-delayed-message',
+                  options: {
+                    arguments: {
+                      'x-delayed-type': 'direct',
+                    },
+                  },
+                },
               ],
               queues: [
                 {
