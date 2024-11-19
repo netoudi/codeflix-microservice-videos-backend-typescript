@@ -2,6 +2,7 @@ import { AmqpConnection, RabbitMQModule } from '@golevelup/nestjs-rabbitmq';
 import { DynamicModule } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { RabbitmqMessageBroker } from '@/core/shared/infra/message-broker/rabbitmq-message-broker';
+import { RabbitmqConsumeErrorFilter } from '@/modules/rabbitmq-module/rabbitmq-consume-error/rabbitmq-consume-error.filter';
 
 export class RabbitmqModule {
   static forRoot(): DynamicModule {
@@ -40,6 +41,7 @@ export class RabbitmqModule {
           inject: [ConfigService],
         }),
       ],
+      providers: [RabbitmqConsumeErrorFilter],
       exports: [RabbitMQModule],
     };
   }
