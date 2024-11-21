@@ -4,8 +4,12 @@ import { ConfigService } from '@nestjs/config';
 import { RabbitmqMessageBroker } from '@/core/shared/infra/message-broker/rabbitmq-message-broker';
 import { RabbitmqConsumeErrorFilter } from '@/modules/rabbitmq-module/rabbitmq-consume-error/rabbitmq-consume-error.filter';
 
+type RabbitMQModuleOptions = {
+  enableConsumers?: boolean;
+};
+
 export class RabbitmqModule {
-  static forRoot(): DynamicModule {
+  static forRoot(options: RabbitMQModuleOptions = {}): DynamicModule {
     return {
       module: RabbitmqModule,
       global: true,
@@ -14,6 +18,7 @@ export class RabbitmqModule {
           useFactory: (configService: ConfigService) => {
             return {
               uri: configService.get('RABBITMQ_URI') as string,
+              registerHandlers: options.enableConsumers || configService.get('RABBITMQ_REGISTER_HANDLERS'),
               exchanges: [
                 {
                   name: 'dlx.exchange',
