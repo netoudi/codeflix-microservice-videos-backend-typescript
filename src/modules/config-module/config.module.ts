@@ -1,6 +1,6 @@
 import { join } from 'node:path';
 import { Module } from '@nestjs/common';
-import { ConfigModuleOptions, ConfigModule as NestConfigModule } from '@nestjs/config';
+import { ConfigModule as NestConfigModule, ConfigModuleOptions } from '@nestjs/config';
 import Joi from 'joi';
 
 //@ts-expect-error - the type is correct
@@ -57,6 +57,16 @@ export const CONFIG_GOOGLE_SCHEMA: Joi.StrictSchemaMap<CONFIG_GOOGLE_SCHEMA_TYPE
   GOOGLE_CLOUD_STORAGE_BUCKET_NAME: Joi.string().required(),
 };
 
+type CONFIG_RABBITMQ_SCHEMA_TYPE = {
+  RABBITMQ_URI: string;
+  RABBITMQ_REGISTER_HANDLERS: boolean;
+};
+
+export const CONFIG_RABBITMQ_SCHEMA: Joi.StrictSchemaMap<CONFIG_RABBITMQ_SCHEMA_TYPE> = {
+  RABBITMQ_URI: Joi.string().required(),
+  RABBITMQ_REGISTER_HANDLERS: Joi.boolean().required(),
+};
+
 @Module({})
 export class ConfigModule extends NestConfigModule {
   static forRoot(options: ConfigModuleOptions = {}): any {
@@ -71,6 +81,7 @@ export class ConfigModule extends NestConfigModule {
       ],
       validationSchema: Joi.object({
         ...CONFIG_DB_SCHEMA,
+        ...CONFIG_RABBITMQ_SCHEMA,
       }),
       ...otherOptions,
     });

@@ -208,3 +208,6 @@ Content-Type: image/jpeg
 
 ###
 GET {{baseUrl}}/fake-event
+
+###
+GET {{baseUrl}}/rabbitmq-fake

@@ -12,6 +12,7 @@ import { IGenreRepository } from '@/core/genre/domain/genre.repository';
 import { EntityValidationError } from '@/core/shared/domain/validators/validation.error';
 import { Uuid } from '@/core/shared/domain/value-objects/uuid.vo';
 import { UnitOfWorkSequelize } from '@/core/shared/infra/db/sequelize/unit-of-work-sequelize';
+import { InMemoryMessaging } from '@/core/shared/infra/message-broker/in-memory-messaging';
 import { InMemoryStorage } from '@/core/shared/infra/storage/in-memory.storage';
 import { VideoOutputMapper } from '@/core/video/application/use-cases/common/video-output.mapper';
 import { CreateVideoUseCase } from '@/core/video/application/use-cases/create-video/create-video.use-case';
@@ -27,8 +28,11 @@ import { CAST_MEMBER_PROVIDERS } from '@/modules/cast-members-module/cast-member
 import { CATEGORY_PROVIDERS } from '@/modules/categories-module/categories.providers';
 import { ConfigModule } from '@/modules/config-module/config.module';
 import { DatabaseModule } from '@/modules/database-module/database.module';
+import { EventModule } from '@/modules/event-module/event.module';
 import { GENRE_PROVIDERS } from '@/modules/genres-module/genres.providers';
 import { SharedModule } from '@/modules/shared-module/shared.module';
+import { UseCaseModule } from '@/modules/use-case-module/use-case.module';
+import { RabbitmqModuleFake } from '@/modules/videos-module/testing/rabbitmq-module-fake';
 import {
   CreateVideoFixture,
   ListVideosFixture,
@@ -72,6 +76,7 @@ class FileFactory {
 }
 
 describe('VideosController Integration Tests', () => {
+  let module: TestingModule;
   let controller: VideosController;
   let genreRepository: IGenreRepository;
   let categoryRepository: ICategoryRepository;
@@ -79,8 +84,16 @@ describe('VideosController Integration Tests', () => {
   let videoRepository: IVideoRepository;
 
   beforeEach(async () => {
-    const module: TestingModule = await Test.createTestingModule({
-      imports: [ConfigModule.forRoot(), DatabaseModule, SharedModule, VideosModule],
+    module = await Test.createTestingModule({
+      imports: [
+        ConfigModule.forRoot(),
+        SharedModule,
+        EventModule,
+        UseCaseModule,
+        DatabaseModule,
+        RabbitmqModuleFake.forRoot(),
+        VideosModule,
+      ],
     })
       .overrideProvider('UnitOfWork')
       .useFactory({
@@ -90,13 +103,28 @@ describe('VideosController Integration Tests', () => {
         inject: [getConnectionToken()],
       })
       .overrideProvider('IStorage')
-      .useValue(new InMemoryStorage())
+      .useFactory({
+        factory: () => {
+          return new InMemoryStorage();
+        },
+      })
+      .overrideProvider('IMessageBroker')
+      .useFactory({
+        factory: () => {
+          return new InMemoryMessaging();
+        },
+      })
       .compile();
+    await module.init();
     controller = await module.resolve(VideosController);
     genreRepository = module.get(GENRE_PROVIDERS.REPOSITORIES.GENRE_REPOSITORY.provide);
     categoryRepository = module.get(CATEGORY_PROVIDERS.REPOSITORIES.CATEGORY_REPOSITORY.provide);
     castMemberRepository = module.get(CAST_MEMBER_PROVIDERS.REPOSITORIES.CAST_MEMBER_REPOSITORY.provide);
     videoRepository = module.get(VIDEO_PROVIDERS.REPOSITORIES.VIDEO_REPOSITORY.provide);
+  });
+
+  afterEach(async () => {
+    await module.close();
   });
 
   it('should be defined', () => {

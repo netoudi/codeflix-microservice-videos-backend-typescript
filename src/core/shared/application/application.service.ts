@@ -13,14 +13,22 @@ export class ApplicationService {
 
   async finish() {
     const aggregateRoots = [...this.uow.getAggregateRoots()];
+
+    // dispatch local events
     for (const aggregateRoot of aggregateRoots) {
       await this.domainEventMediator.publish(aggregateRoot);
     }
+
     await this.uow.commit();
+
+    // dispatch integration events
+    for (const aggregateRoot of aggregateRoots) {
+      await this.domainEventMediator.publishIntegrationEvents(aggregateRoot);
+    }
   }
 
   async fail() {
-    this.uow.rollback();
+    await this.uow.rollback();
   }
 
   async run<T>(callback: () => Promise<T>): Promise<T> {
