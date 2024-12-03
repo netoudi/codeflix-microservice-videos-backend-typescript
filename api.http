@@ -217,7 +217,17 @@ GET {{baseUrl}}/rabbitmq-fake
 /// AUTH
 ///
 
+### configuração do openid connect server
+GET http://host.docker.internal:8080/realms/codeflix/.well-known/openid-configuration
+
+### certificados
+GET http://host.docker.internal:8080/realms/codeflix/protocol/openid-connect/certs
+
 ###
+
+# @name authentication
+@accessToken = {{authentication.response.body.access_token}}
+
 POST http://host.docker.internal:8080/realms/codeflix/protocol/openid-connect/token
 Content-Type: application/x-www-form-urlencoded
 

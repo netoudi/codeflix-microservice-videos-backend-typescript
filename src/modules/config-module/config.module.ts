@@ -1,6 +1,6 @@
 import { join } from 'node:path';
 import { Module } from '@nestjs/common';
-import { ConfigModule as NestConfigModule, ConfigModuleOptions } from '@nestjs/config';
+import { ConfigModuleOptions, ConfigModule as NestConfigModule } from '@nestjs/config';
 import Joi from 'joi';
 
 //@ts-expect-error - the type is correct
@@ -67,6 +67,16 @@ export const CONFIG_RABBITMQ_SCHEMA: Joi.StrictSchemaMap<CONFIG_RABBITMQ_SCHEMA_
   RABBITMQ_REGISTER_HANDLERS: Joi.boolean().required(),
 };
 
+type CONFIG_JWT_SCHEMA_TYPE = {
+  JWT_PRIVATE_KEY: string;
+  JWT_PUBLIC_KEY: string;
+};
+
+export const CONFIG_JWT_SCHEMA: Joi.StrictSchemaMap<CONFIG_JWT_SCHEMA_TYPE> = {
+  JWT_PRIVATE_KEY: Joi.string().required(),
+  JWT_PUBLIC_KEY: Joi.string().required(),
+};
+
 @Module({})
 export class ConfigModule extends NestConfigModule {
   static forRoot(options: ConfigModuleOptions = {}): any {
@@ -82,6 +92,7 @@ export class ConfigModule extends NestConfigModule {
       validationSchema: Joi.object({
         ...CONFIG_DB_SCHEMA,
         ...CONFIG_RABBITMQ_SCHEMA,
+        ...CONFIG_JWT_SCHEMA,
       }),
       ...otherOptions,
     });
