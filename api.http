@@ -225,3 +225,21 @@ username=admin@user.com
 &password=secret
 &grant_type=password
 &client_id=codeflix-admin-frontend
+
+###
+
+# @name auth
+@accessToken = {{auth.response.body.data.access_token}}
+
+POST {{baseUrl}}/auth
+Content-Type: application/json
+
+{
+  "email": "admin@user.com",
+  "password": "123456"
+}
+
+###
+GET {{baseUrl}}/auth
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
