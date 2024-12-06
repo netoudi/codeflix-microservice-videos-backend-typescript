@@ -7,6 +7,7 @@
 ### create a category
 POST {{baseUrl}}/categories
 Content-Type: application/json
+Authorization: Bearer {{accessToken}}
 
 {
   "name": "Movie"
@@ -18,13 +19,16 @@ Content-Type: application/json
 @categoryId = {{categories.response.body.data.0.id}}
 
 GET {{baseUrl}}/categories
+Authorization: Bearer {{accessToken}}
 
 ### list a category
 GET {{baseUrl}}/categories/{{categoryId}}
+Authorization: Bearer {{accessToken}}
 
 ### udpate a category
 PATCH {{baseUrl}}/categories/{{categoryId}}
 Content-Type: application/json
+Authorization: Bearer {{accessToken}}
 
 {
   "description": "some description"
@@ -32,6 +36,7 @@ Content-Type: application/json
 
 ### delete a category
 DELETE {{baseUrl}}/categories/{{categoryId}}
+Authorization: Bearer {{accessToken}}
 
 
 ///

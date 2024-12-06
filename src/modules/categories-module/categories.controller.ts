@@ -10,6 +10,7 @@ import {
   Patch,
   Post,
   Query,
+  UseGuards,
 } from '@nestjs/common';
 import { CategoryOutput } from '@/core/category/application/use-cases/common/category-output.mapper';
 import { CreateCategoryUseCase } from '@/core/category/application/use-cases/create-category/create-category.use-case';
@@ -17,11 +18,14 @@ import { DeleteCategoryUseCase } from '@/core/category/application/use-cases/del
 import { GetCategoryUseCase } from '@/core/category/application/use-cases/get-category/get-category.use-case';
 import { ListCategoriesUseCase } from '@/core/category/application/use-cases/list-category/list-categories.use-case';
 import { UpdateCategoryUseCase } from '@/core/category/application/use-cases/update-category/update-category.use-case';
-import { CategoryPresenter, CategoryCollectionPresenter } from '@/modules/categories-module/categories.presenter';
+import { AuthGuard } from '@/modules/auth-module/auth.guard';
+import { CheckIsAdminGuard } from '@/modules/auth-module/check-is-admin.guard';
+import { CategoryCollectionPresenter, CategoryPresenter } from '@/modules/categories-module/categories.presenter';
 import { CreateCategoryDto } from '@/modules/categories-module/dto/create-category.dto';
 import { SearchCategoriesDto } from '@/modules/categories-module/dto/search-categories.dto';
 import { UpdateCategoryDto } from '@/modules/categories-module/dto/update-category.dto';
 
+@UseGuards(AuthGuard, CheckIsAdminGuard)
 @Controller('categories')
 export class CategoriesController {
   @Inject(CreateCategoryUseCase)

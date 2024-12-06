@@ -19,6 +19,7 @@ import { AuthService } from '@/modules/auth-module/auth.service';
         };
       },
       inject: [ConfigService],
+      global: true,
     }),
   ],
   controllers: [AuthController],
