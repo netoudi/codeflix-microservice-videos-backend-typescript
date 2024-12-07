@@ -17,6 +17,20 @@ describe('CategoriesController (e2e)', () => {
   });
 
   describe('/categories (POST)', () => {
+    describe('unauthenticated', () => {
+      test('should return 401 when not authenticated', () => {
+        return request(appHelper.app.getHttpServer()).post('/categories').send({}).expect(401);
+      });
+
+      test('should return 403 when not authenticated as admin', () => {
+        return request(appHelper.app.getHttpServer())
+          .post('/categories')
+          .authenticate(appHelper.app, false)
+          .send({})
+          .expect(403);
+      });
+    });
+
     describe('should return a response error with 422 status code when request body is invalid', () => {
       const invalidRequest = CreateCategoryFixture.arrangeInvalidRequest();
       const arrange = Object.keys(invalidRequest).map((key) => ({ label: key, value: invalidRequest[key] }));
@@ -24,6 +38,7 @@ describe('CategoriesController (e2e)', () => {
       test.each(arrange)('when body is $label', ({ value }) => {
         return request(appHelper.app.getHttpServer())
           .post('/categories')
+          .authenticate(appHelper.app)
           .send(value.send_data)
           .expect(422)
           .expect(value.expected);
@@ -37,6 +52,7 @@ describe('CategoriesController (e2e)', () => {
       test.each(arrange)('when body is $label', ({ value }) => {
         return request(appHelper.app.getHttpServer())
           .post('/categories')
+          .authenticate(appHelper.app)
           .send(value.send_data)
           .expect(422)
           .expect(value.expected);
@@ -47,7 +63,11 @@ describe('CategoriesController (e2e)', () => {
       const arrange = CreateCategoryFixture.arrangeForCreate();
 
       test.each(arrange)('when body is $send_data', async ({ send_data, expected }) => {
-        const response = await request(appHelper.app.getHttpServer()).post('/categories').send(send_data).expect(201);
+        const response = await request(appHelper.app.getHttpServer())
+          .post('/categories')
+          .authenticate(appHelper.app)
+          .send(send_data)
+          .expect(201);
         const keysInResponse = ['id', 'name', 'description', 'is_active', 'created_at'];
         expect(Object.keys(response.body)).toStrictEqual(['data']);
         expect(Object.keys(response.body.data)).toStrictEqual(keysInResponse);

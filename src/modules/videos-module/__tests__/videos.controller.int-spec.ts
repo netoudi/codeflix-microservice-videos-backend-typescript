@@ -24,6 +24,7 @@ import { UploadAudioVideoMediasUseCase } from '@/core/video/application/use-case
 import { UploadImageMediasUseCase } from '@/core/video/application/use-cases/upload-image-medias/upload-image-medias.use-case';
 import { Video, VideoId } from '@/core/video/domain/video.aggregate';
 import { IVideoRepository } from '@/core/video/domain/video.repository';
+import { AuthModule } from '@/modules/auth-module/auth.module';
 import { CAST_MEMBER_PROVIDERS } from '@/modules/cast-members-module/cast-members.providers';
 import { CATEGORY_PROVIDERS } from '@/modules/categories-module/categories.providers';
 import { ConfigModule } from '@/modules/config-module/config.module';
@@ -91,6 +92,7 @@ describe('VideosController Integration Tests', () => {
         EventModule,
         UseCaseModule,
         DatabaseModule,
+        AuthModule,
         RabbitmqModuleFake.forRoot(),
         VideosModule,
       ],

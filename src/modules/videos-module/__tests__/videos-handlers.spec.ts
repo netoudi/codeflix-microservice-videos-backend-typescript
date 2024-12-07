@@ -4,6 +4,7 @@ import { FakeUnitOfWorkInMemory } from '@/core/shared/infra/db/in-memory/fake-un
 import { InMemoryMessaging } from '@/core/shared/infra/message-broker/in-memory-messaging';
 import { InMemoryStorage } from '@/core/shared/infra/storage/in-memory.storage';
 import { VideoAudioMediaReplacedIntegrationEvent } from '@/core/video/domain/domain-events/video-audio-media-replaced.event';
+import { AuthModule } from '@/modules/auth-module/auth.module';
 import { ConfigModule } from '@/modules/config-module/config.module';
 import { DatabaseModule } from '@/modules/database-module/database.module';
 import { EventModule } from '@/modules/event-module/event.module';
@@ -23,6 +24,7 @@ describe('VideoModule Unit Tests', () => {
         EventModule,
         UseCaseModule,
         DatabaseModule,
+        AuthModule,
         RabbitmqModuleFake.forRoot(),
         VideosModule,
       ],

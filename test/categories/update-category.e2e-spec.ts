@@ -43,6 +43,7 @@ describe('CategoriesController (e2e)', () => {
       test.each(arrange)('when id is $id', ({ id, send_data, expected }) => {
         return request(appHelper.app.getHttpServer())
           .patch(`/categories/${id}`)
+          .authenticate(appHelper.app)
           .send(send_data)
           .expect(expected.statusCode)
           .expect(expected);
@@ -56,6 +57,7 @@ describe('CategoriesController (e2e)', () => {
       test.each(arrange)('when body is $label', async ({ value }) => {
         return request(appHelper.app.getHttpServer())
           .patch(`/categories/b11c9be1-b619-4ef5-be1b-a1cd9ef265b7`)
+          .authenticate(appHelper.app)
           .send(value.send_data)
           .expect(422)
           .expect(value.expected);
@@ -71,6 +73,7 @@ describe('CategoriesController (e2e)', () => {
         await repository.insert(category);
         return request(appHelper.app.getHttpServer())
           .patch(`/categories/${category.id.value}`)
+          .authenticate(appHelper.app)
           .send(value.send_data)
           .expect(422)
           .expect(value.expected);
@@ -85,6 +88,7 @@ describe('CategoriesController (e2e)', () => {
         await repository.insert(category);
         const response = await request(appHelper.app.getHttpServer())
           .patch(`/categories/${category.id.value}`)
+          .authenticate(appHelper.app)
           .send(send_data)
           .expect(200);
         const keysInResponse = ['id', 'name', 'description', 'is_active', 'created_at'];

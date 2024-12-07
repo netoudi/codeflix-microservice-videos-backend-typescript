@@ -13,6 +13,7 @@ import { Genre, GenreId } from '@/core/genre/domain/genre.aggregate';
 import { IGenreRepository } from '@/core/genre/domain/genre.repository';
 import { Uuid } from '@/core/shared/domain/value-objects/uuid.vo';
 import { UnitOfWorkSequelize } from '@/core/shared/infra/db/sequelize/unit-of-work-sequelize';
+import { AuthModule } from '@/modules/auth-module/auth.module';
 import { CATEGORY_PROVIDERS } from '@/modules/categories-module/categories.providers';
 import { ConfigModule } from '@/modules/config-module/config.module';
 import { DatabaseModule } from '@/modules/database-module/database.module';
@@ -33,7 +34,7 @@ describe('GenresController Integration Tests', () => {
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      imports: [ConfigModule.forRoot(), DatabaseModule, GenresModule],
+      imports: [ConfigModule.forRoot(), DatabaseModule, AuthModule, GenresModule],
     })
       .overrideProvider('UnitOfWork')
       .useFactory({

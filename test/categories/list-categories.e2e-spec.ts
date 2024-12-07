@@ -27,6 +27,7 @@ describe('CategoriesController (e2e)', () => {
         const queryParams = new URLSearchParams(send_data as any).toString();
         return request(appHelper.app.getHttpServer())
           .get(`/categories?${queryParams}`)
+          .authenticate(appHelper.app)
           .expect(200)
           .expect({
             data: expected.entities.map((e) => {
@@ -48,6 +49,7 @@ describe('CategoriesController (e2e)', () => {
         const queryParams = new URLSearchParams(send_data as any).toString();
         return request(appHelper.app.getHttpServer())
           .get(`/categories?${queryParams}`)
+          .authenticate(appHelper.app)
           .expect(200)
           .expect({
             data: expected.entities.map((e) => {

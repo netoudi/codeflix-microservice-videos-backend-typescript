@@ -8,6 +8,7 @@ import { UpdateCastMemberUseCase } from '@/core/cast-member/application/use-case
 import { CastMember } from '@/core/cast-member/domain/cast-member.entity';
 import { ICastMemberRepository } from '@/core/cast-member/domain/cast-member.repository';
 import { Uuid } from '@/core/shared/domain/value-objects/uuid.vo';
+import { AuthModule } from '@/modules/auth-module/auth.module';
 import { CastMembersController } from '@/modules/cast-members-module/cast-members.controller';
 import { CastMembersModule } from '@/modules/cast-members-module/cast-members.module';
 import {
@@ -29,7 +30,7 @@ describe('CastMembersController Integration Tests', () => {
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      imports: [ConfigModule.forRoot(), DatabaseModule, CastMembersModule],
+      imports: [ConfigModule.forRoot(), DatabaseModule, AuthModule, CastMembersModule],
     }).compile();
     controller = module.get<CastMembersController>(CastMembersController);
     repository = module.get<ICastMemberRepository>(CAST_MEMBER_PROVIDERS.REPOSITORIES.CAST_MEMBER_REPOSITORY.provide);

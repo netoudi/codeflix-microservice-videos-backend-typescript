@@ -8,6 +8,7 @@ import { UpdateCategoryUseCase } from '@/core/category/application/use-cases/upd
 import { Category } from '@/core/category/domain/category.entity';
 import { ICategoryRepository } from '@/core/category/domain/category.repository';
 import { Uuid } from '@/core/shared/domain/value-objects/uuid.vo';
+import { AuthModule } from '@/modules/auth-module/auth.module';
 import { CategoriesController } from '@/modules/categories-module/categories.controller';
 import { CategoriesModule } from '@/modules/categories-module/categories.module';
 import { CategoryCollectionPresenter, CategoryPresenter } from '@/modules/categories-module/categories.presenter';
@@ -26,7 +27,7 @@ describe('CategoriesController Integration Tests', () => {
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      imports: [ConfigModule.forRoot(), DatabaseModule, CategoriesModule],
+      imports: [ConfigModule.forRoot(), DatabaseModule, AuthModule, CategoriesModule],
     }).compile();
     controller = module.get<CategoriesController>(CategoriesController);
     repository = module.get<ICategoryRepository>(CATEGORY_PROVIDERS.REPOSITORIES.CATEGORY_REPOSITORY.provide);

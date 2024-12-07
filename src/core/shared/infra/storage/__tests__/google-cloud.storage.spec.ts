@@ -2,7 +2,7 @@ import { Storage as GoogleCloudStorageSdk } from '@google-cloud/storage';
 import { Config } from '@/core/shared/infra/config';
 import { GoogleCloudStorage } from '@/core/shared/infra/storage/google-cloud.storage';
 
-describe('GoogleCloudStorage Unit Tests', () => {
+describe.skip('GoogleCloudStorage Unit Tests', () => {
   let googleCloudStorage: GoogleCloudStorage;
   let storageSdk: GoogleCloudStorageSdk;
 

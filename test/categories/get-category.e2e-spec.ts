@@ -39,6 +39,7 @@ describe('CategoriesController (e2e)', () => {
       test.each(arrange)('when id is $id', ({ id, expected }) => {
         return request(appHelper.app.getHttpServer())
           .get(`/categories/${id}`)
+          .authenticate(appHelper.app)
           .expect(expected.statusCode)
           .expect(expected);
       });
@@ -47,7 +48,10 @@ describe('CategoriesController (e2e)', () => {
     it('should return a category', async () => {
       const category = Category.fake().aCategory().build();
       await repository.insert(category);
-      const response = await request(appHelper.app.getHttpServer()).get(`/categories/${category.id.value}`).expect(200);
+      const response = await request(appHelper.app.getHttpServer())
+        .get(`/categories/${category.id.value}`)
+        .authenticate(appHelper.app)
+        .expect(200);
       const keysInResponse = ['id', 'name', 'description', 'is_active', 'created_at'];
       expect(Object.keys(response.body)).toStrictEqual(['data']);
       expect(Object.keys(response.body.data)).toStrictEqual(keysInResponse);

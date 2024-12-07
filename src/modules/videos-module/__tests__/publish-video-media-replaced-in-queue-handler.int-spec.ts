@@ -17,6 +17,7 @@ import { UploadAudioVideoMediasUseCase } from '@/core/video/application/use-case
 import { VideoAudioMediaReplacedIntegrationEvent } from '@/core/video/domain/domain-events/video-audio-media-replaced.event';
 import { Video } from '@/core/video/domain/video.aggregate';
 import { IVideoRepository } from '@/core/video/domain/video.repository';
+import { AuthModule } from '@/modules/auth-module/auth.module';
 import { CAST_MEMBER_PROVIDERS } from '@/modules/cast-members-module/cast-members.providers';
 import { CATEGORY_PROVIDERS } from '@/modules/categories-module/categories.providers';
 import { ConfigModule } from '@/modules/config-module/config.module';
@@ -41,6 +42,7 @@ describe('PublishVideoMediaReplacedInQueueHandler Integration Tests', () => {
         EventModule,
         UseCaseModule,
         DatabaseModule,
+        AuthModule,
         RabbitmqModule.forRoot(),
         VideosModule,
       ],

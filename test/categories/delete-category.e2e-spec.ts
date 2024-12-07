@@ -36,6 +36,7 @@ describe('CategoriesController (e2e)', () => {
       test.each(arrange)('when id is $id', ({ id, expected }) => {
         return request(appHelper.app.getHttpServer())
           .delete(`/categories/${id}`)
+          .authenticate(appHelper.app)
           .expect(expected.statusCode)
           .expect(expected);
       });
@@ -44,7 +45,10 @@ describe('CategoriesController (e2e)', () => {
     it('should delete a category with response status 204', async () => {
       const category = Category.fake().aCategory().build();
       await repository.insert(category);
-      await request(appHelper.app.getHttpServer()).delete(`/categories/${category.id.value}`).expect(204);
+      await request(appHelper.app.getHttpServer())
+        .delete(`/categories/${category.id.value}`)
+        .authenticate(appHelper.app)
+        .expect(204);
       await expect(repository.findById(category.id)).resolves.toBeNull();
     });
   });
